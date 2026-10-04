@@ -1,0 +1,45 @@
+'use strict';
+const {app,BrowserWindow}=require('electron'),fs=require('fs'),path=require('path'),os=require('os'),http=require('http'),assert=require('node:assert/strict');
+const repo=path.resolve(__dirname,'../..');app.setPath('userData',fs.mkdtempSync(path.join(os.tmpdir(),'kards-orc-')));app.commandLine.appendSwitch('no-proxy-server');app.on('window-all-closed',()=>{});
+let server,win;const pause=ms=>new Promise(r=>setTimeout(r,ms));
+const checks=async function(){
+  const check=(x,m)=>{if(!x)throw Error(m);},U=KG.ui;
+  const fixture=(id,extra={})=>({id,name:id,cardType:'unit',unitType:'infantry',cost:2,attack:3,defense:4,...extra});
+  const file=(data,name='cards.json')=>new File([JSON.stringify(data)],name,{type:'application/json'});
+  const reported=[fixture('orc-neighbors',{cardType:'order',text:'消灭一个单位及其相邻单位'}),fixture('orc-combat-draw',{text:'部署：抽1个单位，其每具有1个对\n战词条，使其与本单位获得+1+1。'})];
+  const fixed=await U.importFiles([file(reported)]);check(fixed.summary.ready===2,'both reported effects import completely');
+  U.openEditor(U.pool.find(c=>c.id==='orc-combat-draw'));U.compileEditor();check(!/未完整/.test(document.getElementById('edWarn').textContent),'reported draw effect recompiles in editor');
+  check(JSON.parse(document.getElementById('edEffects').value).some(e=>e.actions.some(a=>a.op==='drawOne')),'editor keeps filtered draw atom');
+  const general=[fixture('orc-hand-select',{cardType:'order',text:'选择1张花费不小于5的手牌，使其获得-2花费。'}),fixture('orc-deck-top',{text:'部署：选择1张手牌。将其返回卡组顶。'}),fixture('orc-choice',{cardType:'order',text:'抉择：对1个单位造成3点伤害 或 使1个单位获得+2+3。'})];
+  const generalResult=await U.importFiles([file(general)]);check(generalResult.summary.ready===3,'generic hand, deck and choice cards import completely');
+  U.openEditor(U.pool.find(c=>c.id==='orc-choice'));U.compileEditor();check(JSON.parse(document.getElementById('edEffects').value)[0].actions[0].options.every(o=>o.targets?.length===1),'editor retains branch-local targets');
+  let r=await U.importFiles([file([fixture('orc-ui',{text:'部署：抽一张牌。',rarity:'elite',system:['测试体系'],customMetadata:{keep:1}})])]);
+  check(r.summary.ready===1,'JSON alone imports card without image');check(U.pool.some(c=>c.id==='orc-ui'&&c.system[0]==='测试体系'&&c.effects.length),'card metadata and effects enter pool');
+  const mine=U.custom.find(c=>c.id==='orc-ui');mine.effects=[{trigger:'deploy',actions:[{op:'drawOne',side:'enemy'}]}];mine.effectStatus='manual-confirmed';localStorage.setItem('kg.custom',JSON.stringify(U.custom));
+  r=await U.importFiles([file([fixture('orc-ui',{text:'部署：抽三张牌。'})])]);check(r.summary.skipped===1,'duplicate ID skipped');check(mine.effects[0].actions[0].side==='enemy','manual effects preserved');
+  const csv=new File(['name,cost,text,keywords\n"CSV,测试",2,"部署：抽二张牌。\n获得2个指挥点。",轻甲2'],'cards.csv');r=await U.importFiles([csv]);check(r.summary.ready===1,'quoted CSV and multiline imported');check(U.pool.some(c=>c.name==='CSV,测试'&&c.kwValues.lightArmor===2),'numeric keyword persists');
+  r=await U.importFiles([file([fixture('orc-creator',{text:'部署：将一张“批次UI衍生”加入手牌。'}),fixture('orc-token',{name:'批次UI衍生',token:true,text:'闪击。'})])]);check(r.summary.ready===2,'batch forward reference');
+  r=await U.importFiles([file([fixture('orc-draft',{text:'在第三回合抽取。立即赢得游戏。'})])]);check(r.summary.pending===1,'unknown effect is draft');check(!U.pool.some(c=>c.id==='orc-draft'),'incomplete card stays out of playable pool');check(JSON.parse(localStorage.getItem('kg.orcDrafts')).some(x=>x.id==='orc-draft'),'draft persisted');
+  Array.from(document.querySelectorAll('#importStatus button')).find(b=>b.textContent==='编辑待核对卡牌').click();const dsl=document.getElementById('edEffects');
+  const before=dsl.value;U.compileEditor();check(dsl.value===before,'partial parsing retains existing DSL');check(/未完整/.test(document.getElementById('edWarn').textContent),'partial diagnostics visible');U.saveEditor();check(!U.pool.some(c=>c.id==='orc-draft'),'unreviewed save blocked');
+  document.getElementById('edText').value='在第三回合抽取';U.compileEditor();check(JSON.parse(dsl.value).length===0,'metadata-only parsing clears obsolete DSL');U.saveEditor();check(U.pool.find(c=>c.id==='orc-draft').drawOnTurn===3,'metadata-only card saved and draft promoted');check(!JSON.parse(localStorage.getItem('kg.orcDrafts')).some(x=>x.id==='orc-draft'),'resolved draft removed');
+  U.openEditor(U.pool.find(c=>c.id==='orc-ui'));dsl.value=JSON.stringify([{trigger:'deploy',actions:[{op:'drawOne'}]}]);document.getElementById('edText').value='闪击、磁反应装甲2。';U.compileEditor();check(JSON.parse(dsl.value).length===0,'keyword-only parse clears stale effects');check(document.getElementById('edKeywords').value.includes('magnetic2'),'keyword-only numeric value applied');
+  dsl.value='[{"trigger":"deploy","actions":[]}]';const kw=document.getElementById('edKeywords');kw.value='未知词条';U.compileEditor();check(dsl.value==='[{"trigger":"deploy","actions":[]}]','invalid keyword leaves DSL untouched');
+  const old=localStorage.getItem('kg.custom'),oldIds=U.custom.map(c=>c.id).join(','),orig=Storage.prototype.setItem;
+  Storage.prototype.setItem=function(k,v){if(k==='kg.orcDrafts')throw Error('quota fixture');return orig.call(this,k,v);};
+  r=await U.importFiles([file([fixture('orc-quota',{text:'部署：抽一张牌。'})])]);Storage.prototype.setItem=orig;
+  check(!!r.error,'storage error surfaced');check(localStorage.getItem('kg.custom')===old,'storage transaction rolled back');check(U.custom.map(c=>c.id).join(',')===oldIds,'memory pool unchanged on storage error');
+  const png=new File([Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII='),c=>c.charCodeAt(0))],'图片测试.png',{type:'image/png'});
+  r=await U.importFiles([png]);check(r.summary.ready===1,'image-only import retained');check(U.images['custom/图片测试'],'image stored and shown');
+  r=await U.importFiles([file([fixture('orc-remains',{text:'立即赢得游戏。'})])]);check(r.summary.pending===1,'reload fixture pending');
+  return {cards:U.custom.length,pending:JSON.parse(localStorage.getItem('kg.orcDrafts')).length};
+};
+app.whenReady().then(async()=>{try{
+  server=http.createServer((req,res)=>{const pathname=new URL(req.url,'http://localhost').pathname,mobile=pathname.startsWith('/mobile/'),rel=decodeURIComponent(pathname.replace(/^\/(?:mobile|desktop)\//,'')),sources=[path.join(repo,mobile?'kards-mobile/www':'electron'),path.join(repo,'resources/app')];const f=sources.map(s=>path.resolve(s,rel)).find(f=>sources.some(s=>f.startsWith(s+path.sep))&&fs.existsSync(f)&&fs.statSync(f).isFile());if(!f){res.writeHead(404);return res.end();}res.writeHead(200,{'Content-Type':{'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css'}[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(res);});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+  for(const surface of ['desktop','mobile']){win=new BrowserWindow({show:false,width:surface==='desktop'?1280:844,height:surface==='desktop'?800:390,webPreferences:{partition:'orc-'+surface+'-'+Date.now(),backgroundThrottling:false}});const errors=[];win.webContents.on('console-message',(_e,l,m)=>{if(l>=3&&!/404|favicon|Failed to load resource/.test(m))errors.push(m);});await win.loadURL(`http://127.0.0.1:${server.address().port}/${surface}/game/index.html`);
+    for(let n=0;n<200;n++){if(await win.webContents.executeJavaScript('!!window.KG?.ui?.pool?.length && !!document.querySelector("#edCompileBtn")?.onclick || !!window.KG?.ui?.state'))break;await pause(50);}
+    const result=await win.webContents.executeJavaScript('('+checks.toString()+')()');console.log('PASS '+surface+' data-only import, CSV, references, metadata, drafts, duplicates, image and quota: '+JSON.stringify(result));
+    await win.reload();for(let n=0;n<200;n++){if(await win.webContents.executeJavaScript('!!document.querySelector("#importStatus select")'))break;await pause(50);}assert.equal(await win.webContents.executeJavaScript('document.querySelector("#importStatus select").options[0].textContent'),'orc-remains');console.log('PASS '+surface+' persisted draft recovery');assert.deepEqual(errors,[]);win.destroy();win=null;
+  }server.close();app.exit(0);
+}catch(e){console.error(e.stack);if(win)win.destroy();if(server)server.close();app.exit(1);}});
+setTimeout(()=>{console.error('OrC UI timeout');app.exit(1);},90000).unref();

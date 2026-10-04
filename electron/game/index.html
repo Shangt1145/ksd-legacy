@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14171c">
+<title>KARDS DIY 对战</title>
+<link rel="stylesheet" href="css/style.css?v=115">
+</head>
+<body>
+<!-- ⚠ 网页版废弃标注（2026-09-27）：桌面壳（Electron）与网页版共用本页，
+     横幅由 ui.js 按 UA 判别——UA 含 Electron = 桌面版，不显示；纯浏览器 = 显示。 -->
+<div id="webDeprecated" class="hidden">
+  <span class="wd-text">⚠ 网页版已废弃，仅作过渡保留 —— 请改用桌面版：<b>desktop/dist/KARDS-DIY-*.zip</b>，解压双击「KARDS DIY.exe」即玩</span>
+  <button id="webDepClose" title="本次不再显示">✕</button>
+</div>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">KARDS <span>DIY</span></div>
+    <nav>
+      <button data-screen="battle" class="nav-btn active">对战</button>
+      <button data-screen="decklib" class="nav-btn">卡组</button>
+      <button data-screen="collection" class="nav-btn">卡牌库 / 导入</button>
+      <button data-screen="help" class="nav-btn">规则</button>
+    </nav>
+    <!-- 效果检查器（独立页面，不是游戏内界面）：改 effects DSL。
+         必须放在 nav 的**外面**：buildMobileChrome() 会把 nav 里的 .nav-btn 镜像成抽屉按钮
+         （调用 show(nb.dataset.screen || '')），锚点进去会被当成空屏按钮 → 点一下整屏全灭。
+         手机端改为从「卡牌库 / 导入」的按钮簇进（那一条横向可滚）。 -->
+    <a id="navInspector" class="nav-btn" href="inspector.html"
+       title="效果检查器（独立页面）：查看/修改任意卡的 effects、把卡面句子编译成效果、查配方库与 op 说明书。保存进浏览器，回游戏刷新即生效">🔍 效果检查器</a>
+    <button id="fsToggle" class="nav-btn only-mobile" title="全屏（并尝试锁定横屏）——手机横屏玩时没有浏览器标题栏，能多出一条牌的高度">⛶ 全屏</button>
+    <button id="sideToggle" class="nav-btn only-mobile" title="设置 / 战报">★设置</button>
+    <div id="poolInfo" class="pool-info"></div>
+  </header>
+  <!-- 常驻「☰」必须挂在 stacking context 之外（#app 直下即可）：
+       fixed 定位不在乎 DOM 位置，body.in-battle #sidePinBtn 的显示逻辑也不依赖祖先。
+       放进 #screen-battle 会被 isolation: isolate 困住 z85 → 被滑回的顶栏盖住 → 收不回。 -->
+  <button id="sidePinBtn" title="设置 / 战报 / 导航（点开后再点收起）">☰</button>
+
+  <!-- ============================ 对战 ============================ -->
+  <section id="screen-battle" class="screen active">
+    <div id="battle">
+      <div id="boardScroll">
+       <!-- ★ #boardInner：手机横屏的"战场缩放兜底"用（JS 的 fitBoardScale 对它整体
+            scale 到刚好铺满）。它的存在不影响任何拖拽/FLIP 判定 —— 那些都走
+            getBoundingClientRect（返回的是变换后的真实坐标）。 -->
+       <div id="boardInner">
+        <div class="side foe">
+          <div class="hq-row">
+            <!-- 对手指挥点：同样按原版规格 —— 大数字 + K，**下面小字是"指挥点槽"**（友方也看得到） -->
+            <div class="pile"><span class="kr-enemy"><b id="foeKreditNum">0</b><i id="foeKreditCap">0</i></span></div>
+            <div class="pile"><span id="foeHand">0</span><small>手牌</small></div>
+            <div class="pile"><span id="foeDeck">0</span><small>牌库</small></div>
+            <div class="pile hide-mobile"><span id="foeCounters">0</span><small>反制</small></div>
+            <div class="pile foe-tag">敌方</div>
+          </div>
+          <div id="foeRevealed" class="revealed-strip hidden"></div>
+          <div class="row-label">敌方支援阵线 · 最多 6 个单位</div>
+          <div class="board-row" id="foeSupport"></div>
+        </div>
+
+        <div class="frontline-bar" id="frontlineBar">
+          <span>前 线（双方共抢）</span>
+          <span class="fl-slots">格子 <b id="flCount">0</b>/<span id="flMax">5</span></span>
+          <span id="flControl" class="fl-control"></span>
+        </div>
+        <div class="frontline-wrap" id="frontline"></div>
+
+        <div class="side mine">
+          <div class="row-label">我方支援阵线 · 最多 6 个单位</div>
+          <div class="board-row" id="mySupport"></div>
+          <div class="hq-row">
+            <!-- 我方指挥点：与对手同规格（**大数字 + K**，下面小字 = 指挥点槽）——
+                 原来拆成"指挥点 / 上限"两格，不符合原版 -->
+            <div class="pile"><span class="kr-enemy"><b id="myKredits">0</b><i id="mySlots">0</i></span></div>
+            <div class="pile"><span id="myDeck">0</span><small>牌库</small></div>
+            <div class="pile hide-mobile"><span id="myCounters">0</span><small>反制</small></div>
+            <div class="pile"><span id="myDiscard">0</span><small>弃牌</small></div>
+            <div class="pile foe-tag">我方</div>
+          </div>
+        </div>
+       </div>
+      </div>
+
+      <div id="handBar">
+        <div id="mulliganBar" class="mulligan-bar hidden">
+          <span id="mulliganMsg">准备阶段：点「换」标记待替换，然后确认</span>
+          <button id="mulliganConfirmBtn" class="primary">确认（不换则直接开始）</button>
+        </div>
+        <div id="prompt" class="prompt hidden"></div>
+        <div class="hand-wrap">
+          <div id="myHand" class="hand"></div>
+          <div class="turn-box">
+              <div class="kredits-rail" id="myKreditRail" title="指挥点（亮起=本回合可用）">
+              <div class="kr-pips" id="myKreditPips"></div>
+              <div class="kr-num"><b id="myKreditNum">0</b><i id="myKreditCap">0</i></div>
+            </div>
+            <button id="endTurnBtn" class="primary big">结束回合</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- sidePinBtn 已搬到 </header> 之后（#app 直下）：留在 #screen-battle 里会被
+           body.in-battle #screen-battle { isolation: isolate }（style.css 3205）困进
+           stacking context，z-index:85 出不来 —— 对战点☰展开侧栏后顶栏滑回（z80，
+           root context），反而盖住按钮，第二次点击点到顶栏的 poolInfo 上，
+           toggle('side-pinned') 永远执行不了 → "桌面版侧边栏收不回去"（真机探针实锤）。 -->
+      <aside id="sidePanel">
+        <div class="panel-head">
+          <span id="turnLabel">第 1 回合</span>
+          <button id="restartBtn" class="ghost">重开</button>
+        </div>
+
+        <!-- 模式分开：单机对 AI / 局域网联机。两套面板互斥显示，互不干扰。 -->
+        <div class="mode-switch">
+          <button id="modeAiBtn" class="mode-btn active">单机 · 对 AI</button>
+          <button id="modeLanBtn" class="mode-btn">联机 · 局域网</button>
+        </div>
+
+        <!-- ==================== 单机（对 AI） ==================== -->
+        <div id="aiPanel">
+          <div class="setup-row">
+            <label>先手
+              <select id="optFirst">
+                <option value="0">你</option>
+                <option value="1">对手</option>
+                <option value="r">随机</option>
+              </select>
+            </label>
+            <label>演出
+              <select id="optFx" title="动画/特效节奏">
+                <option value="normal">原版</option>
+                <option value="fast">快</option>
+                <option value="faster">极快</option>
+              </select>
+            </label>
+            <label>AI
+              <select id="optAi">
+                <option value="0">普通</option>
+                <option value="mild">偏难（AI 从第 5 回合起每回合 +1 指挥点）</option>
+                <option value="1">困难（AI 每回合 +1 指挥点）</option>
+              </select>
+            </label>
+            <label class="chk"><input type="checkbox" id="optAiOrders" checked> AI使用指令/反制</label>
+            <label class="chk"><input type="checkbox" id="optSfx" checked> 音效</label>
+          </div>
+          <button id="aiStartBtn" class="primary big" style="margin: 8px 12px 2px;">开始游戏</button>
+          <div class="tip-box">
+            <div class="tip-line">拖动单位到敌人身上 = 攻击</div>
+            <div class="tip-line">拖动手牌到支援阵线 = 部署</div>
+            <div class="tip-line">需要指向的卡：拖到目标上直接生效</div>
+            <div class="tip-line">前线同一时间只能一方占据：对手在线上时，先打掉他的前线单位</div>
+            <div class="tip-line">你的单位站上前线后，就能攻击敌方总部</div>
+          </div>
+          <button id="logToggle" class="ghost small">显示战报</button>
+        </div>
+
+        <!-- ==================== 联机（局域网） ==================== -->
+        <div id="mpPanel" class="hidden">
+          <div class="mp-box">
+            <div class="mp-head"><span>联机对战</span><span id="mpStatus" class="mp-status idle">未连接</span></div>
+            <div class="mp-row">
+              <input id="mpName" class="mp-input" placeholder="我的昵称" maxlength="12">
+              <label class="chk"><input type="checkbox" id="mpArt" checked> 同步卡图</label>
+            </div>
+            <div class="mp-row">
+              <input id="mpRoom" class="mp-input mp-code" placeholder="房间码（4位）" maxlength="4">
+              <button id="mpJoinBtn" class="ghost small">加入</button>
+              <button id="mpHostBtn" class="primary small">建房</button>
+            </div>
+            <div class="mp-row">
+              <input id="mpRelay" class="mp-input" placeholder="服务器地址（跨网/加速器必填，例 172.24.81.99:8731；留空=当前页面）" maxlength="64">
+              <button id="mpRelayBtn" class="ghost small">应用</button>
+              <button id="mpRelayClear" class="ghost small">清除</button>
+            </div>
+            <div id="mpAddrList" class="mp-addr-list hidden"></div>
+            <div id="mpProgress" class="mp-progress hidden"><div id="mpProgressBar"></div></div>
+            <div class="mp-row">
+              <select id="mpDeck" title="用哪副卡组参战"></select>
+              <button id="mpStartBtn" class="primary small" disabled>开始对局（房主）</button>
+              <button id="mpLeaveBtn" class="ghost small" disabled>断开</button>
+            </div>
+            <div id="mpStartHint" class="mp-hint mp-start-hint"></div>
+            <div class="mp-row"><button id="mpLogToggle" class="ghost small">联机日志</button></div>
+            <div id="mpHint" class="mp-hint">建房后把<b>本机地址 + 房间码</b>发给对方；对方用浏览器打开同一地址 → 联机 → 加入。<br>
+              <b>跨网 / UU 加速器</b>：两边都开 UU 的「云联机」进同一个房间（游戏没被收录就选「通用联机」），
+              房主把 UU 分配的<b>虚拟 IP</b> 发给对方，对方填进上面的「服务器地址」（<code>虚拟IP:端口</code>）→ 应用。<br>
+              <b>先后手永远随机</b>（由开局种子决定，双方算出的一致）；数据对齐后才允许开局。</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="logDrawer" class="log-drawer hidden">
+      <div class="panel-head"><span>战报</span><button id="logClose" class="ghost small">关闭</button></div>
+      <div id="battleLog" class="log"></div>
+    </div>
+
+    <!-- 联机日志（折叠侧边栏）：同步/不同步/反复拉不齐的全程记录都在这里，
+         手机上开不了控制台也能一键复制发给开发者 -->
+    <div id="mpLogDrawer" class="log-drawer hidden">
+      <div class="panel-head">
+        <span>联机日志</span>
+        <button id="mpLogCopy" class="ghost small">复制全部</button>
+        <button id="mpLogClose" class="ghost small">关闭</button>
+      </div>
+      <div id="mpLogList" class="mp-log-list"></div>
+    </div>
+  </section>
+
+  <!-- ==================== 选择卡组（构筑的上级界面） ====================
+       ★ 制作者 2026-09-25 口径：「选择卡组和卡组构筑界面分开，先选择或新建卡组，
+         然后再进入卡组构筑」「卡组构筑变成选择卡组的下级界面」。
+       于是卡组库的 6 个操作按钮（新建/复制/改名/删除/分享/导入）全部提到这一层，
+       构筑界面里腾出的整条左栏都留给"当前卡组 + 卡池"。 -->
+    <section id="screen-decklib" class="screen">
+      <div class="deckset-head">
+        <div class="deckset-title">
+          <h3>选择卡组</h3>
+          <p class="hint">点一副卡组载入它，然后进「构筑」改牌；要新建就点「新建」。</p>
+        </div>
+        <div class="deck-actions">
+          <button id="newDeckBtn" class="ghost">新建</button>
+          <button id="dupDeckBtn" class="ghost">复制</button>
+          <button id="renameDeckBtn" class="ghost">改名</button>
+          <button id="deleteDeckBtn" class="ghost">删除</button>
+          <button id="shareDeckBtn" class="ghost" title="把当前卡组编成一串「卡组代码」并复制到剪贴板 —— 发给别人，对方点「导入代码」粘贴即可原样收到这副卡组">分享代码</button>
+          <button id="importDeckBtn" class="ghost" title="粘贴别人给你的卡组代码（以 KDS1 开头）→ 直接建成一副新卡组；你卡池里没有的卡会明确跳过并提示数量">导入代码</button>
+        </div>
+      </div>
+      <div class="deckset-go">
+        <button id="editDeckBtn" class="primary big">进入构筑 ▸</button>
+        <!-- ★ 独立的 AI 卡组构筑界面（制作者 2026-09-25）：跟普通构筑同一个界面骨架，
+             但左栏整条换成 AI 卡组 —— 点卡池 / 拖卡全部加给 AI，保存也存 AI 卡组。
+             内部靠 body.ai-build（S.aiBuild 独立状态，不看 deckMode，免得跟普通
+             构筑里"AI 卡组抽屉"的开合语义打架）一键切换。 -->
+        <button id="editAiDeckBtn" class="primary big" title="单独的 AI 卡组构筑界面：左栏是 AI 卡组，点卡池加卡 / 拖卡都加给 AI，保存进 AI 卡组">AI 卡组构筑 ▸</button>
+        <span id="decksetHint" class="hint"></span>
+      </div>
+      <div id="deckLib" class="deck-lib deck-lib-cards"></div>
+    </section>
+
+  <!-- ============================ 构筑（选择卡组的下级界面） ============================ -->
+    <section id="screen-deck" class="screen">
+      <div class="deck-layout">
+        <!-- 左：我的卡组。★ 原版 KARDS 的构筑就是"卡组在左、卡池在右" -->
+        <aside class="deck-side" id="playerDeckSide">
+          <div class="deck-side-head">
+            <button id="backToDeckLib" class="ghost small" title="回到选择卡组">← 卡组库</button>
+            <h3 id="deckTitle">构筑</h3>
+            <!-- ★ AI 卡组收进右侧抽屉（原三栏里它占掉一整栏，手机上更没地方放） -->
+            <button id="aiDeckToggle" class="ghost small" title="打开 / 收起 AI 卡组侧边栏">AI 卡组 ▸</button>
+          </div>
+          <div class="deck-actions">
+            <button id="autoDeckBtn" class="primary">自动构筑</button>
+            <button id="clearDeckBtn" class="ghost">清空</button>
+            <button id="saveDeckBtn" class="ghost">保存</button>
+          </div>
+          <!-- ★ 主国/盟国（每副卡组各存一份；开关默认开，可关掉） -->
+          <div id="nationBar" class="nation-bar">
+            <label class="chk" title="关掉后这副卡组不限制国家"><input type="checkbox" id="nationRuleChk"> 主国/盟国限制</label>
+            <select id="majorSel" title="主国"></select>
+            <select id="allySel" title="盟国（最多 12 张）"></select>
+          </div>
+          <div id="deckStats" class="deck-stats"></div>
+          <div id="deckList" class="deck-list"></div>
+        </aside>
+        <main class="pool-main">
+          <div class="filters">
+            <input id="cardSearch" placeholder="搜索卡名 / 文本">
+            <select id="setFilter"><option value="">全部系列</option></select>
+            <select id="typeFilter">
+              <option value="">全部类型</option>
+              <option value="unit">单位</option>
+              <option value="order">指令</option>
+              <option value="counter">反制</option>
+            </select>
+            <select id="unitTypeFilter">
+              <option value="">全部兵种</option>
+              <option value="infantry">步兵</option>
+              <option value="tank">坦克</option>
+              <option value="artillery">火炮</option>
+              <option value="fighter">战斗机</option>
+              <option value="spacefighter">太空战机</option>
+              <option value="bomber">轰炸机</option>
+              <option value="landcruiser">巡地舰</option>
+              <option value="cruiser">巡航舰</option>
+            </select>
+            <select id="costFilter"><option value="">全部费用</option></select>
+            <label class="chk"><input type="checkbox" id="onlyOwned"> 只看已导入</label>
+            <label class="chk"><input type="checkbox" id="hideToken" checked> 隐藏不可构筑卡</label>
+            <span class="pager">
+              <button id="pagePrev" class="ghost small" title="上一页（PageUp）">◀ 上一页</button>
+              <span id="pageInfo">1/1</span>
+              <button id="pageNext" class="ghost small" title="下一页（PageDown）">下一页 ▶</button>
+              <button id="pageTop" class="ghost small" title="回到顶部（Home）">顶部</button>
+            </span>
+          </div>
+          <div id="poolGrid" class="pool-grid"></div>
+        </main>
+        <!-- 右：AI 卡组（抽屉，默认收起 —— 由左栏的「AI 卡组 ▸」开关） -->
+        <aside class="deck-side deck-drawer" id="aiDeckSide">
+          <div class="deck-side-head">
+            <!-- ★ 只在 AI 构筑界面（body.ai-build）里显示：AI 卡组占据左栏时的返回入口
+                 （普通抽屉形态里藏掉，返回走左栏自己的「← 卡组库」） -->
+            <button id="aiBuildBack" class="ghost small" title="回到选择卡组">← 卡组库</button>
+            <h3>AI 卡组</h3>
+            <button id="aiDeckClose" class="ghost small" title="收起">✕ 收起</button>
+          </div>
+          <div class="deck-actions">
+            <button id="autoAiDeckBtn" class="primary">自动构筑</button>
+            <button id="clearAiDeckBtn" class="ghost">清空</button>
+            <button id="saveAiDeckBtn" class="ghost">保存</button>
+          </div>
+          <div id="aiDeckStats" class="deck-stats"></div>
+          <div id="aiDeckList" class="deck-list"></div>
+        </aside>
+      </div>
+    </section>
+
+  <!-- ========================== 卡牌库 / 导入 ========================== -->
+  <section id="screen-collection" class="screen">
+    <div class="coll-head">
+      <div>
+        <h3>导入我的 DIY 卡牌</h3>
+        <p class="hint">选择卡图文件夹或若干 PNG 文件即可导入；若同目录有 <code>cards.json</code>（字段见下）会自动读取数值与效果文本。</p>
+      </div>
+      <div class="coll-actions">
+        <label class="chk"><input type="checkbox" id="showRef"> 显示词条/参考卡</label>
+        <!-- ★ 首选入口：先建一张空卡，再在右边填数值 / 词条 / 效果，最后配图 -->
+        <button id="newCardBtn" class="primary" title="新建一张空白卡 → 在右侧填数值、词条、效果 → 需要的话再配一张图">＋ 新建卡牌</button>
+        <!-- ⚠ 这里原来**缺了开标签**（只剩下孤零零的 `</label>`）→ file input 裸露成
+             浏览器原生的"选择文件 + 未选择任何文件"，在深色皮肤里非常扎眼。 -->
+        <label class="file-btn ghost" title="整个文件夹的卡图一起导入">
+          选择文件夹
+          <input type="file" id="importDir" webkitdirectory directory multiple>
+        </label>
+        <label class="file-btn ghost">批量导入（资料或图片）
+          <input type="file" id="importFiles" multiple accept="image/*,.json,.csv,.txt">
+        </label>
+        <button id="exportCardsBtn" class="ghost">导出 cards.json</button>
+        <button id="exportCustomBtn" class="ghost" title="把自定义卡连同卡图打包成一个 JSON（离线备份用）。正式保存请从「启动游戏.cmd / node game/tools/serve.js」打开后点「保存到卡池」">导出保存名单</button>
+        <button id="fixAllCustomBtn" class="ghost" title="保存 = 把自定义卡与你对内置卡的手工修改直接写进 nations/（卡牌数据唯一存储），卡图落成真实 png，自动重建卡池并刷新。保存后只能被手动修改。需要从「启动游戏.cmd / node game/tools/serve.js」打开；file:// 下无法保存">保存到卡池</button>
+        <button id="restoreRemovedBtn" class="ghost" title="把被删除的内置卡全部放回卡池（定义一直备份在 kg.removed.bak 里）">恢复已删除的内置卡</button>
+        <!-- ★ 批量删除内置卡（2026-10-02 Alan）：按国家/系列删，或一键全删。
+             删除走 removeBuiltinCard 同一条管线（备份 kg.removed.bak；服务器模式真删 nations/）。 -->
+        <select id="delBuiltinSel" class="ghost" title="选择要删除的内置卡范围（按国家/系列）">
+          <option value="__all__">全部内置卡</option>
+        </select>
+        <button id="delBuiltinBtn" class="ghost" title="删除所选范围内的全部内置卡，含已保存的自定义卡和衍生卡；未保存的本地自定义卡保留">删除内置卡</button>
+        <button id="rebuildFxBtn" class="ghost">重新自动解析效果</button>
+        <!-- 效果级手工编辑的专用工具（独立页面）：卡面句子入口 / 配方库 / op 说明书 / undo / 只读画布 -->
+        <a class="file-btn ghost" id="collInspectorLink" href="inspector.html"
+           title="效果检查器（独立页面）：选中一张卡后逐条看/改它的 effects；「从卡面句子生成…」可把卡面原文编译成效果；还有配方库与 op 说明书。保存进浏览器，回游戏刷新即生效">🔍 效果检查器（改效果 DSL）</a>
+        <button id="clearEditsBtn" class="ghost" title="废弃：清掉早期在编辑器里保存过的效果（它们会盖掉落盘产物）">清除手工编辑</button>
+        <button id="resetImportBtn" class="ghost">清除导入</button>
+      </div>
+    </div>
+    <div id="importStatus" class="import-status"></div>
+    <div class="coll-filters">
+      <input id="collSearch" placeholder="检索：卡名 / 卡面文本 / 卡号…（支持空格分词）">
+      <select id="collSet"><option value="">全部系列</option></select>
+      <select id="collType">
+        <option value="">全部类型</option>
+        <option value="unit">单位</option>
+        <option value="order">指令</option>
+        <option value="counter">反制</option>
+      </select>
+      <select id="collRarity">
+        <option value="">全部稀有度</option>
+        <option value="gold">金（1张）</option>
+        <option value="silver">银（2张）</option>
+        <option value="bronze">铜（3张）</option>
+        <option value="iron">铁（4张）</option>
+        <option value="token">令牌</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="collOnlyFx"> 只看有特效的</label>
+      <span id="collCount" class="hint"></span>
+      <button id="collClear" class="ghost small">重置</button>
+    </div>
+    <div class="coll-body">
+      <div id="collGrid" class="pool-grid"></div>
+    </div>
+  </section>
+
+      <section id="screen-editor" class="screen">
+        <!-- ★ 制卡台：独立全屏界面。三栏：左=卡图与分类 / 中=数值与卡面 / 右=效果 DSL（最宽） -->
+        <div class="editor-top">
+          <h3>制卡台</h3>
+          <div class="editor-row">
+            <label class="file-btn ghost" title="一次选多张 png，批量建成卡">
+              批量导入（资料或图片）
+              <input type="file" id="importFiles2" multiple accept="image/*,.json,.csv,.txt">
+            </label>
+            <label class="file-btn ghost" title="整个文件夹的卡图一起加进来">
+              批量加入（整个文件夹）
+              <input type="file" id="importDir2" webkitdirectory directory multiple>
+            </label>
+            <span class="grow"></span>
+            <button id="edCloseBtn" class="ghost">关闭</button>
+          </div>
+        </div>
+
+        <div class="editor-grid">
+          <!-- ── 左栏：卡图 + 分类 ── -->
+          <div class="ed-col ed-left">
+            <div class="ed-artbox">
+              <img id="edArt" alt="">
+            </div>
+            <label class="file-btn ghost small" title="给这张卡选一张图">
+              配图
+              <input type="file" id="edArtFile" accept="image/*">
+            </label>
+            <label class="block">类型
+              <select id="edCardType"><option value="unit">单位</option><option value="order">指令</option><option value="counter">反制</option></select>
+            </label>
+            <label class="block">兵种
+              <select id="edUnitType">
+                <option value="">—</option>
+                <option value="infantry">步兵</option><option value="tank">坦克</option>
+                <option value="artillery">火炮</option><option value="fighter">战斗机</option><option value="spacefighter">太空战机</option>
+                <option value="bomber">轰炸机</option><option value="landcruiser">巡地舰</option>
+                <option value="cruiser">巡航舰</option>
+              </select>
+            </label>
+            <label class="block">稀有度
+              <select id="edRarity" title="决定卡组里最多能带几张">
+                <option value="">（按卡面标志）</option>
+                <option value="gold">金 · 只能带 1 张</option>
+                <option value="silver">银 · 最多 2 张</option>
+                <option value="bronze">铜 · 最多 3 张</option>
+                <option value="iron">铁 · 最多 4 张</option>
+                <option value="token">令牌 · 不可构筑</option>
+              </select>
+            </label>
+            <label class="block">系列<input id="edSet" placeholder="自定义"></label>
+            <!-- ★ 体系：与 攻击力/费用/系列 **同级**的卡牌元数据（不进 DSL、也不进对战词条）。
+                 卡面里写这个体系名（如「部署两辆 Mk坦克」）就会引用**该体系旗下的所有卡**。
+                 多个体系用逗号分隔。 -->
+            <label class="block" title="体系 = 作战家族（Mk坦克 / WgL战斗机 / 黑盾 / 航母 / 伞兵…）。卡面里写体系名即可引用它旗下所有卡；多个用逗号分隔。">体系
+              <input id="edSystem" placeholder="如 Mk坦克（多个用逗号分隔）">
+            </label>
+          </div>
+
+          <!-- ── 中栏：数值 + 卡面原文 ── -->
+          <div class="ed-col ed-mid">
+            <label class="block">卡名<input id="edName" placeholder="卡名"></label>
+            <label class="chk" title="勾上=在卡牌顶部叠一层卡名文字。卡面图若已自带名字，保持不勾即可">
+              <input type="checkbox" id="edShowName"> 显示卡名叠字（默认关）
+            </label>
+            <div class="stat-grid">
+              <label>费用<input id="edCost" type="number"></label>
+              <label>攻击<input id="edAtk" type="number"></label>
+              <label>防御<input id="edDef" type="number"></label>
+              <label>行动费用<input id="edOp" type="number"></label>
+            </div>
+            <div class="dual-row">
+              <label class="chk" title="巡航舰：卡面上第二个攻击数字（打非太空目标时用）">
+                <input type="checkbox" id="edDual"> 巡航舰（双攻击力）
+              </label>
+              <label>另一攻击力<input id="edAtk2" type="number" placeholder="打非太空目标"></label>
+              <label>对谁用
+                <select id="edDualVs">
+                  <option value="space">太空系</option>
+                  <option value="landcruiser">巡地舰</option>
+                  <option value="cruiser">巡航舰</option>
+                </select>
+              </label>
+            </div>
+            <label class="block">词条（逗号分隔，如 blitz,guard,fury）
+              <input id="edKeywords">
+            </label>
+            <label class="block">效果文本（卡面原文）
+              <textarea id="edText" rows="7"></textarea>
+            </label>
+            <div class="editor-row">
+              <button id="edCompileBtn" class="primary">自动解析效果</button>
+              <button id="edGuideBtn" class="ghost" aria-controls="edGuide" aria-expanded="false">解析规范</button>
+              <button id="edSaveBtn" class="primary">保存修改</button>
+            </div>
+            <div id="edParseStatus" class="parse-status" role="status" aria-live="polite"></div>
+            <div id="edWarn" class="warn"></div>
+            <div id="edGuide" class="guide-panel" hidden>
+              <div class="guide-head">
+                <span>制卡者手册 · 自动解析与效果 DSL</span>
+                <button id="edGuideClose" class="ghost">收起</button>
+              </div>
+              <pre id="edGuideBody" class="guide-body"></pre>
+            </div>
+          </div>
+
+          <!-- ── 右栏：效果 DSL（最宽，方便手改） ── -->
+          <div class="ed-col ed-right">
+            <label class="block">效果 DSL（JSON）
+              <textarea id="edEffects" class="dsl-box" rows="30" spellcheck="false"></textarea>
+            </label>
+          </div>
+        </div>
+      </section>
+
+  <!-- ============================ 规则 ============================ -->
+  <section id="screen-help" class="screen">
+    <div class="help">
+      <h3>怎么玩</h3>
+      <ul>
+        <li><b>目标</b>：把对手总部 20 点防御打到 0。</li>
+        <li><b>指挥点</b>：每回合 +1，上限 12，回合开始回满；卡面左上角数字就是花费。牌库抽空后每抽一张受递增疲劳伤害。</li>
+        <li><b>前线（双方共抢的一条线）</b>：单位先进入自己的支援阵线；<b>移动到前线</b>会花掉行动并支付行动花费。
+          前线每方最多 5 个，双方可以同时站在线上 —— <b>你在前线有人、对手没有 = 你控制前线</b>（面板会显示）。
+          <b>只有前线的单位能攻击敌方总部</b>（对方有固守单位时必须先解决固守）。</li>
+        <li><b>攻击范围</b>：支援阵线里的步兵/坦克<b>只能打敌方前线</b>；<b>炮兵、战斗机、轰炸机、巡地舰、巡航舰可以跨阵线攻击</b>任意战线的目标，
+          其中<b>火炮 / 轰炸机 / 太空单位（巡地舰·巡航舰·太空战机）无视固守</b>（战斗机仍受固守限制）。<b>太空单位攻打陆军不会受到反击伤害</b>。</li>
+        <li><b>兵种怎么认</b>：看卡面「攻击 / 防御」<b>中间的单位图标</b> —— 士兵=步兵、坦克轮廓=坦克、
+          长炮管=火炮、飞机=战斗机/轰炸机、<b>三角形=太空战机</b>、<b>圆角车体+横带=巡地舰</b>、<b>箭形舰体=巡航舰</b>。
+          带两个攻击数字的单位一定是<b>巡航舰</b>。</li>
+        <li><b>反击规则</b>：通常互伤，但下列情况不反击 —— 攻方是<b>炮兵</b>；攻方是<b>轰炸机且目标不是战斗机</b>；
+          攻方带<b>冲击</b>（首次攻击）；守方是<b>炮兵</b>；守方是<b>轰炸机而攻方不是战斗机</b>。
+          轰炸机打战斗机、战斗机打轰炸机时正常互相伤害。</li>
+        <li><b>固守/守护</b>：<b>只保护同一阵线上的目标</b> —— 前线固守挡前线目标，支援线固守挡支援线目标；<b>总部算支援阵线目标</b>，所以只有敌方支援线的固守才保护总部。</li>
+        <li><b>行动花费</b>：卡面花费格右下角的小数字，攻击与移动都要付；坦克可以同回合"先移动再攻击"（付两次），闪击只取消"部署当回合不能动"的限制。</li>
+        <li><b>操作</b>：<b>把卡从手牌拖到支援阵线</b>即可出牌；拖动场上单位到另一条阵线移动，拖到敌方单位或总部攻击；普通点击只查看详情；<kbd>Esc</kbd> 取消，<kbd>空格</kbd> 结束回合。</li>
+          <span class="rar-legend"><i class="rarity gold"></i>金 = 同名最多 1 张</span>
+          <span class="rar-legend"><i class="rarity silver"></i>银 = 2 张</span>
+          <span class="rar-legend"><i class="rarity bronze"></i>铜 = 3 张</span>
+          <span class="rar-legend"><i class="rarity iron"></i>铁 = 4 张</span>
+          <span class="rar-legend"><i class="rarity token"></i>无标志 = 不能放进卡组，只能由其他卡牌产生（开发 / 加入手牌 / 召唤）</span>
+        </li>
+        <li><b>词条</b>：闪击（部署当回合可动）、固守（必须先打它）、烟幕（攻击前不可被指定，<b>攻击或移动后解除</b>）、
+          伏击（<b>每回合首次</b>被攻击时先手反击）、动员（上前线触发）、狂怒/奋战（每回合攻击两次）、
+          亡计（死亡触发）、老兵（达成条件升级）、<b>冲击（首次攻击不会受到反击伤害，攻击后失去）</b>、
+          游击、流亡、重甲N、强磁护盾、硬铝弹等。鼠标悬停任意卡牌可看词条说明。</li>
+        <li><b>设置</b>：右侧面板可以选谁先手、以及 AI 难度。这套 DIY 卡池节奏极快，先手与 1 点指挥点的差别就能决定胜负，觉得太简单就让 AI 先手或开"困难"。</li>
+      </ul>
+      <h3>局域网联机对战</h3>
+      <p class="hint">对战页右侧顶部有两个模式按钮：<b>单机 · 对 AI</b> 和 <b>联机 · 局域网</b>。
+      <ol>
+        <li><b>建房方</b>：双击 <code>启动游戏.cmd</code> 起服务（窗口里会打印你的局域网地址），
+          切到「联机 · 局域网」→ 填昵称 → 点 <b>建房</b>，把地址和 4 位<b>房间码</b>发给对方。</li>
+        <li><b>加入方</b>：用浏览器打开那个地址 → 「联机 · 局域网」→ 填房间码 → <b>加入</b>。</li>
+        <li>连上后自动做 <b>DIY 数据对等</b>：两边卡池逐张比指纹，<b>一方独有的卡会把它的
+          同名但内容不同的卡按<b>房主</b>版本统一；<b>对不齐就不让开局</b>，并写清还差什么。</li>
+        <li>勾选「同步卡图」会顺便把对方那边你缺的卡图传过来（首次联机稍慢，之后不用再传）。</li>
+        <li>双方各选一副卡组 → 房主点 <b>开始对局</b>。<b>先后手永远随机</b>（由开局种子决定，
+          两边算出来必然一致，不提供人工挑先手）。换牌阶段要<b>两边都确认</b>才开局。</li>
+        <li>对局中每方只在自己的回合操作。对手出牌 / 攻击 / 移动你都会<b>看到和他一样的动画</b>，
+        <li>联机时<b>不显示战报</b>：战报是双方共用的一份，里面有「情报看到了对手哪张手牌」
+      </ol>
+      <p class="hint">技术口径：两边各跑一份<b>确定性引擎</b>（随机数走种子），只同步「动作 + 每一步选择的答案」，
+        卡池差异在开局前就被拉平 —— 这是"双方 DIY 数据不对等"的根治办法。</p>
+      <h3>导入自己的卡</h3>
+      <ol>
+        <li>把卡图 PNG 与 <code>cards.json</code> 放进一个文件夹，点「选择文件夹 / 文件」。</li>
+        <li>没有 cards.json 时，游戏会先建出只有卡图与文件名的卡，点开它填数值与效果文本，再点「自动解析效果」——常见中文句式（抽牌/伤害/消灭/增益/压制/洗入卡组/部署：/亡计：…）会自动生成可执行效果。</li>
+        <li>解析完整时结果才会写进效果 DSL。遇到未识别内容，编辑器会显示警告并保留当前 DSL；修改原文或手写 DSL 后再保存。卡面原文旁的「解析规范」说明了句式与 DSL 规则。</li>
+        <li><code>cards.json</code> 字段：<code>id, name, set, cardType(unit|order), unitType, cost, attack, defense, opCost, keywords[], text, effects[]</code>。</li>
+      </ol>
+      <h3>快捷键</h3>
+      <ul><li><kbd>Esc</kbd> 取消当前选择 · <kbd>空格</kbd> 结束回合 · <kbd>PageUp/PageDown</kbd> 卡池翻页 · <kbd>F2</kbd> 布局诊断</li></ul>
+      <h3>界面显示不对？</h3>
+      <p class="hint">按 <kbd>F2</kbd>（或点下面按钮）会显示一份布局诊断：窗口高度、各容器高度、卡池的
+        <code>clientHeight / scrollHeight</code>。<b>如果 scrollHeight 不大于 clientHeight，说明容器还在跟着内容长高（边界没生效）</b>，
+      <p><button id="diagBtn" class="ghost">显示布局诊断</button></p>
+    </div>
+  </section>
+
+  <!-- ==================== 界面设置（手机端侧边栏入口） ====================
+       音量走 sfx 的全局 volume（kg_sfx_volume）；界面大小走 --ui-zoom（kg_ui_zoom），
+       只作用于菜单系界面（对战布局固定 —— 动对战缩放会牵连拖拽/FLIP 判定，不碰）。 -->
+  <section id="screen-settings" class="screen">
+    <div class="settings-wrap">
+      <div class="settings-card">
+        <h3>界面设置</h3>
+        <div class="set-row">
+          <label for="setVol">音效音量</label>
+          <input type="range" id="setVol" min="0" max="100" step="5">
+          <span id="setVolVal" class="set-val"></span>
+        </div>
+        <div class="set-row">
+          <label for="setZoom">界面大小</label>
+          <input type="range" id="setZoom" min="70" max="140" step="5">
+          <span id="setZoomVal" class="set-val"></span>
+        </div>
+        <p class="hint">「界面大小」作用于卡牌库 / 卡组构筑等菜单界面；对战界面的布局是固定的（缩放会破坏拖拽判定）。设置保存在本机浏览器。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="tooltip" class="tooltip hidden"></div>
+<div id="toast" class="toast hidden"></div>
+<div id="diag" class="diag hidden">
+  <div class="panel-head"><span>布局诊断（把这段发给开发者）</span><button id="diagClose" class="ghost small">关闭</button></div>
+  <pre id="diagText"></pre>
+</div>
+<div id="errorBanner" class="error-banner hidden">
+  <div class="eb-title">页面出错了（把这段文字发给开发者即可定位）</div>
+  <pre id="errorText"></pre>
+  <div class="eb-actions">
+    <button id="errCopy" class="ghost">复制</button>
+    <button id="errClose" class="ghost">关闭</button>
+  </div>
+</div>
+
+<script src="js/engine.js?v=115"></script>
+<script src="js/primitives-extra.js?v=115"></script>
+<script src="js/primitives.js?v=115"></script>
+  <script src="js/effects.js?v=115"></script>
+<script src="js/effect-primitives.js?v=115"></script>
+  <script src="js/compiler.js?v=115"></script>
+  <script src="js/effect-contract.js?v=115"></script>
+  <script src="js/orc.js?v=115"></script>
+  <script src="js/card-import.js?v=115"></script>
+<script src="js/cards.js?v=115"></script>
+<!-- ★ 异画表 g.KG_ALT_ART（扫描器生成：node game/tools/scan-alt-art.js）
+     必须在 ui.js **之前**加载，否则前端不知道哪些卡有异画 → 不给切换入口。
+     ⚠ 这个标签曾经被弄丢过一次（表现为"异画效果全没了"），别再删它。
+     ★ 从 serve.js 打开时这份表只作**兜底**：启动时 ui.js 会去 GET /__alt-art 现扫一次，
+       所以新放一张 <卡图名>y.png **刷新浏览器就生效**，不用跑扫描器、也不用改这里的 ?v=1790264248。 -->
+<script src="js/alt-art.js?v=115"></script>
+<script src="js/card-guide.js?v=115"></script>
+<script src="js/ai.js?v=115"></script>
+<script src="js/effects-data.js?v=115"></script>
+<script src="js/sfx.js?v=115"></script>
+<script src="js/animate.js?v=115"></script>
+<script src="js/netsync.js?v=115"></script>
+<script src="js/net.js?v=115"></script>
+<script src="js/thumbs.js?v=115"></script>
+<script src="js/auto-save.js?v=115"></script>
+<script src="js/ui.js?v=115"></script>
+</body>
+</html>

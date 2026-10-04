@@ -1,0 +1,2911 @@
+{
+ "generatedAt": "2026-10-02T09:05:59",
+ "source": "docs/CARD-DATA-SPEC.md §5/§6",
+ "op": {
+  "_returnToHandOld": {
+   "name": "返回手牌（旧版兼容）",
+   "desc": "returnToHand 的旧写法。新卡请用 returnToHand。",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "aliasOf": "returnToHand",
+   "neverSeen": true
+  },
+  "activate": {
+   "name": "激活",
+   "desc": "手动执行另一组效果（连锁）",
+   "params": {
+    "effects": {
+     "desc": "效果数组",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "addCardToHand": {
+   "name": "加入手牌",
+   "desc": "获得一张卡（进手牌；from:\"deck\"=从卡组抽指定卡；costTo/costMod 改它的费用）",
+   "params": {
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": "string"
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": ""
+    },
+    "costTo": {
+     "desc": "设为的花费",
+     "type": "number"
+    },
+    "costMod": {
+     "desc": "花费修正",
+     "type": ""
+    },
+    "_quotedName": {
+     "desc": "带引号卡名",
+     "type": "boolean"
+    },
+    "cardId": {
+     "desc": "精确卡 id",
+     "type": "string"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "random": {
+     "desc": "多候选时随机取一",
+     "type": "boolean"
+    },
+    "self": {
+     "desc": "自己",
+     "type": "boolean"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "armorBonus": {
+   "name": "护甲加成",
+   "desc": "临时+N 重甲",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "asVar": {
+   "name": "作为变量（记下这个单位）",
+   "desc": "把这次召唤出来的单位（或某个引用）记成具名变量；后面的动作用「事件引用 → 变量名」引用它，或用 refAll 形态整组引用。变量作用域 = 本次结算。",
+   "params": {
+    "name": {
+     "desc": "变量名（如 v1）",
+     "type": ""
+    },
+    "from": {
+     "desc": "来源：summoned=本次召唤 / target=玩家选定 / eventUnit=事件主角 / var=复制另一个变量",
+     "type": ""
+    },
+    "ref": {
+     "desc": "当 from 不是 summoned 时引用谁（target / eventUnit / 另一个变量名）",
+     "type": ""
+    }
+   },
+   "aliasOf": null,
+   "neverSeen": true
+  },
+  "auraBuff": {
+   "name": "光环增益",
+   "desc": "光环 buff（编译器内部产物，手写请用 §10 aura）",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    },
+    "attack": {
+     "desc": "攻击力（可负）",
+     "type": ""
+    },
+    "defense": {
+     "desc": "防御力（可负）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "buff": {
+   "name": "属性增减",
+   "desc": "+N/+N（duration:\"turn\"=本回合）。防御加成有下限 1 保护（不会因此致死）。反向用负数",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "defense": {
+     "desc": "防御力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "duration": {
+     "desc": "持续时间（\"turn\"=本回合）",
+     "type": "enum"
+    },
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": ""
+    },
+    "opCostMod": {
+     "desc": "行动花费修正",
+     "type": "number"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    }
+   }
+  },
+  "buffAll": {
+   "name": "全体属性增减",
+   "desc": "+N/+N（duration:\"turn\"=本回合）。防御加成有下限 1 保护（不会因此致死）。反向用负数",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "defense": {
+     "desc": "防御力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "duration": {
+     "desc": "持续时间（\"turn\"=本回合）",
+     "type": "enum"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "opCostMod": {
+     "desc": "行动花费修正",
+     "type": "number"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "buff",
+   "neverSeen": true
+  },
+  "buffCardsInPiles": {
+   "name": "增减牌堆中的卡",
+   "desc": "给手牌/卡组里的卡永久+身材/词条/改费",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "defense": {
+     "desc": "防御力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "piles": {
+     "desc": "牌堆",
+     "type": "string"
+    },
+    "cost": {
+     "desc": "花费",
+     "type": ""
+    },
+    "opCost": {
+     "desc": "行动花费",
+     "type": ""
+    },
+    "keywords": {
+     "desc": "词条 key 数组",
+     "type": "array"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "buffDeckAndHand": {
+   "name": "增减卡组和手牌",
+   "desc": "给手牌/卡组里的卡永久+身材/词条/改费",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "defense": {
+     "desc": "防御力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "piles": {
+     "desc": "牌堆",
+     "type": "string"
+    },
+    "cost": {
+     "desc": "花费",
+     "type": ""
+    },
+    "opCost": {
+     "desc": "行动花费",
+     "type": ""
+    },
+    "keywords": {
+     "desc": "词条 key 数组",
+     "type": "array"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "aliasOf": "buffCardsInPiles",
+   "neverSeen": true
+  },
+  "canMoveAndAttack": {
+   "name": "可移动并攻击",
+   "desc": "本单位可以同一回合移动并攻击（独立原语，等价 grantMod mod:\"canMoveAndAttack\"）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "chooseFromHand": {
+   "name": "从手牌选择",
+   "desc": "对选中手牌做后续处理：discard 弃掉 / chosen 转换为该 set 随机单位 / toField 直接上场 / duplicate 复制一张进手牌；actions=处理完追加执行",
+   "params": {
+    "mode": {
+     "desc": "模式",
+     "type": ""
+    },
+    "set": {
+     "desc": "系列",
+     "type": ""
+    },
+    "to": {
+     "desc": "去向",
+     "type": ""
+    },
+    "actions": {
+     "desc": "动作数组",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "chooseHandCard": {
+   "name": "选择一张手牌",
+   "desc": "选手牌（count=候选数），结果供后续 op 引用（transformHandCard/discardChosenHand/…）",
+   "params": {
+    "count": {
+     "desc": "数量",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    },
+    "prompt": {
+     "desc": "提示语",
+     "type": "string"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "chooseOne": {
+   "name": "抉择",
+   "desc": "抉择：玩家选一个分支执行（condition 不满足的选项自动隐藏；cost/requireKredits 付不起的也隐藏）",
+   "params": {
+    "options": {
+     "desc": "分支数组 [{label, actions}]",
+     "type": ""
+    },
+    "actions": {
+     "desc": "动作数组",
+     "type": ""
+    },
+    "condition": {
+     "desc": "条件对象",
+     "type": ""
+    },
+    "cost": {
+     "desc": "花费",
+     "type": ""
+    },
+    "prompt": {
+     "desc": "提示语",
+     "type": "string"
+    }
+   }
+  },
+  "condOpCost": {
+   "name": "条件行动花费",
+   "desc": "满足条件（场上有该名单位）时本卡行动花费调整",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   }
+  },
+  "conditional": {
+   "name": "如果…则",
+   "desc": "if/then/else（等价效果块级 condition+else，动作内用这个）",
+   "params": {
+    "condition": {
+     "desc": "条件对象",
+     "type": "condition"
+    },
+    "then": {
+     "desc": "条件成立时执行",
+     "type": ""
+    },
+    "else": {
+     "desc": "条件不成立时执行",
+     "type": ""
+    }
+   }
+  },
+  "conditionalRandomSplit": {
+   "name": "随机分支",
+   "desc": "把 total 平均分给目标组；evenTo:\"hq\" 把敌方总部也算进分母（余数从前往后每家+1）",
+   "params": {
+    "evenTo": {
+     "desc": "把某方也算进分母（\"hq\"）",
+     "type": "string"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "total": {
+     "desc": "总伤害数值（平均分给目标组）",
+     "type": "number"
+    }
+   },
+   "aliasOf": "damageSplit+evenTo:\"hq\"",
+   "neverSeen": true
+  },
+  "copyHandCard": {
+   "name": "复制手牌",
+   "desc": "复制手牌进卡组/手牌",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": ""
+    },
+    "trueCopy": {
+     "desc": "",
+     "type": ""
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "sel": {
+     "desc": "选择方式（all/chosen/random）",
+     "type": "string"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "copyLastDiscarded": {
+   "name": "复制刚弃的牌",
+   "desc": "取回刚弃掉的牌相关（本回合最后弃牌）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "copyToDeck": {
+   "name": "复制进卡组",
+   "desc": "复制一张卡置入卡组顶（halve=身材减半变体）",
+   "params": {
+    "cardId": {
+     "desc": "精确卡 id",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "of": {
+     "desc": "",
+     "type": ""
+    },
+    "halve": {
+     "desc": "身材减半变体",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "costReduce": {
+   "name": "费用降低",
+   "desc": "某方玩家的打出费用全局修正：之后打出的卡都 -N 指挥点（不是减某张目标卡！）",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "countered": {
+   "name": "被反制",
+   "desc": "反制生效占位（记日志）",
+   "params": {},
+   "neverSeen": true
+  },
+  "damage": {
+   "name": "造成伤害",
+   "desc": "对目标单位造成 N 伤害",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "damageAll": {
+   "name": "对全体造成伤害",
+   "desc": "对目标单位造成 N 伤害",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "damage",
+   "neverSeen": true
+  },
+  "damageHQ": {
+   "name": "对总部造成伤害",
+   "desc": "对某方总部造成 N 伤害",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "defaultSide": "**enemy**"
+  },
+  "damageSplit": {
+   "name": "均分伤害",
+   "desc": "把 total 平均分给目标组；evenTo:\"hq\" 把敌方总部也算进分母（余数从前往后每家+1）",
+   "params": {
+    "total": {
+     "desc": "总伤害数值（平均分给目标组）",
+     "type": "number"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "evenTo": {
+     "desc": "把某方也算进分母（\"hq\"）",
+     "type": "string"
+    }
+   },
+   "defaultSide": "target 缺省敌方全体"
+  },
+  "debuff": {
+   "name": "属性削减",
+   "desc": "-N/-N（走 buff 同路，有下限保护）",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）",
+     "type": ""
+    },
+    "defense": {
+     "desc": "防御力（可负）",
+     "type": ""
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "debuffTemp": {
+   "name": "临时削减",
+   "desc": "临时减攻（permAtk 记账）",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "defense": {
+     "desc": "防御力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "duration": {
+     "desc": "持续时间（\"turn\"=本回合）",
+     "type": "enum"
+    }
+   }
+  },
+  "deckCostModAll": {
+   "name": "全卡组费用修正",
+   "desc": "整个卡组费用修正",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "**enemy**",
+   "neverSeen": true
+  },
+  "deckToField": {
+   "name": "卡组上场",
+   "desc": "从卡组拉单位直接进场",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "buff": {
+     "desc": "增减值",
+     "type": "object"
+    },
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    }
+   }
+  },
+  "deckToHand": {
+   "name": "卡组入手牌",
+   "desc": "从卡组选卡进手牌",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    },
+    "count": {
+     "desc": "数量",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "deckToTop": {
+   "name": "放回卡组顶",
+   "desc": "卡组里符合条件的卡随机挪 N 张到卡组顶",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    },
+    "count": {
+     "desc": "数量",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "delayNextTurn": {
+   "name": "跳过下回合",
+   "desc": "延迟效果到下回合",
+   "params": {
+    "count": {
+     "desc": "数量",
+     "type": ""
+    },
+    "effects": {
+     "desc": "效果数组",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "destroy": {
+   "name": "消灭",
+   "desc": "消灭目标单位",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "forEach": {
+     "desc": "",
+     "type": "array"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "destroyAll": {
+   "name": "全体消灭",
+   "desc": "消灭目标单位",
+   "params": {
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "forEach": {
+     "desc": "",
+     "type": "array"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "destroy",
+   "neverSeen": true
+  },
+  "develop": {
+   "name": "开发",
+   "desc": "开发：按 filter 展示若干张选一张（from:\"deck\"=从卡组复制，不消耗）",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "set": {
+     "desc": "系列",
+     "type": ""
+    },
+    "setIn": {
+     "desc": "系列（数组）",
+     "type": ""
+    },
+    "rarity": {
+     "desc": "稀有度",
+     "type": ""
+    },
+    "maxCost": {
+     "desc": "费用上限",
+     "type": ""
+    },
+    "minCost": {
+     "desc": "费用下限",
+     "type": ""
+    },
+    "unitType": {
+     "desc": "兵种",
+     "type": ""
+    },
+    "cardIds": {
+     "desc": "卡 id 白名单",
+     "type": ""
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": "string"
+    },
+    "thenSummon": {
+     "desc": "然后召唤",
+     "type": "boolean"
+    },
+    "allowToken": {
+     "desc": "",
+     "type": ""
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   }
+  },
+  "discard": {
+   "name": "弃牌",
+   "desc": "弃手牌。⚠ 默认弃敌方！弃自己手牌必须显式 side:\"self\"",
+   "params": {
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "mode": {
+     "desc": "模式",
+     "type": "string"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "random": {
+     "desc": "多候选时随机取一",
+     "type": ""
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": "string"
+    },
+    "prompt": {
+     "desc": "提示语",
+     "type": "string"
+    }
+   },
+   "defaultSide": "**enemy**"
+  },
+  "discardAll": {
+   "name": "全部弃掉",
+   "desc": "按条件弃掉整手牌",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    },
+    "cardId": {
+     "desc": "精确卡 id",
+     "type": ""
+    },
+    "unitType": {
+     "desc": "兵种",
+     "type": ""
+    }
+   },
+   "defaultSide": "self"
+  },
+  "discardChosenHand": {
+   "name": "弃所选手牌",
+   "desc": "弃掉 chooseHandCard 选中的手牌",
+   "params": {},
+   "neverSeen": true
+  },
+  "discardFromDeck": {
+   "name": "从卡组弃牌",
+   "desc": "从卡组弃牌（削减卡组）",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "discover": {
+   "name": "发现",
+   "desc": "发现（同上家族）",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": "string"
+    },
+    "prompt": {
+     "desc": "提示语",
+     "type": "string"
+    }
+   },
+   "aliasOf": "develop"
+  },
+  "draw": {
+   "name": "抽牌",
+   "desc": "抽 N 张",
+   "params": {
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "condition": {
+     "desc": "条件对象",
+     "type": "condition"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": "string"
+    },
+    "oncePerTurn": {
+     "desc": "每回合一次",
+     "type": "string"
+    }
+   },
+   "defaultSide": "**self**"
+  },
+  "drawUntil": {
+   "name": "抽到…为止",
+   "desc": "抽到手牌数达到 N",
+   "params": {
+    "handSize": {
+     "desc": "手牌张数",
+     "type": "number"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "endTurnNow": {
+   "name": "立即结束回合",
+   "desc": "立即结束当前回合",
+   "params": {}
+  },
+  "enemyDeckToHand": {
+   "name": "敌方卡组入手牌",
+   "desc": "从敌方卡组拿卡进手牌",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    },
+    "count": {
+     "desc": "数量",
+     "type": ""
+    }
+   }
+  },
+  "fight": {
+   "name": "互相战斗",
+   "desc": "强制战斗：双方同时互相造成攻击力伤害。攻击方=效果来源自己，srcRef:\"summoned\" 可改指刚召唤的单位",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "srcRef": {
+     "desc": "施动者引用",
+     "type": ""
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    }
+   }
+  },
+  "fightRepeatedly": {
+   "name": "以随机顺序反复战斗",
+   "desc": "目标组逐一与敌方随机单位缠斗至死（防死循环上限 30 轮）",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "forEach": {
+   "name": "逐个执行",
+   "desc": "对每个目标执行 actions（循环变量 \"each\"）",
+   "params": {
+    "as": {
+     "desc": "循环变量名",
+     "type": "string"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "actions": {
+     "desc": "动作数组",
+     "type": ""
+    }
+   }
+  },
+  "forecast": {
+   "name": "预报",
+   "desc": "随机把一张天气引子卡加入手牌",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "fury": {
+   "name": "狂怒",
+   "desc": "给目标 +N 攻击力（名字叫 fury 但只是加攻！）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   },
+   "neverSeen": true
+  },
+  "gainKreditSlot": {
+   "name": "获得指挥点槽",
+   "desc": "指挥点上限+N（不加当前点数）",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "gainKredits": {
+   "name": "获得指挥点",
+   "desc": "获得 N 指挥点",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "globalOpCostMod": {
+   "name": "全局行动花费修正",
+   "desc": "全场单位行动花费修正",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "grant": {
+   "name": "获得词条",
+   "desc": "授予词条（词条 key 见 §11）",
+   "params": {
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "grantAll": {
+   "name": "全体获得",
+   "desc": "授予词条（词条 key 见 §11）",
+   "params": {
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   },
+   "aliasOf": "grant"
+  },
+  "grantEffect": {
+   "name": "获得效果（挂在单位身上）",
+   "desc": "给场上单位挂一个额外监听效果（默认亡计型），与该单位自己的 effects 并行存在",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    },
+    "effectTrigger": {
+     "desc": "挂载的触发名",
+     "type": ""
+    },
+    "effects": {
+     "desc": "效果数组",
+     "type": ""
+    },
+    "label": {
+     "desc": "标签文本",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "grantEffectToHand": {
+   "name": "手牌获得效果",
+   "desc": "给手牌（前 count 张）挂「使用时」效果（触发名 play）",
+   "params": {
+    "count": {
+     "desc": "数量",
+     "type": ""
+    },
+    "effects": {
+     "desc": "效果数组",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "grantMod": {
+   "name": "获得常驻修正",
+   "desc": "给单位挂常驻修正。mod 取值见 §10.2 mods 键表。vsType 形态：{mod:\"vsType\", unitType:\"tank\", attack:2}=对战坦克+2攻；vsHq 形态=对战总部+攻；takeDoubleFrom=受某兵种双倍伤；extraTypes=额外视为某兵种",
+   "params": {
+    "mod": {
+     "desc": "常驻修正 key（见 §10.2）",
+     "type": "enum"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "unitType": {
+     "desc": "兵种",
+     "type": ""
+    },
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "damage": {
+     "desc": "伤害值",
+     "type": ""
+    },
+    "takeDamage": {
+     "desc": "受到伤害",
+     "type": ""
+    },
+    "double": {
+     "desc": "翻倍标记",
+     "type": "boolean"
+    },
+    "duration": {
+     "desc": "持续时间（\"turn\"=本回合）",
+     "type": ""
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "cond": {
+     "desc": "条件",
+     "type": "string"
+    },
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    }
+   }
+  },
+  "grantRandomCombatKw": {
+   "name": "随机获得对战词条",
+   "desc": "每个目标随机获得 1 个对战词条（池：armor / fury / lightArmor / magnetic / guerrilla / ambush / blitz / impact / shield / sponge / smokescreen）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "neverSeen": true
+  },
+  "grantRandomKwToPiles": {
+   "name": "牌堆随机获得词条",
+   "desc": "给牌堆里的卡随机挂词条（编译器产物）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "neverSeen": true
+  },
+  "handOpCostMod": {
+   "name": "手牌行动花费修正",
+   "desc": "改手牌单位行动花费",
+   "params": {
+    "sel": {
+     "desc": "选择方式（all/chosen/random）",
+     "type": ""
+    },
+    "count": {
+     "desc": "数量",
+     "type": ""
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "handToField": {
+   "name": "手牌上场",
+   "desc": "把手牌里的单位直接放进场",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "mode": {
+     "desc": "模式",
+     "type": "string"
+    },
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    },
+    "removeKeywords": {
+     "desc": "要去掉的词条",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "handUnitToFrontline": {
+   "name": "手牌单位上前线",
+   "desc": "把手牌单位放进前线",
+   "params": {
+    "maxCost": {
+     "desc": "费用上限",
+     "type": ""
+    },
+    "loseBlitz": {
+     "desc": "同时失去闪击",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "heal": {
+   "name": "治疗",
+   "desc": "治疗目标（攻防互换形态：攻=防、防=攻）",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "healAll": {
+   "name": "全体治疗",
+   "desc": "治疗目标（攻防互换形态：攻=防、防=攻）",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "heal"
+  },
+  "healHQ": {
+   "name": "治疗总部",
+   "desc": "治疗某方总部",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "defaultSide": "**enemy**（\"治疗敌方总部\"？⚠ 实际按 side 取，写 self 治自己）",
+   "neverSeen": true
+  },
+  "hqArmor": {
+   "name": "总部护甲",
+   "desc": "总部+护甲",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "hqEnchant": {
+   "name": "总部附魔",
+   "desc": "给总部挂附魔效果块（监听事件，见 §10.3）",
+   "params": {
+    "effects": {
+     "desc": "效果数组",
+     "type": "array"
+    },
+    "once": {
+     "desc": "仅一次",
+     "type": ""
+    },
+    "untilTurnEnd": {
+     "desc": "持续到回合结束",
+     "type": "boolean"
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": "string"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "hqKeyword": {
+   "name": "总部词条",
+   "desc": "总部获得词条",
+   "params": {
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    },
+    "untilTurnEnd": {
+     "desc": "持续到回合结束",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "hqMaxUp": {
+   "name": "总部上限提升",
+   "desc": "总部血量上限+N",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "intel": {
+   "name": "情报",
+   "desc": "随机看一张敌方手牌（记入情报）",
+   "params": {},
+   "neverSeen": true
+  },
+  "log": {
+   "name": "日志（占位）",
+   "desc": "只记一条日志（调试用）",
+   "params": {
+    "text": {
+     "desc": "文本",
+     "type": "string"
+    }
+   }
+  },
+  "loseDefense": {
+   "name": "失去防御力",
+   "desc": "目标失去 N 点防御——可以致死（归零即消灭）",
+   "params": {
+    "byCost": {
+     "desc": "按目标费用取数值",
+     "type": "boolean"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "loseKreditSlots": {
+   "name": "失去指挥点槽",
+   "desc": "上限-N",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "defaultSide": "**enemy**"
+  },
+  "loseKredits": {
+   "name": "失去指挥点",
+   "desc": "失去 N 指挥点",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "**enemy**",
+   "neverSeen": true
+  },
+  "mill": {
+   "name": "磨牌",
+   "desc": "卡组顶弃 N 张进弃牌堆",
+   "params": {
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "defaultSide": "**enemy**"
+  },
+  "modMovedCost": {
+   "name": "移动费用修正",
+   "desc": "改刚挪到卡组顶那几张的费用（oddOnly=只改奇数费的）",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "oddOnly": {
+     "desc": "只改奇数费",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "move": {
+   "name": "移动",
+   "desc": "把单位移到 frontline/support（不花行动费）",
+   "params": {
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "nextTurnDrawPending": {
+   "name": "下回合多抽牌",
+   "desc": "下回合 +N 点 / +N 上限 / 多抽 N",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "nextTurnKredits": {
+   "name": "下回合指挥点",
+   "desc": "下回合 +N 点 / +N 上限 / 多抽 N",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "nextTurnSlots": {
+   "name": "下回合指挥点槽",
+   "desc": "下回合 +N 点 / +N 上限 / 多抽 N",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "nextTurnStart": {
+   "name": "下个回合开始时（执行一组动作）",
+   "desc": "把一组动作用延迟效果排到下个回合开始结算。写「下回合多抽牌」这类卡面时用它；不要用 trigger:\"turnStart\"（那是每个回合都触发）。",
+   "params": {
+    "actions": {
+     "desc": "动作数组",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy",
+     "type": ""
+    }
+   },
+   "aliasOf": null,
+   "neverSeen": true
+  },
+  "noDrawNextTurn": {
+   "name": "下回合不抽牌",
+   "desc": "下回合不能抽牌",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "noKreditSlotForTurns": {
+   "name": "连续N回合没有指挥点槽",
+   "desc": "N 回合内不涨指挥点",
+   "params": {
+    "turns": {
+     "desc": "回合数",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "**enemy**",
+   "neverSeen": true
+  },
+  "noKreditSlotNextTurn": {
+   "name": "下回合没有指挥点槽",
+   "desc": "下回合不涨指挥点",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "**enemy**",
+   "neverSeen": true
+  },
+  "nthTime": {
+   "name": "nthTime",
+   "desc": "（SPEC 未单列，按已注册行为使用）",
+   "params": {
+    "then": {
+     "desc": "条件成立时执行；动作数组",
+     "type": "actionList"
+    },
+    "key": {
+     "desc": "",
+     "type": "string"
+    },
+    "every": {
+     "desc": "",
+     "type": "boolean"
+    },
+    "reset": {
+     "desc": "",
+     "type": "boolean"
+    },
+    "on": {
+     "desc": "监听事件",
+     "type": "string"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "neverSeen": true
+  },
+  "opCostMod": {
+   "name": "行动花费修正",
+   "desc": "单位行动花费 +N（负数=减）",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "opCostModAll": {
+   "name": "全体行动花费修正",
+   "desc": "某方全体行动花费修正",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "orderDamageMod": {
+   "name": "指令伤害修正",
+   "desc": "指令伤害修正",
+   "params": {
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "orderDoubleTurn": {
+   "name": "指令双倍回合",
+   "desc": "本回合指令效果翻倍",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "pin": {
+   "name": "压制",
+   "desc": "压制 N 回合（被压单位不能攻击/移动）；有 noPin 修正的单位免疫。广播 friendlyPinned",
+   "params": {
+    "turns": {
+     "desc": "回合数",
+     "type": "number"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "randomPick": {
+   "name": "随机挑选",
+   "desc": "随机选一个分支执行",
+   "params": {
+    "options": {
+     "desc": "分支数组 [{label, actions}]",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "refreshAction": {
+   "name": "刷新行动机会",
+   "desc": "目标立刻恢复 1 次行动",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "neverSeen": true
+  },
+  "rememberTarget": {
+   "name": "记住目标",
+   "desc": "把单位记在施法单位身上，之后用代词 \"remembered\"（§9）引用",
+   "params": {
+    "holder": {
+     "desc": "记录在哪个单位上",
+     "type": ""
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "removeDeckTop": {
+   "name": "移除卡组顶",
+   "desc": "移除卡组顶 N 张。to:\"hand\"=进手牌、to:\"removed\"=移出对局、不写 to=进弃牌堆",
+   "params": {
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "removeFromEnemyDeck": {
+   "name": "从敌方卡组移除",
+   "desc": "从敌方卡组移除卡",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "removeKeyword": {
+   "name": "失去词条",
+   "desc": "剥除词条",
+   "params": {
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "neverSeen": true
+  },
+  "removeUnit": {
+   "name": "removeUnit",
+   "desc": "移除（2026-10-02 Alan 定义）：单位离开战场但不算被消灭 —— 不派发亡计/击杀事件、不计 unitsLost、不进弃牌堆，卡进该方 removed 区。派发监听触发 unitLeft（「单位不因消灭离开战场时」）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "repeat": {
+   "name": "重复",
+   "desc": "重复执行 N 次",
+   "params": {
+    "times": {
+     "desc": "次数；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "actions": {
+     "desc": "动作数组",
+     "type": ""
+    }
+   }
+  },
+  "retreat": {
+   "name": "撤退",
+   "desc": "KARDS 撤退规则：前线单位退回支援线；支援线单位退回手牌。同时广播 friendlyRetreated",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "returnToHand"
+  },
+  "returnToHand": {
+   "name": "返回手牌",
+   "desc": "KARDS 撤退规则：前线单位退回支援线；支援线单位退回手牌。同时广播 friendlyRetreated",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "reveal": {
+   "name": "明牌",
+   "desc": "让目标单位变明牌（对对手可见）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "neverSeen": true
+  },
+  "salvage": {
+   "name": "打捞",
+   "desc": "从弃牌堆随机取回 N 张进手牌",
+   "params": {
+    "count": {
+     "desc": "数量",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "scrapAirDraw": {
+   "name": "废铁空中抽牌",
+   "desc": "消灭全场空军，双方各按损失抽牌",
+   "params": {},
+   "neverSeen": true
+  },
+  "script": {
+   "name": "内联脚本（危险）",
+   "desc": "JS 逃生舱：原语组合不出的效果直接写 JS。手写卡别用——这是给维护者救火用的，AI 用它=逃避规范",
+   "params": {
+    "script": {
+     "desc": "",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "setDefense": {
+   "name": "设置防御力",
+   "desc": "把攻/防设为某值。防≤0 → 消灭",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "setStats",
+   "neverSeen": true
+  },
+  "setHandCost": {
+   "name": "设置手牌费用",
+   "desc": "改手牌费用",
+   "params": {
+    "mode": {
+     "desc": "模式",
+     "type": "string"
+    },
+    "choose": {
+     "desc": "选择数",
+     "type": "boolean"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "amount": {
+     "desc": "数值（接受动态值，如 {count:…} / {stat:…}）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "setKreditSlots": {
+   "name": "设置指挥点槽数",
+   "desc": "上限设为 N",
+   "params": {
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "setLastAddedCost": {
+   "name": "设置新加入卡的费用",
+   "desc": "改\"本回合加入手牌的卡\"的费用",
+   "params": {
+    "count": {
+     "desc": "数量",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "setOpCost": {
+   "name": "设置行动花费",
+   "desc": "行动花费设为 N",
+   "params": {
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "setStats": {
+   "name": "设置身材",
+   "desc": "把攻/防设为某值。防≤0 → 消灭",
+   "params": {
+    "attack": {
+     "desc": "攻击力（可负）；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "setVar": {
+   "name": "设置变量",
+   "desc": "设置上下文变量（后续 num() 用字符串名读取）",
+   "params": {
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "setWeather": {
+   "name": "设置天气",
+   "desc": "改变天气",
+   "params": {
+    "kind": {
+     "desc": "种类 / 天气种类",
+     "type": "string"
+    }
+   }
+  },
+  "shuffleHandIntoDeck": {
+   "name": "手牌洗回卡组",
+   "desc": "手牌洗回卡组（制胜之招用，会记洗入数量供 num() 读）",
+   "params": {},
+   "neverSeen": true
+  },
+  "shuffleIn": {
+   "name": "洗入卡组",
+   "desc": "把卡洗进卡组（from:\"discard\"=从弃牌堆取）",
+   "params": {
+    "cardId": {
+     "desc": "精确卡 id",
+     "type": "string"
+    },
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "from": {
+     "desc": "来源区域",
+     "type": ""
+    },
+    "range": {
+     "desc": "范围",
+     "type": ""
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": "string"
+    },
+    "random": {
+     "desc": "多候选时随机取一",
+     "type": "boolean"
+    },
+    "self": {
+     "desc": "自己",
+     "type": "boolean"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "shuffleInUntil": {
+   "name": "洗入卡组直到…",
+   "desc": "洗入卡组直到卡组达到 N 张",
+   "params": {
+    "deckSize": {
+     "desc": "卡组张数",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "shuffleRandomSet": {
+   "name": "洗入随机系列",
+   "desc": "从某系列随机洗 N 张进卡组",
+   "params": {
+    "max": {
+     "desc": "",
+     "type": ""
+    },
+    "set": {
+     "desc": "系列",
+     "type": ""
+    },
+    "random": {
+     "desc": "多候选时随机取一",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "silence": {
+   "name": "沉默",
+   "desc": "抑制（2026-10-02 Alan 定稿）：一次性清除 —— 那一瞬失去所有对战词条、效果和属性增益（光环也算），之后是一张白纸，可以重新贴膜（包括光环——光环是持续效果，会照常重新罩上）。卡面自带文字效果（silenced）不恢复。免疫：mods.noSuppress。监听触发 friendlySuppressed",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "summon": {
+   "name": "召唤",
+   "desc": "召唤单位进场。to: \"frontline\"(前线) / \"sameZone\"(与来源同排) / \"hqAdjacent\"(总部右邻，不挤总部)；其余值=支援队尾",
+   "params": {
+    "count": {
+     "desc": "数量；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    },
+    "cardId": {
+     "desc": "精确卡 id",
+     "type": "string"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": "string"
+    },
+    "random": {
+     "desc": "多候选时随机取一",
+     "type": "boolean"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "summonFromHand": {
+   "name": "从手牌召唤",
+   "desc": "把手牌里的单位直接放进场",
+   "params": {
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    },
+    "mode": {
+     "desc": "模式",
+     "type": "string"
+    },
+    "to": {
+     "desc": "去向",
+     "type": "string"
+    },
+    "removeKeywords": {
+     "desc": "要去掉的词条",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "aliasOf": "handToField",
+   "defaultSide": "self",
+   "neverSeen": true
+  },
+  "suppressHQ": {
+   "name": "压制总部",
+   "desc": "压制总部效果",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "takeControl": {
+   "name": "夺取控制权",
+   "desc": "夺取单位控制权",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  },
+  "transformHandCard": {
+   "name": "转换手牌",
+   "desc": "把手牌换成另一张卡。优先作用于上一条 chooseHandCard 选中的牌；否则随机/第一张",
+   "params": {
+    "cardId": {
+     "desc": "精确卡 id",
+     "type": ""
+    },
+    "set": {
+     "desc": "系列",
+     "type": "string"
+    },
+    "maxCost": {
+     "desc": "费用上限",
+     "type": ""
+    },
+    "mode": {
+     "desc": "模式",
+     "type": ""
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "defaultSide": "self"
+  },
+  "transformUnit": {
+   "name": "变形单位",
+   "desc": "把场上单位变成另一张卡（保留已受 buff 的差值）。卡来源参数与 addCardToHand 同族（cardId 优先 → 卡名 → filter）",
+   "params": {
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "triggerMountain": {
+   "name": "触发山地",
+   "desc": "触发目标的山地/部署特性结算",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "unpin": {
+   "name": "解除压制",
+   "desc": "解除压制",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   },
+   "neverSeen": true
+  },
+  "upgradeSelf": {
+   "name": "升为老兵",
+   "desc": "立即检查老兵升级（通常不需要手写，引擎自动查）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    }
+   }
+  }
+ },
+ "cond": {
+  "and": {
+   "name": "且（全部满足）",
+   "desc": "全部成立",
+   "params": {
+    "items": {
+     "desc": "子条件数组",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "cardInDeck": {
+   "name": "卡组里有某张卡",
+   "desc": "卡组里有某名卡",
+   "params": {
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "cardVarHasKeyword": {
+   "name": "cardVarHasKeyword",
+   "desc": "（SPEC 未单列，按已注册行为使用）",
+   "params": {},
+   "neverSeen": true
+  },
+  "compare": {
+   "name": "数值比较",
+   "desc": "通用比较：left cmp value",
+   "params": {
+    "left": {
+     "desc": "左值",
+     "type": "object"
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": "enum"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   }
+  },
+  "controlFrontline": {
+   "name": "控制前线",
+   "desc": "控制前线",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "controlsType": {
+   "name": "控制着某兵种",
+   "desc": "控制着 N 个某类单位",
+   "params": {
+    "unitType": {
+     "desc": "兵种",
+     "type": "array"
+    },
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": "enum"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "filter": {
+     "desc": "筛选条件（见 §8.2 / §8.3）",
+     "type": "filter"
+    }
+   }
+  },
+  "damageFromType": {
+   "name": "伤害来自某兵种",
+   "desc": "本次伤害来源是该兵种",
+   "params": {
+    "unitType": {
+     "desc": "兵种",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "damaged": {
+   "name": "已受伤",
+   "desc": "目标已受伤 / 满血",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "deadUnitCostAtLeast": {
+   "name": "阵亡单位费用不少于",
+   "desc": "死亡单位花费 ≥ N",
+   "params": {
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "deckSize": {
+   "name": "卡组张数",
+   "desc": "卡组数比较",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "defenderIsType": {
+   "name": "防守方是某兵种",
+   "desc": "被攻击者是某兵种",
+   "params": {
+    "type": {
+     "desc": "类型",
+     "type": "string"
+    }
+   }
+  },
+  "discoveredCardNotInDeck": {
+   "name": "开发出的卡不在卡组",
+   "desc": "本次开发的卡不在构筑内",
+   "params": {}
+  },
+  "eventCardIs": {
+   "name": "事件卡是…",
+   "desc": "事件所用卡名包含匹配",
+   "params": {
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": "string"
+    }
+   }
+  },
+  "eventUnitIs": {
+   "name": "事件单位是…",
+   "desc": "事件主角是某类/某名单位",
+   "params": {
+    "unitType": {
+     "desc": "兵种",
+     "type": ""
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "firstUnitThisTurn": {
+   "name": "本回合第一个部署的单位",
+   "desc": "本回合第一个部署的单位",
+   "params": {},
+   "neverSeen": true
+  },
+  "frontlineControl": {
+   "name": "前线控制权",
+   "desc": "前线控制方 == value（1=自己）",
+   "params": {
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "frontlineEmpty": {
+   "name": "前线为空",
+   "desc": "某方前线为空",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "frontlineEnemyOrFull": {
+   "name": "敌方前线或已满",
+   "desc": "敌占前线 或 我前线已满",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": "enum"
+    }
+   }
+  },
+  "handHasCard": {
+   "name": "手牌有某张卡",
+   "desc": "手牌里有某名卡",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": "enum"
+    },
+    "spec": {
+     "desc": "单位选择器",
+     "type": "unitSpec"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   }
+  },
+  "handSize": {
+   "name": "手牌张数",
+   "desc": "手牌数比较",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "hasKeyword": {
+   "name": "拥有词条",
+   "desc": "目标有词条",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": "selector"
+    },
+    "keyword": {
+     "desc": "词条 key（见 §11）",
+     "type": "keyword"
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": "enum"
+    },
+    "spec": {
+     "desc": "单位选择器",
+     "type": "unitSpec"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   }
+  },
+  "hasRoom": {
+   "name": "还有空位",
+   "desc": "有空位（zone: frontline/support）",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "zone": {
+     "desc": "区域（frontline / support / hand / deck）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "hqAbove": {
+   "name": "总部生命高于",
+   "desc": "总部血 > N",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "hqBelow": {
+   "name": "总部生命低于",
+   "desc": "总部血 < N",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "isUnitType": {
+   "name": "是某兵种",
+   "desc": "目标是某兵种",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    },
+    "unitType": {
+     "desc": "兵种",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "kreditsAtLeast": {
+   "name": "指挥点不少于",
+   "desc": "指挥点比较",
+   "params": {
+    "side": {
+     "desc": "阵营：self / enemy / friendly / opponent",
+     "type": ""
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "kreditsAtMost": {
+   "name": "指挥点不多于",
+   "desc": "（SPEC 未单列，按已注册行为使用）",
+   "params": {},
+   "neverSeen": true
+  },
+  "lastTurnKilledCompare": {
+   "name": "上回合击杀数比较",
+   "desc": "上一回合被消灭单位数比较（「若其不小于N」专用）",
+   "params": {
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "not": {
+   "name": "非（否定）",
+   "desc": "取反",
+   "params": {
+    "item": {
+     "desc": "子条件",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "opCost": {
+   "name": "行动花费",
+   "desc": "某单位行动花费比较（亡计类条件常用）",
+   "params": {
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": "enum"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    },
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   }
+  },
+  "or": {
+   "name": "或（任一满足）",
+   "desc": "任一成立",
+   "params": {
+    "items": {
+     "desc": "子条件数组",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "playedUnitThisTurn": {
+   "name": "本回合部署过单位",
+   "desc": "本回合已部署单位数 ≤ N",
+   "params": {
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "random": {
+   "name": "随机判定",
+   "desc": "概率成立",
+   "params": {
+    "chance": {
+     "desc": "概率（默认 0.5）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "revealedInEnemyHand": {
+   "name": "在敌方手牌中被明示",
+   "desc": "敌方手牌有明牌",
+   "params": {}
+  },
+  "targetAlive": {
+   "name": "目标存活",
+   "desc": "声明目标还活着",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "targetDead": {
+   "name": "目标已死",
+   "desc": "目标已死（没声明目标时=\"本效果最近打死过单位\"）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "targetDestroyed": {
+   "name": "目标被消灭",
+   "desc": "目标已死（没声明目标时=\"本效果最近打死过单位\"）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "targetIsHQ": {
+   "name": "目标是总部",
+   "desc": "声明目标是单位 / 总部",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "targetIsUnit": {
+   "name": "目标是单位",
+   "desc": "声明目标是单位 / 总部",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "targetPinned": {
+   "name": "目标被压制",
+   "desc": "目标已被压制（用效果前快照，防自己 pin 完误判恒真）",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   }
+  },
+  "turnAtLeast": {
+   "name": "回合数不少于",
+   "desc": "当前回合数比较",
+   "params": {
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "undamaged": {
+   "name": "未受伤",
+   "desc": "目标已受伤 / 满血",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "unitCount": {
+   "name": "单位数量",
+   "desc": "符合条件的单位数比较",
+   "params": {
+    "spec": {
+     "desc": "单位选择器",
+     "type": "unitSpec"
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": "enum"
+    },
+    "value": {
+     "desc": "值；数值或动态值对象",
+     "type": "numberExpr"
+    }
+   }
+  },
+  "unitCountLess": {
+   "name": "单位数量少于",
+   "desc": "我方单位数 < 敌方",
+   "params": {}
+  },
+  "unitInZone": {
+   "name": "单位在某个区域",
+   "desc": "目标在某排",
+   "params": {
+    "target": {
+     "desc": "目标选择器 或 引用代词",
+     "type": ""
+    },
+    "zone": {
+     "desc": "区域（frontline / support / hand / deck）",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  },
+  "var": {
+   "name": "变量比较",
+   "desc": "上下文变量比较",
+   "params": {
+    "name": {
+     "desc": "卡名（包含匹配）",
+     "type": ""
+    },
+    "cmp": {
+     "desc": "比较符：>= > <= < == !=（缺省 >=）",
+     "type": ""
+    },
+    "value": {
+     "desc": "值",
+     "type": ""
+    }
+   },
+   "neverSeen": true
+  }
+ }
+}

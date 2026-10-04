@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.desktop-resources/
+resources/app/_backup*/
+resources/app/window-state.json
+resources/app/_deck_diag.json
+resources/app/_deck_restore.done
+window-state.json
+_deck_diag.json
+_deck_restore.done
+_deck_restore.json
+player-data/
+*.log
+.env
+.env.*
+!.env.example

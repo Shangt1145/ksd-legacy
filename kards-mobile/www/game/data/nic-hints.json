@@ -1,0 +1,8 @@
+{
+  "_说明": "联机时服务器（game/tools/serve.js）给网卡分类用的自定义规则。键 = 分类名，值 = 网卡名正则数组（不分大小写，命中就归这一类）。文件不存在或没有生效条目 = 只用内置规则，行为不变。",
+  "_用法": "内置已经认得 UU 加速器 / 网易UU / NetEase UU / 云联机、TAP-Wintun 虚拟网卡、Radmin、Tailscale、ZeroTier、Hamachi 等。只有当你的加速器网卡名换了、内置认不出来时才需要动这里：把下面某条键名开头的下划线去掉（例如 \"_uu\" 改成 \"uu\"）就生效，也可以自己加任意分类名。",
+  "_分类名": ["lan 同局域网", "uu UU加速器云联机", "tap 虚拟网卡(TAP/Wintun)", "radmin", "tailscale", "vpn", "vm 虚拟机网卡", "other"],
+  "_uu": ["uu加速器", "网易uu", "netease\\s*uu", "云联机"],
+  "_tap": ["tap-", "wintun"],
+  "_radmin": ["radmin"]
+}

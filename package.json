@@ -1,0 +1,52 @@
+{
+  "name": "kards-diy",
+  "version": "1.0.9",
+  "private": true,
+  "description": "KARDS DIY 对战 —— 桌面版（内嵌本地服务器 + 联机）",
+  "main": "main.js",
+  "scripts": {
+    "prestart": "node tools/desktop-sync.js --apply",
+    "start": "electron .",
+    "desktop:sync": "node tools/desktop-sync.js --apply",
+    "desktop:check": "node tools/desktop-sync.js --check",
+    "desktop:test": "node tools/dsl/check-kards-compat.js",
+    "desktop:test-delete": "electron tools/check-builtin-deletion.js",
+    "dist": "node tools/desktop-sync.js --stage && electron-builder --config tools/electron-builder.config.js --win --dir",
+    "zip": "node tools/desktop-sync.js --stage && electron-builder --config tools/electron-builder.config.js --win zip",
+    "nsis": "node tools/desktop-sync.js --stage && electron-builder --config tools/electron-builder.config.js --win nsis",
+    "desktop:test-migration": "electron tools/check-data-migration.js",
+    "desktop:test-inspector": "electron tools/check-effect-inspector.js && electron tools/check-inspector-native.js",
+    "desktop:test-primitives": "node tools/dsl/check-effect-primitives.js",
+    "desktop:test-orc": "node tools/orc/check.js && node tools/orc/check-cli.js && electron tools/orc/check-ui.js",
+    "desktop:test-ui": "electron tools/check-desktop-ui.js",
+    "test": "npm run desktop:test && npm run desktop:test-primitives && npm run desktop:test-inspector && npm run desktop:test-migration"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.alan.kardsdiy",
+    "productName": "KARDS DIY",
+    "copyright": "DIY fan project",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "zip"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "asar": false,
+    "files": [
+      "main.js",
+      "preload.js",
+      "player-storage.js",
+      "package.json"
+    ],
+    "extraResources": [],
+    "artifactName": "KARDS-DIY-${version}-win-${arch}.${ext}",
+    "compression": "normal"
+  }
+}

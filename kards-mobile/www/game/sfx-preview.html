@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KARDS 音效试听 · 按兵种</title>
+<style>
+  :root{
+    --bg:#14120e; --panel:#1e1b15; --panel2:#262219; --line:#3d372a;
+    --khaki:#c9b585; --olive:#7d8c5c; --rust:#b5643c; --txt:#e8e0cc; --dim:#948b74;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:26px 20px 60px; background:var(--bg); color:var(--txt);
+    font:14px/1.6 "Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.014) 0 1px,transparent 1px 3px);
+  }
+  .wrap{max-width:1040px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 6px;color:var(--khaki);letter-spacing:1px}
+  h2{font-size:16px;margin:28px 0 4px;color:var(--khaki);font-weight:600}
+  .sub{color:var(--dim);font-size:13px;margin-bottom:18px}
+  .sub b{color:var(--olive)}
+  .tip{font-size:12px;color:var(--dim);margin-bottom:10px}
+
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px;
+       padding:13px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+  button{
+    background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+    padding:7px 14px;border-radius:5px;cursor:pointer;font-size:13px;font-family:inherit;
+    transition:background .15s,border-color .15s;
+  }
+  button:hover{background:#332e22;border-color:var(--olive)}
+  button.primary{background:var(--olive);color:#14120e;border-color:var(--olive);font-weight:600}
+  button.primary:hover{background:#8d9d69}
+  .vol{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:13px}
+  input[type=range]{accent-color:var(--olive)}
+
+  table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  th,td{padding:9px 12px;text-align:left;font-size:13px;border-bottom:1px solid var(--line)}
+  th{background:var(--panel2);color:var(--khaki);font-weight:600;font-size:12.5px;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#241f18}
+  td.cn{color:var(--txt);font-weight:500;white-space:nowrap}
+  td.desc{color:var(--dim);font-size:12.5px}
+  td.files{font-size:12px;color:var(--olive);font-family:ui-monospace,Consolas,monospace}
+  td.act{white-space:nowrap;text-align:right}
+  td.act button{padding:5px 12px;font-size:12.5px}
+  .playing td{background:#3a3323 !important}
+
+  .tuner{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:15px 17px}
+  .tuner .row{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin-bottom:12px}
+  .tuner select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+                padding:6px 10px;border-radius:5px;font-family:inherit;font-size:13px}
+  .tuner .big{font-size:25px;color:var(--khaki);font-weight:700;min-width:60px;text-align:center}
+  .tuner .tag{font-size:12px;color:var(--dim);min-width:150px}
+  .tuner .tag b{color:var(--olive)}
+
+  .note{margin-top:24px;padding:14px 16px;background:var(--panel);border-left:3px solid var(--rust);
+        border-radius:0 6px 6px 0;font-size:12.5px;color:var(--dim);line-height:1.75}
+  .note b{color:var(--khaki)}
+  .note code{background:#000;color:var(--olive);padding:1px 5px;border-radius:3px;font-size:11.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>KARDS 音效试听</h1>
+  <div class="sub">素材 <b>free-sound-effects.net</b>（免版税·可商用）· 二战实录 · 开火/移动/部署**三者都按兵种分化**</div>
+
+  <div class="bar">
+    <button class="primary" id="btnDemo">▶ 模拟实战连播</button>
+    <button id="btnStop">■ 停止</button>
+    <div class="vol">
+      <span>音量</span>
+      <input type="range" id="vol" min="0" max="100" value="45" style="width:120px">
+      <span id="volTxt">0.45</span>
+    </div>
+  </div>
+  <div class="tip">音量基准 0.45（游戏内默认）· 各事件增益已计入 · 点“试听”随机播一个变体</div>
+
+  <h2>① 开火 attack</h2>
+  <div class="tip">按**攻击者**兵种：步枪 ≠ 加农炮 ≠ 榴弹炮 ≠ 俯冲轰炸</div>
+  <table id="tAttack"></table>
+
+  <h2>② 移动 move</h2>
+  <div class="tip">按**移动者**兵种：军靴 ≠ 履带 ≠ 炮车牵引 ≠ 螺旋桨 ≠ 破浪</div>
+  <table id="tMove"></table>
+
+  <h2>③ 部署 deploy</h2>
+  <div class="tip">按**进场者**兵种：上膛踏地 ≠ 装甲启动 ≠ 炮闩装填 ≠ 汽笛 ≠ 起飞</div>
+  <table id="tDeploy"></table>
+
+  <h2>④ 同兵种内按防御力变音调</h2>
+  <div class="tuner">
+    <div class="row">
+      <span>兵种</span>
+      <select id="tunerType">
+        <option value="tank">坦克</option>
+        <option value="infantry">步兵</option>
+        <option value="artillery">火炮</option>
+        <option value="landcruiser">巡地舰</option>
+        <option value="fighter">战斗机</option>
+      </select>
+      <span>防御力</span>
+      <input type="range" id="tunerDef" min="1" max="24" value="4" style="width:230px">
+      <span class="big" id="tunerVal">4</span>
+      <button id="tunerPlay">▶ 试听</button>
+    </div>
+    <div class="row">
+      <span class="tag">音调倍率 <b id="tunerRate">1.00×</b></span>
+      <span class="tag" id="tunerDesc"></span>
+    </div>
+    <div class="tip">防御力越高 → 音调越低、越厚重（皮厚的车更沉）。拖动滑块来回听，差别很明显。</div>
+  </div>
+
+  <h2>⑤ 其它事件</h2>
+  <div class="tip">命中按**被击中者**选弹着材质；其余为通用事件</div>
+  <table id="tOther"></table>
+
+  <div class="note">
+    <b>为什么这么配</b><br>
+    · <b>attack</b> 按攻击者兵种：步兵=步枪/机枪 · 坦克=加农炮 · 火炮=榴弹炮 · 战斗机=高射炮连射 ·
+      轰炸机=俯冲轰炸 · 巡航舰=舰炮 · 巡地舰=重型火炮 · 太空战机=低沉重炮<br>
+    · <b>move</b> 按移动者兵种：步兵=军靴 · 坦克=履带/机车 · 火炮=炮车牵引（马匹挽具）·
+      战斗机=喷气飞掠 · 轰炸机=大型喷气机 · 巡航舰=飞船低鸣轰隆 · 巡地舰=强力火箭引擎 · 太空战机=科幻喷气<br>
+    · <b>deploy</b> 按进场者兵种：步兵=上膛踏地 · 坦克=装甲启动 · 火炮=炮闩装填 · 战斗机=小火箭点火 ·
+      轰炸机=大型喷气起飞 · 巡航舰=传送充能 · 巡地舰=重型启动 · 太空战机=飞船起飞<br>
+    · <b>hit</b> 按被击中者：装甲=金属 · 工事/火炮=混凝土 · 步兵=泥土<br><br>
+    <b>音调怎么来的</b>：HTMLAudio 的 <code>playbackRate</code> 同时改音调与速度。
+    按防御力<b>对数</b>映射（def 1 → 1.17×、def 4 → 1.00×、def 24 → 0.80×），夹在 0.80~1.30 防慢放/卡通音。<br><br>
+    <b>缺素材不会没声音</b>：没有专属素材的兵种自动回落通用音，只是"不够贴"，不会静默。<br><br>
+    <b>重做素材</b>：<code>_sfx2_fetch.js</code>（开火）+ <code>_sfx3_fetch.js</code>（移动/部署）下载，
+    然后 <code>node game/tools/_sfx_process.js</code> 统一裁剪+压缩+峰值对齐。
+    处理链是必须的 —— 原始素材 2~30 秒（有 4MB 的环境录音），不裁会盖住后续所有音效。
+  </div>
+</div>
+
+<script>
+var EVENT_GAIN = { attack: 2.0, die: 1.2, hit: 1.3, move: 1.0, deploy: 1.1, ui: 0.7 };
+
+// 兵种中文名
+var CN = { infantry:'步兵', tank:'坦克', artillery:'火炮', fighter:'战斗机', bomber:'轰炸机',
+           cruiser:'巡航舰', landcruiser:'巡地舰', spacefighter:'太空战机' };
+var ORDER = ['infantry','tank','artillery','fighter','bomber','cruiser','landcruiser','spacefighter'];
+
+// 三张兵种表（与 game/js/sfx.js 保持一致）
+var ATTACK = {
+  infantry:['attack1','attack2','attack3'], tank:['tank1','tank2'], artillery:['artillery1','artillery2'],
+  fighter:['fighter1'], bomber:['bomber1','bomber2'], cruiser:['cruiser1','cruiser2'],
+  landcruiser:['landcruiser1','landcruiser2'], spacefighter:['spacefighter1','spacefighter2']
+};
+var MOVE = {
+  infantry:['move1','move2','move3'], tank:['mv_tank1','mv_tank2'], artillery:['mv_artillery1','mv_artillery2'],
+  fighter:['mv_fighter1','mv_fighter2'], bomber:['mv_bomber1'], cruiser:['mv_cruiser1','mv_cruiser2'],
+  landcruiser:['mv_landcruiser1','mv_landcruiser2'], spacefighter:['mv_spacefighter1']
+};
+var DEPLOY = {
+  infantry:['deploy1','deploy2'], tank:['dp_tank1','dp_tank2'], artillery:['dp_artillery1','dp_artillery2'],
+  fighter:['dp_fighter1','dp_fighter2'], bomber:['dp_bomber1'], cruiser:['dp_cruiser1','dp_cruiser2'],
+  landcruiser:['dp_landcruiser1'], spacefighter:['dp_spacefighter1','dp_spacefighter2']
+};
+var DESC = {
+  attack: { infantry:'步枪单发 / 机枪点射', tank:'加农炮 / 速射炮', artillery:'榴弹炮',
+            fighter:'高射炮连射', bomber:'俯冲轰炸 / 飞越', cruiser:'舰炮',
+            landcruiser:'重型火炮', spacefighter:'低沉重炮 / 飞掠' },
+  move:   { infantry:'军靴踩泥土/碎屑/水泥', tank:'履带行进', artillery:'炮车牵引（马匹挽具）',
+            fighter:'喷气机飞掠', bomber:'大型喷气机起飞飞掠', cruiser:'飞船低鸣轰隆',
+            landcruiser:'强力火箭引擎', spacefighter:'科幻喷气背包飞行' },
+  deploy: { infantry:'枪机上膛 / 军靴踏地', tank:'装甲机械启动', artillery:'炮闩装填',
+            fighter:'小火箭点火', bomber:'大型喷气机起飞', cruiser:'飞船传送充能',
+            landcruiser:'重型机械启动', spacefighter:'飞船起飞' }
+};
+
+var OTHER = [
+  { evt:'hit', cn:'命中', desc:'按被击中者选弹着材质', files:['hit1','hit2','hit3'],
+    sub:['装甲/舰船=金属','工事/火炮=混凝土','步兵=泥土'] },
+  { evt:'die', cn:'阵亡', desc:'单位被消灭 —— 重型爆炸', files:['die1','die2','die3'] },
+  { evt:'ui',  cn:'界面', desc:'老式机械开关 / 拨杆', files:['ui1','ui2'] }
+];
+
+var BASE = 0.45, vol = BASE, cur = null, demo = null;
+
+function rateForDefense(def) {
+  var d = Math.max(1, Number(def) || 1);
+  return Math.max(0.80, Math.min(1.30, 1.0 - (Math.log2(d) - 2) * 0.085));
+}
+function stopAll() {
+  if (demo) { clearTimeout(demo); demo = null; }
+  document.querySelectorAll('tr.playing').forEach(function (n) { n.classList.remove('playing'); });
+  if (cur) { try { cur.pause(); cur.currentTime = 0; } catch (e) { } cur = null; }
+}
+function playFiles(files, evt, rate, row) {
+  stopAll();
+  if (!files || !files.length) return null;
+  var f = files[Math.floor(Math.random() * files.length)];
+  var a = new Audio('assets/sfx/' + f + '.mp3');
+  a.volume = Math.max(0, Math.min(1, vol * (EVENT_GAIN[evt] || 1)));
+  a.playbackRate = rate || 1;
+  cur = a;
+  if (row) { row.classList.add('playing'); setTimeout(function () { row.classList.remove('playing'); }, 1400); }
+  var p = a.play(); if (p && p.catch) p.catch(function () { });
+  return a;
+}
+
+// 渲染三张兵种表
+function renderTypeTable(elId, evt, table) {
+  var el = document.getElementById(elId);
+  var html = '<tr><th style="width:90px">兵种</th><th>音色</th><th style="width:290px">素材文件</th>' +
+    '<th style="width:80px">增益</th><th style="width:78px"></th></tr>';
+  ORDER.forEach(function (tp) {
+    var files = table[tp] || [];
+    html += '<tr data-evt="' + evt + '" data-files="' + files.join(',') + '">' +
+      '<td class="cn">' + CN[tp] + '</td>' +
+      '<td class="desc">' + (DESC[evt][tp] || '') + '</td>' +
+      '<td class="files">' + files.join(', ') + '</td>' +
+      '<td class="desc">×' + EVENT_GAIN[evt].toFixed(1) + '</td>' +
+      '<td class="act"><button>试听</button></td></tr>';
+  });
+  el.innerHTML = html;
+}
+renderTypeTable('tAttack', 'attack', ATTACK);
+renderTypeTable('tMove', 'move', MOVE);
+renderTypeTable('tDeploy', 'deploy', DEPLOY);
+
+// 其它事件
+{
+  var el = document.getElementById('tOther');
+  var html = '<tr><th style="width:90px">事件</th><th>音色</th><th style="width:290px">素材文件</th>' +
+    '<th style="width:80px">增益</th><th style="width:78px"></th></tr>';
+  OTHER.forEach(function (g) {
+    html += '<tr data-evt="' + g.evt + '" data-files="' + g.files.join(',') + '">' +
+      '<td class="cn">' + g.cn + '</td>' +
+      '<td class="desc">' + g.desc + (g.sub ? '<br><span style="color:#6f6857">' + g.sub.join(' · ') + '</span>' : '') + '</td>' +
+      '<td class="files">' + g.files.join(', ') + '</td>' +
+      '<td class="desc">×' + EVENT_GAIN[g.evt].toFixed(1) + '</td>' +
+      '<td class="act"><button>试听</button></td></tr>';
+  });
+  el.innerHTML = html;
+}
+
+// 点行 = 试听（防御力按 4 = 基准音调）
+document.body.addEventListener('click', function (e) {
+  var tr = e.target.closest && e.target.closest('tr[data-files]');
+  if (!tr) return;
+  playFiles(tr.dataset.files.split(','), tr.dataset.evt, rateForDefense(4), tr);
+});
+
+document.getElementById('btnStop').addEventListener('click', stopAll);
+document.getElementById('vol').addEventListener('input', function (e) {
+  vol = e.target.value / 100;
+  document.getElementById('volTxt').textContent = vol.toFixed(2);
+});
+
+// 防御力音调演示
+var tType = document.getElementById('tunerType'), tDef = document.getElementById('tunerDef');
+function updTuner() {
+  var d = parseInt(tDef.value, 10), r = rateForDefense(d);
+  document.getElementById('tunerVal').textContent = d;
+  document.getElementById('tunerRate').textContent = r.toFixed(2) + '×';
+  document.getElementById('tunerDesc').textContent =
+    d <= 2 ? '脆皮：清脆短促' : d <= 5 ? '中等：标准音色' : d <= 10 ? '偏厚：低沉一些' :
+    d <= 16 ? '重甲：明显厚重' : '超重：非常沉闷';
+}
+tDef.addEventListener('input', updTuner);
+updTuner();
+document.getElementById('tunerPlay').addEventListener('click', function () {
+  playFiles(ATTACK[tType.value], 'attack', rateForDefense(parseInt(tDef.value, 10)), null);
+});
+
+// 模拟实战：步兵遭遇 → 坦克推进 → 空袭
+document.getElementById('btnDemo').addEventListener('click', function () {
+  stopAll();
+  var seq = [
+    ['attack1', 'attack', 1.10],    // 步兵开火
+    ['hit3',    'hit',    1.10],    // 打中步兵（泥土）
+    ['mv_tank1','move',   0.92],    // 坦克履带推进
+    ['dp_tank1','deploy', 0.92],    // 坦克就位
+    ['tank1',   'attack', 0.90],    // 坦克开炮
+    ['hit1',    'hit',    0.90],    // 打中装甲（金属）
+    ['die1',    'die',    0.90],    // 目标被摧毁
+    ['dp_cruiser1','deploy',1.00],  // 巡航舰汽笛
+    ['bomber1', 'attack', 0.88],    // 俯冲轰炸
+    ['ui1',     'ui',     1.00]     // 界面
+  ];
+  var i = 0;
+  (function next() {
+    if (i >= seq.length) return;
+    var s = seq[i++];
+    var tr = document.querySelector('tr[data-files="' + s[0] + '"]') ||
+             document.querySelector('tr[data-evt="' + s[1] + '"]');
+    playFiles([s[0]], s[1], s[2], tr);
+    demo = setTimeout(next, 950);
+  })();
+});
+</script>
+</body>
+</html>

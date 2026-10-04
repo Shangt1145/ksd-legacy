@@ -1,0 +1,195 @@
+{
+ "version": 1,
+ "note": "编译后不变式：OrC 解析\"成功\"之后，拿产出跟卡面原文对账，抓「认错了却报成功」的静默错。规则外置，改这个文件即可，不用改 js。用法: node game/tools/lint-effects.js",
+ "vocab": {
+  "numericKeys": [
+   "amount",
+   "count",
+   "times",
+   "attack",
+   "defense",
+   "value",
+   "n",
+   "kredits",
+   "costTo",
+   "hp",
+   "damage",
+   "num",
+   "armor",
+   "cost"
+  ],
+  "dynamicHints": [
+   "byCost",
+   "byValue",
+   "byStat",
+   "byDefense",
+   "byAttack",
+   "dynamic",
+   "stat",
+   "count",
+   "hand",
+   "deck",
+   "supportFree",
+   "frontlineFree",
+   "rand",
+   "maxStat",
+   "playedCount",
+   "var",
+   "revealedCount",
+   "lastAdded",
+   "hq",
+   "kredits",
+   "turn",
+   "sum",
+   "mul",
+   "min",
+   "max"
+  ],
+  "conditionalOps": [
+   "conditional",
+   "chooseOne",
+   "conditionalRandomSplit",
+   "repeat",
+   "forEach",
+   "condOpCost",
+   "condOpCostAll",
+   "randomPick"
+  ],
+  "fullTeamOps": [
+   "buffAll",
+   "grantAll",
+   "damageAll",
+   "healAll",
+   "debuff",
+   "armorBonus",
+   "auraBuff",
+   "grantRandomKwToPiles",
+   "destroyAll",
+   "discardAll"
+  ],
+  "sideDefaultEnemyOps": [
+   "discard",
+   "discardAll",
+   "discardChosenHand",
+   "loseKredits",
+   "loseKreditSlots"
+  ],
+  "selfTargetOps": [
+   "grant",
+   "buff",
+   "debuff",
+   "grantMod",
+   "armorBonus",
+   "grantEffect",
+   "setStats",
+   "loseDefense"
+  ],
+  "phantomOpWords": {
+   "_note": "只放高置信的：卡面没有对应中文词就不该出现。damageHQ 不放——「所有目标」本就含总部，是正确展开",
+   "destroy": "消灭|牺牲|摧毁|移除|破坏|击毁",
+   "destroyAll": "消灭|牺牲|摧毁|移除|破坏|击毁",
+   "discard": "弃|丢掉",
+   "pin": "压制",
+   "silence": "沉默|抑制",
+   "retreat": "撤退|退回"
+  },
+  "listeningTriggers": [
+   "unitDeployed",
+   "unitMobilized",
+   "friendlyDeath",
+   "friendlyAttacked",
+   "friendlyDamaged",
+   "friendlyPinned",
+   "friendlyRetreated",
+   "friendlySilenced",
+   "friendlySurvived",
+   "attack",
+   "attacked",
+   "orderPlayed",
+   "hqDamaged",
+   "enemyKilled",
+   "afterKill",
+   "afterAttack",
+   "afterAttackHQ",
+   "impactUsed",
+   "unpinned",
+   "targetedByOrder",
+   "chargeNow",
+   "kreditsGained",
+   "turnStart",
+   "turnEnd",
+   "friendlySuppressed",
+   "shuffle",
+   "unitLeft"
+  ]
+ },
+ "rules": [
+  {
+   "id": "R1-duration-lost",
+   "level": "high",
+   "when": "本回合(内)?|直到回合结束|这个回合|于本回合",
+   "unless": "第一个|首次|第一个单位",
+   "expect": "duration",
+   "why": "卡面写了「本回合」，产出里没有任何 duration → 临时效果变永久生效"
+  },
+  {
+   "id": "R2-dynamic-value-flattened",
+   "level": "high",
+   "when": "每有一|等同于|其数量|等同于其",
+   "expect": "dynamic",
+   "why": "卡面是「每有一个X…」/「等同于其Y」这类动态量，产出里全是字面数字 → 数值被写死"
+  },
+  {
+   "id": "R3-repeat-lost",
+   "level": "mid",
+   "when": "重复\\s*[一两二三四五六七八九十\\d]+\\s*次|重复",
+   "expect": "repeat",
+   "why": "卡面有「重复N次」，产出里没有 times / repeat / forEach → 只执行一次"
+  },
+  {
+   "id": "R4-side-defaulted-to-enemy",
+   "level": "high",
+   "when": ".",
+   "expect": "explicitSide",
+   "why": "discard / loseKredits 一类 op 没写显式 side，引擎历史默认是【敌方】→ 阵营搞反"
+  },
+  {
+   "id": "R5-condition-swallowed",
+   "level": "high",
+   "when": "若|如果|当.*时，",
+   "unless": "如果可能|若可能|若能",
+   "expect": "condition",
+   "why": "卡面有条件从句，产出里没有 condition / 条件式 op / 卡牌级字段 → 变成无条件执行"
+  },
+  {
+   "id": "R6-trigger-suffix-became-action",
+   "level": "high",
+   "when": "消灭\\s*[一两二三四五六七八九十\\d]+\\s*个.{0,20}后|击杀.{0,10}后|消灭.{0,10}之后",
+   "unless": "部署|亡计|亡計",
+   "expect": "notKillOnNonKillTrigger",
+   "why": "「消灭N个之后」应是触发条件，却产出顶层 destroy/damage 且 trigger 不是 afterKill → 变成立刻无条件执行"
+  },
+  {
+   "id": "R7-pronoun-self-in-listening",
+   "level": "high",
+   "when": "其",
+   "unless": "本单位|自己|自身|该单位本身|获得等同于",
+   "expect": "notSelfInListening",
+   "why": "监听触发里卡面写的「其」应指事件里那个单位，产出却是 target:\"self\" → 目标搞反"
+  },
+  {
+   "id": "R8-teamwide-buff-lost",
+   "level": "high",
+   "when": "使(所有|全部)友方|所有友方单位获得",
+   "expect": "fullTeam",
+   "why": "「使所有友方…获得」这类全量效果，产出里没有对应的全量 op → 这半句可能整句消失"
+  },
+  {
+   "id": "R9-phantom-op",
+   "level": "high",
+   "when": ".",
+   "expect": "noPhantomOp",
+   "why": "产出里有 destroy/discard/pin 这类破坏性动作，但卡面正文里根本没有对应的中文词 → 编译器凭空造动作"
+  }
+ ]
+}

@@ -1,0 +1,4036 @@
+{
+ "generatedAt": "2026-10-02T08:49:30.122Z",
+ "source": {
+  "registry": "KG.effects.OPS / KG.effects.CONDS",
+  "overlayCards": 262,
+  "compiledCards": 53
+ },
+ "counts": {
+  "ops": 127,
+  "conditions": 46
+ },
+ "ops": {
+  "_returnToHandOld": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "activate": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "addCardToHand": {
+   "label": null,
+   "seenInData": 52,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "_quotedName": {
+     "types": [
+      "boolean"
+     ],
+     "n": 7,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "cardId": {
+     "types": [
+      "string"
+     ],
+     "n": 43,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "costTo": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "number",
+     "label": null,
+     "note": null,
+     "values": [
+      0
+     ]
+    },
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 51,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 6,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "name": {
+     "types": [
+      "string"
+     ],
+     "n": 48,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "random": {
+     "types": [
+      "boolean"
+     ],
+     "n": 2,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "self": {
+     "types": [
+      "boolean"
+     ],
+     "n": 1,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "armorBonus": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "asVar": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "auraBuff": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "buff": {
+   "label": null,
+   "seenInData": 33,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "attack": {
+     "types": [
+      "number",
+      "object"
+     ],
+     "n": 30,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3
+     ]
+    },
+    "defense": {
+     "types": [
+      "number",
+      "object"
+     ],
+     "n": 26,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3
+     ]
+    },
+    "duration": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "turn"
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "opCostMod": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "number",
+     "label": null,
+     "note": null,
+     "values": [
+      -1
+     ]
+    },
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 33,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self",
+      "t1"
+     ]
+    }
+   }
+  },
+  "buffAll": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": "buff",
+   "note": null,
+   "params": {}
+  },
+  "buffCardsInPiles": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "attack": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    },
+    "defense": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "keyword": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "keyword",
+     "label": null,
+     "note": null,
+     "values": [
+      "blitz"
+     ]
+    },
+    "keywords": {
+     "types": [
+      "array"
+     ],
+     "n": 1,
+     "type": "array",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "piles": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "hand"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "buffDeckAndHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": "buffCardsInPiles",
+   "note": null,
+   "params": {}
+  },
+  "canMoveAndAttack": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "chooseFromHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "chooseHandCard": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "prompt": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "选择一张手牌转换为 USG 单位"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "chooseOne": {
+   "label": null,
+   "seenInData": 19,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "prompt": {
+     "types": [
+      "string"
+     ],
+     "n": 19,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "抉择"
+     ]
+    }
+   }
+  },
+  "condOpCost": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      -2
+     ]
+    },
+    "filter": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": [
+      ""
+     ]
+    }
+   }
+  },
+  "conditional": {
+   "label": null,
+   "seenInData": 14,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "condition": {
+     "types": [
+      "object"
+     ],
+     "n": 14,
+     "type": "condition",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "conditionalRandomSplit": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "copyHandCard": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "sel": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "random"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "copyLastDiscarded": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "copyToDeck": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "costReduce": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "countered": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "damage": {
+   "label": null,
+   "seenInData": 32,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 32,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      9
+     ]
+    },
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 32,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "t1"
+     ]
+    }
+   }
+  },
+  "damageAll": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": "damage",
+   "note": null,
+   "params": {}
+  },
+  "damageHQ": {
+   "label": null,
+   "seenInData": 14,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number",
+      "object"
+     ],
+     "n": 14,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      8
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 14,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "enemy",
+      "self"
+     ]
+    }
+   }
+  },
+  "damageSplit": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "evenTo": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "hq"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "total": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "number",
+     "label": null,
+     "note": null,
+     "values": [
+      20
+     ]
+    }
+   }
+  },
+  "debuff": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "debuffTemp": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "attack": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      3
+     ]
+    },
+    "defense": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      7
+     ]
+    },
+    "duration": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "turn"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "deckCostModAll": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "deckToField": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "buff": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "object",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "keyword": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "keyword",
+     "label": null,
+     "note": null,
+     "values": [
+      "blitz"
+     ]
+    },
+    "to": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "support",
+      "frontline"
+     ]
+    }
+   }
+  },
+  "deckToHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "deckToTop": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "delayNextTurn": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "destroy": {
+   "label": null,
+   "seenInData": 22,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "forEach": {
+     "types": [
+      "array"
+     ],
+     "n": 1,
+     "type": "array",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "target": {
+     "types": [
+      "object",
+      "string"
+     ],
+     "n": 22,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "t1"
+     ]
+    }
+   }
+  },
+  "destroyAll": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": "destroy",
+   "note": null,
+   "params": {}
+  },
+  "develop": {
+   "label": null,
+   "seenInData": 20,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      2
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 20,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "from": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "deck",
+      "pool"
+     ]
+    },
+    "thenSummon": {
+     "types": [
+      "boolean"
+     ],
+     "n": 1,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    }
+   }
+  },
+  "discard": {
+   "label": null,
+   "seenInData": 4,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 3,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      3
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "mode": {
+     "types": [
+      "string"
+     ],
+     "n": 4,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "named",
+      "choose",
+      "random"
+     ]
+    },
+    "name": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "空袭"
+     ]
+    },
+    "prompt": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "选择并弃一张单位"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 4,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "enemy",
+      "self"
+     ]
+    }
+   }
+  },
+  "discardAll": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "discardChosenHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "discardFromDeck": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "discover": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": "develop",
+   "note": null,
+   "params": {
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "from": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "pool"
+     ]
+    },
+    "prompt": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "从三种随机进攻模式中选择一张加入手牌"
+     ]
+    }
+   }
+  },
+  "draw": {
+   "label": null,
+   "seenInData": 38,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "condition": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "condition",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 38,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      4
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "from": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "Deck"
+     ]
+    },
+    "oncePerTurn": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 5,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self",
+      "both"
+     ]
+    }
+   }
+  },
+  "drawUntil": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "handSize": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "number",
+     "label": null,
+     "note": null,
+     "values": [
+      7,
+      9
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "endTurnNow": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "enemyDeckToHand": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "fight": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "t1"
+     ]
+    }
+   }
+  },
+  "fightRepeatedly": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "side": {
+     "types": [
+      "enum"
+     ],
+     "n": 0,
+     "type": "enum",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "forEach": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "as": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "t"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "forecast": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "fury": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "amount": {
+     "types": [
+      "numberExpr"
+     ],
+     "n": 0,
+     "type": "numberExpr",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "gainKreditSlot": {
+   "label": null,
+   "seenInData": 9,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 9,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 9,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "gainKredits": {
+   "label": null,
+   "seenInData": 17,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number",
+      "object"
+     ],
+     "n": 16,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 17,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "globalOpCostMod": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "grant": {
+   "label": null,
+   "seenInData": 19,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "keyword": {
+     "types": [
+      "string"
+     ],
+     "n": 19,
+     "type": "keyword",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 19,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self",
+      "t1"
+     ]
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    }
+   }
+  },
+  "grantAll": {
+   "label": null,
+   "seenInData": 3,
+   "aliasOf": "grant",
+   "note": null,
+   "params": {
+    "keyword": {
+     "types": [
+      "string"
+     ],
+     "n": 3,
+     "type": "keyword",
+     "label": null,
+     "note": null,
+     "values": [
+      "deathrattle",
+      "lightArmor",
+      "armor"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 3,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    }
+   }
+  },
+  "grantEffect": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "grantEffectToHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "grantMod": {
+   "label": null,
+   "seenInData": 38,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "attack": {
+     "types": [
+      "number"
+     ],
+     "n": 6,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3,
+      4
+     ]
+    },
+    "cond": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "foeUnitOnBoard"
+     ]
+    },
+    "double": {
+     "types": [
+      "boolean"
+     ],
+     "n": 1,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "keyword": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "keyword",
+     "label": null,
+     "note": null,
+     "values": [
+      "impact"
+     ]
+    },
+    "mod": {
+     "types": [
+      "string"
+     ],
+     "n": 38,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 38,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self",
+      "t1"
+     ]
+    },
+    "unitType": {
+     "types": [
+      "string",
+      "array"
+     ],
+     "n": 12,
+     "type": null,
+     "label": null,
+     "note": null,
+     "values": [
+      "nonspace",
+      "tank",
+      "space",
+      "infantry",
+      "fighter",
+      "order",
+      "spacefighter"
+     ]
+    },
+    "value": {
+     "types": [
+      "boolean",
+      "number"
+     ],
+     "n": 3,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      3,
+      4,
+      "true"
+     ]
+    }
+   }
+  },
+  "grantRandomCombatKw": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "grantRandomKwToPiles": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "side": {
+     "types": [
+      "enum"
+     ],
+     "n": 0,
+     "type": "enum",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "handOpCostMod": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "handToField": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "mode": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "toField"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "to": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "frontline"
+     ]
+    }
+   }
+  },
+  "handUnitToFrontline": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "heal": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "healAll": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": "heal",
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      999
+     ]
+    },
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 2,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "healHQ": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "side": {
+     "types": [
+      "enum"
+     ],
+     "n": 0,
+     "type": "enum",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "amount": {
+     "types": [
+      "numberExpr"
+     ],
+     "n": 0,
+     "type": "numberExpr",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "hqArmor": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "hqEnchant": {
+   "label": null,
+   "seenInData": 5,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "effects": {
+     "types": [
+      "array"
+     ],
+     "n": 5,
+     "type": "array",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "name": {
+     "types": [
+      "string"
+     ],
+     "n": 5,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "谨慎错误",
+      "本回合友方部署移至前线",
+      "联合工业政策",
+      "Winter防空塔",
+      "友方太空单位部署时，使其行动花费减为0"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "untilTurnEnd": {
+     "types": [
+      "boolean"
+     ],
+     "n": 2,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    }
+   }
+  },
+  "hqKeyword": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "hqMaxUp": {
+   "label": null,
+   "seenInData": 8,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 8,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 8,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self",
+      "enemy"
+     ]
+    }
+   }
+  },
+  "intel": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "log": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "text": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "未实现：若可能，选择手中一张花费不大于 7的单位，将其加入前线，并使其失去闪击",
+      "未实现：下一个加入战场的友方单位获得守护并失去烟幕"
+     ]
+    }
+   }
+  },
+  "loseDefense": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "byCost": {
+     "types": [
+      "boolean"
+     ],
+     "n": 1,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "loseKreditSlots": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "enemy"
+     ]
+    }
+   }
+  },
+  "loseKredits": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "mill": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      5
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "modMovedCost": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "move": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "object",
+      "string"
+     ],
+     "n": 2,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "to": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "frontline"
+     ]
+    }
+   }
+  },
+  "nextTurnDrawPending": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "nextTurnKredits": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      -2
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "enemy"
+     ]
+    }
+   }
+  },
+  "nextTurnSlots": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "nextTurnStart": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "noDrawNextTurn": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "noKreditSlotForTurns": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "noKreditSlotNextTurn": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "nthTime": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "then": {
+     "types": [
+      "actionList"
+     ],
+     "n": 0,
+     "type": "actionList",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "key": {
+     "types": [
+      "string"
+     ],
+     "n": 0,
+     "type": "string",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "every": {
+     "types": [
+      "boolean"
+     ],
+     "n": 0,
+     "type": "boolean",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "reset": {
+     "types": [
+      "boolean"
+     ],
+     "n": 0,
+     "type": "boolean",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "on": {
+     "types": [
+      "string"
+     ],
+     "n": 0,
+     "type": "string",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "opCostMod": {
+   "label": null,
+   "seenInData": 5,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number",
+      "object"
+     ],
+     "n": 5,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      3,
+      -2,
+      -1
+     ]
+    },
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 5,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self",
+      "t1"
+     ]
+    }
+   }
+  },
+  "opCostModAll": {
+   "label": null,
+   "seenInData": 4,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number",
+      "object"
+     ],
+     "n": 4,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      -1
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 4,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "orderDamageMod": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "orderDoubleTurn": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "pin": {
+   "label": null,
+   "seenInData": 10,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "string",
+      "object"
+     ],
+     "n": 10,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "t1"
+     ]
+    },
+    "turns": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "number",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    }
+   }
+  },
+  "randomPick": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "refreshAction": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "rememberTarget": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "removeDeckTop": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      15
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "to": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "removed"
+     ]
+    }
+   }
+  },
+  "removeFromEnemyDeck": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "removeKeyword": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    },
+    "keyword": {
+     "types": [
+      "keyword"
+     ],
+     "n": 0,
+     "type": "keyword",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "removeUnit": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "repeat": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "times": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "retreat": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": "returnToHand",
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "returnToHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "reveal": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "salvage": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "scrapAirDraw": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "script": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "setDefense": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": "setStats",
+   "note": null,
+   "params": {}
+  },
+  "setHandCost": {
+   "label": null,
+   "seenInData": 4,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "amount": {
+     "types": [
+      "number"
+     ],
+     "n": 3,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      -1,
+      -2
+     ]
+    },
+    "choose": {
+     "types": [
+      "boolean"
+     ],
+     "n": 3,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true",
+      "false"
+     ]
+    },
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 4,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      99,
+      -1
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "mode": {
+     "types": [
+      "string"
+     ],
+     "n": 3,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "reduce"
+     ]
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 4,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "setKreditSlots": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      8
+     ]
+    }
+   }
+  },
+  "setLastAddedCost": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "setOpCost": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      0
+     ]
+    }
+   }
+  },
+  "setStats": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "attack": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      0
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "setVar": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "setWeather": {
+   "label": null,
+   "seenInData": 24,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "kind": {
+     "types": [
+      "string"
+     ],
+     "n": 24,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "mist",
+      "gale",
+      "clear",
+      "snow"
+     ]
+    }
+   }
+  },
+  "shuffleHandIntoDeck": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "shuffleIn": {
+   "label": null,
+   "seenInData": 10,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cardId": {
+     "types": [
+      "string"
+     ],
+     "n": 5,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "USG/units/_7",
+      "av76/command/-2",
+      "av76/command/-1",
+      "av76/command/-4",
+      "星盟/c/-6"
+     ]
+    },
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 8,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      4,
+      20
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "name": {
+     "types": [
+      "string"
+     ],
+     "n": 6,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "弃掉手牌和卡组中的所有单位将数张古洛亚飞艇",
+      "ADC",
+      "支援政策",
+      "经济复苏",
+      "反击",
+      "胁迫"
+     ]
+    },
+    "random": {
+     "types": [
+      "boolean"
+     ],
+     "n": 1,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "self": {
+     "types": [
+      "boolean"
+     ],
+     "n": 2,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "to": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "top"
+     ]
+    }
+   }
+  },
+  "shuffleInUntil": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "shuffleRandomSet": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "silence": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": [
+      "t1"
+     ]
+    }
+   }
+  },
+  "summon": {
+   "label": null,
+   "seenInData": 12,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cardId": {
+     "types": [
+      "string"
+     ],
+     "n": 6,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "UN/unit/-3",
+      "UN/unit/-9",
+      "UN/unit/-10",
+      "av76/units/-11",
+      "deran/units/_27"
+     ]
+    },
+    "count": {
+     "types": [
+      "number"
+     ],
+     "n": 11,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "name": {
+     "types": [
+      "string"
+     ],
+     "n": 10,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "联合侦察连",
+      "联合红色第三战团",
+      "国民第33团",
+      "新地反应部队",
+      "卡尔拉第二团",
+      "审判战巡舰",
+      "44(b)坦克",
+      "第一军",
+      "332工程步兵团"
+     ]
+    },
+    "random": {
+     "types": [
+      "boolean"
+     ],
+     "n": 2,
+     "type": "boolean",
+     "label": null,
+     "note": null,
+     "values": [
+      "true"
+     ]
+    },
+    "to": {
+     "types": [
+      "string"
+     ],
+     "n": 3,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "support",
+      "sameZone",
+      "hqAdjacent"
+     ]
+    }
+   }
+  },
+  "summonFromHand": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": "handToField",
+   "note": null,
+   "params": {}
+  },
+  "suppressHQ": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "takeControl": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "transformHandCard": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "set": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "USG"
+     ]
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  },
+  "transformUnit": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "triggerMountain": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "unpin": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "selector"
+     ],
+     "n": 0,
+     "type": "selector",
+     "label": null,
+     "note": "实现级补全（卡池数据未观测，按 effects.js 实现补）",
+     "values": null
+    }
+   }
+  },
+  "upgradeSelf": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    }
+   }
+  }
+ },
+ "conditions": {
+  "and": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "cardInDeck": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "cardVarHasKeyword": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "compare": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cmp": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      ">="
+     ]
+    },
+    "left": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "object",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      3,
+      4
+     ]
+    }
+   }
+  },
+  "controlFrontline": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "controlsType": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cmp": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      ">="
+     ]
+    },
+    "filter": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "filter",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    },
+    "unitType": {
+     "types": [
+      "array"
+     ],
+     "n": 1,
+     "type": "array",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    }
+   }
+  },
+  "damageFromType": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "damaged": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "deadUnitCostAtLeast": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "deckSize": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "defenderIsType": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "type": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "space"
+     ]
+    }
+   }
+  },
+  "discoveredCardNotInDeck": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "eventCardIs": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "name": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "string",
+     "label": null,
+     "note": null,
+     "values": [
+      "补给"
+     ]
+    }
+   }
+  },
+  "eventUnitIs": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "firstUnitThisTurn": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "frontlineControl": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "frontlineEmpty": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "frontlineEnemyOrFull": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "side": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      "self"
+     ]
+    }
+   }
+  },
+  "handHasCard": {
+   "label": null,
+   "seenInData": 2,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cmp": {
+     "types": [
+      "string"
+     ],
+     "n": 2,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      ">="
+     ]
+    },
+    "spec": {
+     "types": [
+      "object"
+     ],
+     "n": 2,
+     "type": "unitSpec",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 2,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    }
+   }
+  },
+  "handSize": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "hasKeyword": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cmp": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      ">="
+     ]
+    },
+    "keyword": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "keyword",
+     "label": null,
+     "note": null,
+     "values": [
+      "intel"
+     ]
+    },
+    "spec": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "unitSpec",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "target": {
+     "types": [
+      "object"
+     ],
+     "n": 1,
+     "type": "selector",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1
+     ]
+    }
+   }
+  },
+  "hasRoom": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "hqAbove": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "hqBelow": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "isUnitType": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "kreditsAtLeast": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "kreditsAtMost": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "lastTurnKilledCompare": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "not": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "opCost": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cmp": {
+     "types": [
+      "string"
+     ],
+     "n": 1,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      ">="
+     ]
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 1,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      8
+     ]
+    }
+   }
+  },
+  "or": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "playedUnitThisTurn": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "random": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "revealedInEnemyHand": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "targetAlive": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "targetDead": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "targetDestroyed": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "targetIsHQ": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "targetIsUnit": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "targetPinned": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "turnAtLeast": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "undamaged": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "unitCount": {
+   "label": null,
+   "seenInData": 4,
+   "aliasOf": null,
+   "note": null,
+   "params": {
+    "cmp": {
+     "types": [
+      "string"
+     ],
+     "n": 4,
+     "type": "enum",
+     "label": null,
+     "note": null,
+     "values": [
+      ">=",
+      ">"
+     ]
+    },
+    "spec": {
+     "types": [
+      "object"
+     ],
+     "n": 4,
+     "type": "unitSpec",
+     "label": null,
+     "note": null,
+     "values": null
+    },
+    "value": {
+     "types": [
+      "number"
+     ],
+     "n": 4,
+     "type": "numberExpr",
+     "label": null,
+     "note": null,
+     "values": [
+      1,
+      2,
+      3
+     ]
+    }
+   }
+  },
+  "unitCountLess": {
+   "label": null,
+   "seenInData": 1,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "unitInZone": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  },
+  "var": {
+   "label": null,
+   "seenInData": 0,
+   "aliasOf": null,
+   "note": null,
+   "params": {}
+  }
+ },
+ "effectFields": {
+  "trigger": 594,
+  "actions": 283,
+  "targets": 45,
+  "oncePerTurn": 6,
+  "on": 10,
+  "owner": 12,
+  "filter": 4,
+  "interrupt": 6,
+  "once": 4,
+  "aura": 20,
+  "condition": 12,
+  "grants": 2,
+  "onAttack": 2,
+  "cardFields": 16,
+  "unimplemented": 4,
+  "notes": 10,
+  "vars": 6,
+  "noAttackIfNameOnBoard": 2,
+  "passiveRules": 4
+ },
+ "effectFieldKinds": {
+  "trigger": {
+   "string": 297
+  },
+  "actions": {
+   "array": 283
+  },
+  "targets": {
+   "array": 44,
+   "object": 1
+  },
+  "oncePerTurn": {
+   "boolean": 3
+  },
+  "on": {
+   "string": 5
+  },
+  "owner": {
+   "string": 6
+  },
+  "filter": {
+   "object": 2
+  },
+  "interrupt": {
+   "string": 3
+  },
+  "once": {
+   "boolean": 2
+  },
+  "aura": {
+   "object": 10
+  },
+  "condition": {
+   "object": 6
+  },
+  "grants": {
+   "array": 1
+  },
+  "onAttack": {
+   "object": 1
+  },
+  "cardFields": {
+   "object": 8
+  },
+  "unimplemented": {
+   "boolean": 2
+  },
+  "notes": {
+   "string": 5
+  },
+  "vars": {
+   "object": 3
+  },
+  "noAttackIfNameOnBoard": {
+   "string": 1
+  },
+  "passiveRules": {
+   "object": 2
+  }
+ },
+ "targetFields": {
+  "id": 38,
+  "side": 38,
+  "kind": 38,
+  "prompt": 38,
+  "filter": 15,
+  "zone": 7
+ },
+ "selectorFields": {
+  "sel": 93,
+  "side": 62,
+  "filter": 21,
+  "ref": 14,
+  "id": 11,
+  "count": 1,
+  "zone": 11
+ },
+ "filterKeys": {
+  "set": 3,
+  "unitType": 11,
+  "maxCost": 5,
+  "nameIncludes": 3,
+  "name": 14,
+  "cardType": 17,
+  "cardIds": 3,
+  "rarity": 1,
+  "cardFields.upgradeOn": 3,
+  "cardFields.costModPerKeyword": 1,
+  "maxAttack": 1,
+  "cardFields.costModPerOrder": 2,
+  "setIn": 2,
+  "minCost": 1,
+  "system": 1,
+  "cardFields.costModByStat": 1
+ },
+ "_audit": {
+  "observedOpsNotRegistered": [],
+  "registeredOpsNeverSeen": [
+   "_returnToHandOld",
+   "activate",
+   "armorBonus",
+   "asVar",
+   "auraBuff",
+   "buffAll",
+   "buffDeckAndHand",
+   "chooseFromHand",
+   "conditionalRandomSplit",
+   "copyLastDiscarded",
+   "copyToDeck",
+   "costReduce",
+   "countered",
+   "damageAll",
+   "debuff",
+   "deckCostModAll",
+   "deckToHand",
+   "deckToTop",
+   "delayNextTurn",
+   "destroyAll",
+   "discardChosenHand",
+   "discardFromDeck",
+   "fightRepeatedly",
+   "forecast",
+   "fury",
+   "globalOpCostMod",
+   "grantEffect",
+   "grantEffectToHand",
+   "grantRandomCombatKw",
+   "grantRandomKwToPiles",
+   "handOpCostMod",
+   "handUnitToFrontline",
+   "heal",
+   "healHQ",
+   "hqArmor",
+   "hqKeyword",
+   "intel",
+   "loseKredits",
+   "modMovedCost",
+   "nextTurnDrawPending",
+   "nextTurnSlots",
+   "noDrawNextTurn",
+   "noKreditSlotForTurns",
+   "noKreditSlotNextTurn",
+   "nthTime",
+   "orderDamageMod",
+   "randomPick",
+   "refreshAction",
+   "rememberTarget",
+   "removeFromEnemyDeck",
+   "removeKeyword",
+   "removeUnit",
+   "returnToHand",
+   "reveal",
+   "salvage",
+   "scrapAirDraw",
+   "script",
+   "setDefense",
+   "setLastAddedCost",
+   "setVar",
+   "shuffleHandIntoDeck",
+   "shuffleInUntil",
+   "shuffleRandomSet",
+   "summonFromHand",
+   "suppressHQ",
+   "transformUnit",
+   "triggerMountain",
+   "unpin"
+  ],
+  "observedCondsNotRegistered": [],
+  "registeredCondsNeverSeen": [
+   "and",
+   "cardInDeck",
+   "cardVarHasKeyword",
+   "controlFrontline",
+   "damageFromType",
+   "damaged",
+   "deadUnitCostAtLeast",
+   "deckSize",
+   "eventUnitIs",
+   "firstUnitThisTurn",
+   "frontlineControl",
+   "handSize",
+   "hasRoom",
+   "hqAbove",
+   "hqBelow",
+   "isUnitType",
+   "kreditsAtLeast",
+   "kreditsAtMost",
+   "lastTurnKilledCompare",
+   "not",
+   "or",
+   "playedUnitThisTurn",
+   "random",
+   "targetAlive",
+   "targetDead",
+   "targetDestroyed",
+   "targetIsHQ",
+   "targetIsUnit",
+   "turnAtLeast",
+   "undamaged",
+   "unitInZone",
+   "var"
+  ]
+ }
+}

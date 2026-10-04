@@ -1,0 +1,7 @@
+{
+  "_说明": "nations 存储元数据。卡数据在 <国家>.json；这里只放跨卡全局信息。",
+  "schema": 1,
+  "migratedAt": "2026-09-27T12:33:46.343Z",
+  "sourceGeneratedAt": "2026-09-27T12:33:46.617Z",
+  "orphanAliases": {}
+}

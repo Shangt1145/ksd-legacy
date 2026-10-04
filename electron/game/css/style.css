@@ -1,0 +1,3723 @@
+:root {
+  --bg: #14161a;
+  --panel: #1d2027;
+  --panel2: #23262e;
+  --line: #333844;
+  --text: #e8e6e1;
+  --dim: #9aa1ad;
+  --gold: #c9a227;
+  --red: #b4453c;
+  --green: #4f8a4a;
+  --blue: #3f6f9f;
+  --card-w: 104px;
+  --card-h: 146px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(circle at 50% 0%, #1e2229, #0f1114 70%);
+  color: var(--text);
+  font: 14px/1.5 "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  overflow: hidden;
+}
+button { font: inherit; cursor: pointer; }
+.hidden { display: none !important; }
+
+/* 高度链：#app 必须有确定高度，否则 .screen �?height:100% 会退化成 auto�?   容器跟着内容一起长�?�?scrollHeight == clientHeight �?永远"�?1/1 �?、滚轮失�?*/
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------ 顶栏 */
+#topbar {
+  flex: 0 0 auto;
+  height: 48px; display: flex; align-items: center; gap: 16px;
+  padding: 0 16px; background: #191c22; border-bottom: 1px solid var(--line);
+}
+.brand { font-weight: 700; letter-spacing: 2px; color: var(--gold); }
+.brand span { color: var(--dim); font-weight: 400; font-size: 12px; }
+nav { display: flex; gap: 6px; }
+.nav-btn {
+  background: transparent; border: 1px solid transparent; color: var(--dim);
+  padding: 6px 12px; border-radius: 6px;
+}
+.nav-btn:hover { color: var(--text); background: #23272f; }
+.nav-btn.active { color: var(--text); background: #2a2f39; border-color: var(--line); }
+.pool-info { margin-left: auto; color: var(--dim); font-size: 12px; }
+/* 顶栏 / 卡牌库里的「效果检查器」是 a 标签（独立页面），沿用按钮外观但别带下划线。
+   手机端顶栏太窄 → 藏掉顶栏那个，改从「卡牌库 / 导入」的按钮簇进。 */
+a.nav-btn, a.file-btn { text-decoration: none; }
+html.mobile-ui #navInspector { display: none; }
+
+.screen { display: none; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.screen.active { display: flex; flex-direction: column; min-height: 0; }
+.screen > * { min-height: 0; }
+
+/* ------------------------------------------------------------ 对战 */
+/* 结构�?battle = 左列(棋盘可滚�?+ 手牌固定) | 右侧面板 */
+#battle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+#boardScroll {
+  grid-column: 1; grid-row: 1;
+  min-height: 0; overflow-y: auto; overflow-x: hidden;
+}
+#handBar {
+  grid-column: 1; grid-row: 2;
+  border-top: 1px solid var(--line); background: #16181d;
+  padding: 4px 10px 6px; min-height: 0;
+}
+#sidePanel {
+  grid-column: 2; grid-row: 1 / -1;
+  border-left: 1px solid var(--line); display: flex; flex-direction: column;
+  background: #171a1f; min-height: 0; overflow: hidden;
+}
+.log-drawer {
+  position: fixed; right: 12px; bottom: 12px; width: 380px; max-height: 60vh;
+  display: flex; flex-direction: column; background: #14161a; border: 1px solid var(--line);
+  border-radius: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.6); z-index: 70;
+}
+.log-drawer .log { padding: 8px 10px; }
+.tip-box { padding: 8px 12px; font-size: 11px; color: var(--dim); line-height: 1.7; border-bottom: 1px solid var(--line); }
+.tip-line::before { content: '· '; color: var(--gold); }
+button.small { padding: 4px 10px; font-size: 12px; }
+#sidePanel > #logToggle { margin: 8px 12px; }
+.side { padding: 4px 12px; min-height: 0; }
+.side.mine { display: flex; flex-direction: column; }
+.frontline-wrap { display: flex; flex-direction: column; gap: 2px; }
+.fl-line {
+  display: flex; gap: 6px; min-height: calc(var(--card-h) + 2px);
+  align-items: center; padding: 2px 4px; border-radius: 8px;
+  background: repeating-linear-gradient(90deg, rgba(201,162,39,.05), rgba(201,162,39,.05) 14px, rgba(201,162,39,.1) 14px, rgba(201,162,39,.1) 28px);
+  overflow-x: auto; overflow-y: hidden;
+}
+.fl-line > .line-units { padding: 0 2px; }
+.fl-line.foe-line { border-bottom: 1px dashed #4a4335; }
+.fl-line.mine-line { border-top: 1px dashed #4a4335; }
+.fl-sep { text-align: center; color: var(--gold); font-size: 12px; line-height: 1; opacity: .8; }
+
+.hq-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pile.foe-tag { color: var(--dim); font-size: 12px; align-self: center; }
+.pile {
+  min-width: 52px; padding: 3px 7px; border-radius: 6px; background: var(--panel);
+  border: 1px solid var(--line); text-align: center;
+}
+.pile span { display: block; font-size: 16px; font-weight: 600; }
+.pile small { color: var(--dim); font-size: 10px; }
+
+.row-label { color: var(--dim); font-size: 11px; margin: 3px 0 2px; }
+.board-row {
+  display: flex; gap: 6px; min-height: calc(var(--card-h) + 2px);
+  align-items: center; padding: 2px 4px; border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  overflow-x: auto; overflow-y: hidden;
+}
+/* 阵线上的单位区：**默认居中**，HQ 固定在支援线最左端 */
+.line-units {
+  /* 间距留给"卡外竖排词条"那一列（否则会压到左边那张卡上） */
+  display: flex; gap: 16px; align-items: center; justify-content: center;
+  flex: 1 1 auto; min-width: 0; min-height: calc(var(--card-h) + 2px);
+  transition: padding .12s ease;
+}
+.frontline-bar {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: repeating-linear-gradient(90deg, #2b2f37, #2b2f37 12px, #262a31 12px, #262a31 24px);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  color: var(--dim); letter-spacing: 2px; font-size: 12px; padding: 2px 0;
+}
+.fl-slots { letter-spacing: 0; color: #cbbf9a; }
+.fl-control { letter-spacing: 0; }
+.fl-control.mine { color: #7fd6a0; }
+.fl-control.foe { color: #ff9b8a; }
+
+.hand-wrap { display: flex; align-items: flex-end; gap: 12px; min-height: 0; }
+.hand {
+  display: flex; gap: 6px; flex: 1; min-width: 0;
+  overflow-x: auto; overflow-y: visible;
+  min-height: calc(var(--card-h) + 6px);
+  padding-top: 6px;
+}
+.turn-box { display: flex; flex-direction: column; gap: 6px; padding-bottom: 4px; }
+#prompt { margin: 0 0 6px; }
+
+/* 窗口不高时自动缩小卡牌，尽量一屏放下（手牌永远在底部） */
+@media (max-height: 900px) { :root { --card-w: 96px; --card-h: 135px; } }
+@media (max-height: 820px) { :root { --card-w: 88px; --card-h: 124px; } }
+@media (max-height: 720px) { :root { --card-w: 78px; --card-h: 110px; } }
+
+/* ------------------------------------------------------------ 卡牌 */
+.card {
+  width: var(--card-w); height: var(--card-h); border-radius: 6px; overflow: hidden;
+  position: relative; border: 1px solid #3d4250; background: #0c0d10;
+  transition: transform .12s ease, box-shadow .12s ease; flex: 0 0 auto;
+}
+.card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card.selectable { cursor: pointer; }
+.card.playable { box-shadow: 0 0 0 2px var(--gold); }
+.card.selectable:hover { transform: translateY(-6px); box-shadow: 0 6px 18px rgba(0,0,0,.6); }
+.card.targetable { box-shadow: 0 0 0 3px #d8b74a, 0 0 14px rgba(216,183,74,.6); cursor: crosshair; }
+.card.selected { box-shadow: 0 0 0 3px #6cc0ff; }
+.card.exhausted { filter: grayscale(.85) brightness(.6); }
+/* ★ 抽牌：从手牌区最右边滑进它在手牌里的位置（制作者口径；起点由 JS 用 --draw-from 给出） */
+@keyframes drawIn {
+  from { transform: translateX(var(--draw-from, 150px)); opacity: 0; }
+  12% { opacity: 1; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.card.drawn-in { animation: drawIn .46s cubic-bezier(.2,.85,.25,1); }
+/* ★ 烧牌：滑进来之后"焦化"飞向弃牌堆 */
+.fly-card.burn-card.burning {
+  filter: sepia(1) saturate(2.4) hue-rotate(-24deg) brightness(.6);
+  box-shadow: 0 0 20px rgba(255,120,40,.8);
+}
+.card.dead { opacity: .25; }
+.card-badges {
+  position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 3px; padding: 3px;
+  background: linear-gradient(transparent, rgba(0,0,0,.85)); font-size: 10px; flex-wrap: wrap;
+}
+/* ★ 战场单位：词条/状态排到**卡牌外侧**、贴着边缘的竖排一列（原版 KARDS 的味道）。
+   卡面不再被底部那条渐变遮住，攻防数字也回到角落（改过的会变色）。 */
+.card.kw-out { overflow: visible; }
+.card.kw-out > img { border-radius: 6px; }
+/* 作用域挂在卡元素上（.card.kw-out）—— 状态类在"按 uid 复用节点"的路径上才可靠 */
+.card.kw-out > .card-badges {
+  left: auto; right: calc(100% + 2px); top: 0; bottom: auto;
+  flex-direction: column; flex-wrap: nowrap; align-items: flex-end; gap: 2px;
+  padding: 0; background: none; font-size: 9px; line-height: 1.05; width: auto;
+}
+.card.kw-out > .card-badges .badge {
+  writing-mode: vertical-rl; text-orientation: upright; padding: 3px 1px;
+  border-radius: 3px; letter-spacing: 0; white-space: nowrap;
+}
+.badge { background: rgba(0,0,0,.6); border: 1px solid #555; border-radius: 3px; padding: 0 3px; }
+.badge.kw { border-color: var(--gold); color: #f0d98a; }
+.badge.counter { border-color: #7fd4ff; color: #b9e8ff; }   /* 反制卡标记 */
+.card-cost {
+  position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,.75);
+  border: 1px solid var(--gold); color: #ffe9a8; border-radius: 4px; padding: 0 5px; font-weight: 700;
+}
+.card-name {
+  position: absolute; top: 2px; right: 2px; max-width: 70%; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; background: rgba(0,0,0,.68); border-radius: 4px; padding: 0 4px; font-size: 11px;
+}
+.card-stat { position: absolute; bottom: 2px; background: rgba(0,0,0,.75); border-radius: 4px; padding: 0 5px; font-weight: 700; }
+.card-stat.atk { left: 2px; color: #ffc9a0; }
+/* 巡航舰：角落同时显示两个攻击值（左=对太空 / 右=其他），斜杠分隔、大+小 */
+.card-stat.atk.dual { display: inline-flex; align-items: baseline; gap: 2px; padding: 0 5px; }
+.card-stat.atk.dual b { font-size: 13px; color: #ffdcae; }
+.card-stat.atk.dual i { font-size: 10px; font-style: normal; color: #ffbe86; }
+.card-stat.atk.dual i::before { content: '/'; margin-right: 1px; color: #b9a06a; }
+.card-stat.def { right: 2px; color: #a8d8ff; }
+/* 攻防被增益/减益/编辑改过：数字直接在角落变色（不再往词条行写 x/x） */
+.card.atk-up .card-stat.atk, .card.def-up .card-stat.def { color: #9df09d; box-shadow: 0 0 0 1px rgba(120,240,140,.6); }
+.card.atk-down .card-stat.atk, .card.def-down .card-stat.def { color: #ff9d9d; box-shadow: 0 0 0 1px rgba(255,120,120,.6); }
+.unimpl { position: absolute; top: 50%; left: 0; right: 0; text-align: center; color: #ff9a6a; font-size: 10px; }
+
+/* ------------------------------------------------------- 侧栏 / 日志 */
+#sidePanel { border-left: 1px solid var(--line); display: flex; flex-direction: column; background: #171a1f; min-height: 0; overflow: hidden; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.prompt {
+  margin: 8px 12px; padding: 10px; border-radius: 6px; background: #2b2416;
+  border: 1px solid var(--gold); color: #ffe6a8;
+}
+/* 准备阶段（mulligan）换牌提示条 */
+.mulligan-bar {
+  margin: 8px 12px; padding: 10px 12px; border-radius: 6px;
+  background: #1e3a2a; border: 1px solid #4a9d6a; color: #c8f0d8;
+  display: flex; align-items: center; gap: 12px;
+}
+.mulligan-bar span { flex: 1; font-size: 14px; }
+.mulligan-bar .primary { flex: 0 0 auto; }
+.hidden { display: none !important; }
+.prompt button { margin-right: 6px; margin-top: 6px; }
+.log { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 8px 12px; font-size: 12px; color: #c6cbd4; }
+.log div { padding: 2px 0; border-bottom: 1px dashed #24272e; }
+.log .k-turn { color: var(--gold); font-weight: 600; }
+.log .k-damage { color: #ff9b8a; }
+.log .k-hq { color: #ff6b5a; font-weight: 600; }
+.log .k-death { color: #d0a0ff; }
+.log .k-keyword { color: #8fd6a0; }
+.log .k-play, .log .k-move { color: #9fc9ff; }
+.log .k-error { color: #ff8080; }
+
+button.primary { background: #2f5d8a; border: 1px solid #4a7fb5; color: #fff; border-radius: 6px; padding: 6px 12px; }
+button.primary:hover { background: #386ea3; }
+button.ghost { background: #23262e; border: 1px solid var(--line); color: var(--text); border-radius: 6px; padding: 6px 12px; }
+button.ghost:hover { background: #2c303a; }
+button.big { padding: 14px 20px; font-size: 16px; font-weight: 700; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ------------------------------------------------------------ 构筑 */
+#playerDeckSide .deck-lib { flex: 0 1 auto; max-height: 32%; overflow-y: auto; margin-bottom: 10px; padding: 2px 0; }
+#playerDeckSide .deck-lib-empty { color: var(--dim); font-size: 12px; padding: 4px 6px; }
+.deck-lib-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 6px; margin-bottom: 2px;
+  border: 1px solid transparent; border-radius: 6px;
+  background: #1c2027; font-size: 12px; cursor: pointer;
+}
+.deck-lib-item:hover { background: #23272f; }
+.deck-lib-item.active { background: #223046; border-color: #3d6fa8; }
+.deck-lib-item .dl-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.deck-lib-item.active .dl-name { color: var(--gold); font-weight: 700; }
+.deck-lib-item .dl-num { flex: 0 0 auto; color: var(--dim); font-size: 11px; }
+.deck-lib-item .dl-del {
+  flex: 0 0 auto; border: none; background: transparent; color: var(--dim);
+  font-size: 11px; line-height: 1; padding: 2px 4px; border-radius: 4px; cursor: pointer;
+}
+.deck-lib-item .dl-del:hover { background: #7a2b2b; color: #fff; }
+#playerDeckSide > h3 { flex: 0 0 auto; margin: 0 0 6px; }
+#playerDeckSide > h3:not(:first-child) { margin-top: 4px; }
+.deck-name { color: var(--gold); }
+
+.deck-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr) 280px; flex: 1 1 auto; height: auto; min-height: 0; overflow: hidden; }
+.deck-side {
+  border-right: 1px solid var(--line); padding: 10px;
+  display: flex; flex-direction: column; background: #171a1f;
+  min-height: 0; overflow: hidden;
+}
+#aiDeckSide { border-right: none; border-left: 1px solid var(--line); }
+.deck-side-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.deck-actions { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+.deck-stats { font-size: 12px; color: var(--dim); margin-bottom: 8px; flex: 0 0 auto; }
+.deck-list { overflow-y: auto; flex: 1 1 auto; min-height: 120px; border-top: 1px solid var(--line); padding-top: 4px; }
+.deck-item { display: flex; justify-content: space-between; padding: 4px 6px; border-bottom: 1px dashed #24272e; font-size: 12px; cursor: pointer; }
+.deck-item:hover { background: #23272f; }
+.deck-item .c { color: var(--gold); }
+.pool-main { display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
+.filters { display: flex; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; align-items: center; flex: 0 0 auto; }
+.filters input, .filters select, .editor input, .editor select, .editor textarea {
+  background: #23262e; border: 1px solid var(--line); color: var(--text); border-radius: 5px; padding: 5px 8px;
+}
+.filters input { min-width: 180px; }
+.pager { margin-left: auto; display: flex; align-items: center; gap: 6px; color: var(--dim); font-size: 12px; }
+.chk { display: flex; align-items: center; gap: 4px; color: var(--dim); font-size: 12px; }
+.pool-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+  gap: 8px; padding: 12px;
+  flex: 1 1 auto; min-height: 0;              /* 关键：让它成为可滚动区域，滚轮才有效 */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  align-content: start;
+}
+.grid-card { position: relative; cursor: pointer; }
+.grid-card .card { width: 100%; height: auto; }
+.grid-card .card img { height: auto; }
+.grid-card .meta { font-size: 11px; color: var(--dim); display: flex; justify-content: space-between; padding: 2px 2px 0; }
+.grid-card .count-badge {
+  position: absolute; top: 4px; right: 4px; background: var(--gold); color: #1a1a1a;
+  font-weight: 700; border-radius: 10px; padding: 0 7px; font-size: 12px;
+}
+.grid-card.owned .card { border-color: var(--green); }
+.grid-card.unbuildable { opacity: .45; }
+.grid-card.unbuildable .card { border-style: dashed; }
+.bad { border-color: var(--red) !important; }
+
+/* ------------------------------------------------------- 卡牌�?/ 编辑�?*/
+.coll-head { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 16px; align-items: flex-start; flex: 0 0 auto; }
+.coll-head h3 { margin: 0 0 4px; }
+.hint { color: var(--dim); font-size: 12px; margin: 0; max-width: 620px; }
+.coll-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.file-btn { position: relative; overflow: hidden; display: inline-block; padding: 6px 12px; border-radius: 6px; }
+.file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.import-status { padding: 8px 16px; color: var(--dim); font-size: 12px; }
+.import-status button, .import-status select { min-height: 44px; margin: 6px 8px 2px 0; max-width: 100%; }
+.import-status label { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.import-status .import-log { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 220px; overflow: auto; }
+.coll-body { display: grid; grid-template-columns: minmax(0, 1fr) 380px; flex: 1 1 auto; height: auto; min-height: 0; overflow: hidden; }
+.coll-body .pool-grid { min-height: 0; }
+.editor { border-left: 1px solid var(--line); background: #171a1f; padding: 12px; overflow-y: auto; }
+.editor-head { display: flex; gap: 10px; margin-bottom: 10px; }
+.editor-head img { width: 110px; border-radius: 6px; border: 1px solid var(--line); }
+.editor-head input { width: 100%; margin-bottom: 6px; }
+.editor-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
+.editor-row label { display: flex; flex-direction: column; font-size: 11px; color: var(--dim); gap: 2px; }
+.editor-row input, .editor-row select { width: 82px; }
+.block { display: block; font-size: 12px; color: var(--dim); margin: 8px 0; }
+.block input, .block textarea { width: 100%; margin-top: 4px; font-family: inherit; }
+.block textarea { font-family: Consolas, monospace; font-size: 12px; }
+.warn { color: #ffb27a; font-size: 12px; white-space: pre-wrap; margin-top: 6px; }
+
+/* ------------------------------------------------------------ 规则 */
+.help { padding: 20px 32px; overflow-y: auto; flex: 1 1 auto; min-height: 0; max-width: 900px; }
+.help h3 { color: var(--gold); }
+.help li { margin: 4px 0; }
+kbd { background: #23262e; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
+.rar-legend { display: inline-flex; align-items: center; gap: 4px; margin-right: 12px; }
+.rar-legend .rarity { position: static; display: inline-block; width: 11px; height: 11px; }
+
+/* ------------------------------------------------------------ 浮层 */
+.tooltip {
+  position: fixed; z-index: 50; width: 230px; background: #1b1f26; border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px; font-size: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.6); pointer-events: none;
+}
+.tooltip img { width: 100%; border-radius: 6px; margin-bottom: 6px; }
+.tooltip .t-name { font-weight: 700; color: var(--gold); }
+.tooltip .t-kw { color: #8fd6a0; }
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: #2b2416; border: 1px solid var(--gold); color: #ffe6a8; padding: 10px 18px; border-radius: 8px; z-index: 60;
+}
+.error-banner {
+  position: fixed; top: 56px; left: 50%; transform: translateX(-50%);
+  max-width: 860px; z-index: 80; background: #2a1414; border: 1px solid #b4453c;
+  border-radius: 8px; padding: 12px 16px; box-shadow: 0 12px 40px rgba(0,0,0,.6);
+}
+.error-banner .eb-title { color: #ff9b8a; font-weight: 700; margin-bottom: 6px; }
+.error-banner pre { margin: 0; max-height: 240px; overflow: auto; color: #ffd9d0; font-size: 12px; white-space: pre-wrap; }
+.error-banner .eb-actions { margin-top: 8px; display: flex; gap: 8px; }
+.diag {
+  position: fixed; left: 50%; top: 60px; transform: translateX(-50%);
+  width: min(860px, 94vw); max-height: 76vh; z-index: 85; display: flex; flex-direction: column;
+  background: #14161a; border: 1px solid var(--gold); border-radius: 8px; box-shadow: 0 18px 50px rgba(0,0,0,.7);
+}
+.diag pre { margin: 0; padding: 10px 14px; overflow: auto; font-size: 12px; color: #d8d5cc; white-space: pre-wrap; }
+/* 兜底：万一高度链在某个浏览器上仍不生效，至少让整个构筑界面能滚 */
+#screen-deck.fallback-scroll { overflow-y: auto; }
+#screen-deck.fallback-scroll .deck-layout { height: auto; min-height: 100%; }
+.setup-row { display: flex; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.setup-row label { font-size: 11px; color: var(--dim); display: flex; flex-direction: column; gap: 2px; }
+.setup-row select { background: #23262e; border: 1px solid var(--line); color: var(--text); border-radius: 5px; padding: 3px 6px; }
+.import-log { max-height: 120px; overflow: auto; font-size: 11px; color: var(--dim); white-space: pre-wrap; }
+
+/* --------------------------------------------- 对战模式切换（单机 / 联机） */
+.mode-switch { display: flex; gap: 0; padding: 8px 12px 0; }
+.mode-btn {
+  flex: 1 1 0; background: #1b1e24; border: 1px solid var(--line); color: var(--dim);
+  padding: 7px 6px; font-size: 12px; cursor: pointer; border-radius: 0;
+}
+.mode-btn:first-child { border-radius: 6px 0 0 6px; }
+.mode-btn:last-child { border-radius: 0 6px 6px 0; border-left: none; }
+.mode-btn:hover { background: #23272f; color: var(--text); }
+.mode-btn.active { background: #2b3d55; border-color: #3d6fa8; color: #fff; font-weight: 700; }
+#mpPanel { display: flex; flex-direction: column; min-height: 0; }
+
+/* ------------------------------------------------------- 联机对战面板 */
+.mp-box { padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.mp-head { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 700; }
+.mp-status { font-size: 11px; font-weight: 400; color: var(--dim); }
+.mp-status.waiting { color: var(--gold); }
+.mp-status.ready { color: var(--green); }
+.mp-status.playing { color: var(--blue); }
+.mp-status.error { color: var(--red); }
+.mp-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.mp-input { background: #23262e; border: 1px solid var(--line); color: var(--text); border-radius: 5px; padding: 4px 7px; font-size: 12px; min-width: 0; flex: 1 1 90px; }
+.mp-code { flex: 0 0 92px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; text-align: center; }
+.mp-row select { background: #23262e; border: 1px solid var(--line); color: var(--text); border-radius: 5px; padding: 4px 6px; font-size: 12px; flex: 1 1 120px; min-width: 0; }
+.mp-row .chk { font-size: 11px; color: var(--dim); display: flex; align-items: center; gap: 3px; white-space: nowrap; }
+.mp-row button.small { padding: 4px 8px; font-size: 11px; }
+.mp-progress { height: 16px; background: #23262e; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.mp-progress.hidden { display: none; }
+#mpProgressBar { height: 100%; width: 0; background: var(--blue); color: #fff; font-size: 10px;
+  line-height: 14px; padding-left: 6px; white-space: nowrap; transition: width .18s ease; }
+.mp-hint { font-size: 11px; color: var(--dim); line-height: 1.6; }
+.mp-start-hint { color: var(--gold); min-height: 15px; }
+.mp-start-hint:empty { display: none; }
+
+
+/* --------------------------------------------------- 卡牌动画与拖拽 */
+.card { will-change: transform; user-select: none; }
+.card img { -webkit-user-drag: none; user-select: none; }
+.slot, .hq-card { user-select: none; }
+.card.played { animation: cardIn .34s cubic-bezier(.2,.8,.3,1.25); }
+@keyframes cardIn { from { transform: translateY(46px) scale(.82); opacity: .15; } to { transform: none; opacity: 1; } }
+.card.hit { animation: cardHit .42s ease; }
+@keyframes cardHit {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,80,60,0); }
+  25% { box-shadow: 0 0 0 3px #ff5a44, 0 0 16px rgba(255,90,68,.8); transform: translateX(-4px); }
+  60% { transform: translateX(3px); }
+}
+.card.attack-lunge { animation: lunge .3s ease; }
+@keyframes lunge { 50% { transform: translateY(-16px) scale(1.06); } }
+/* ⚠ .card.moved-in / @keyframes movedIn 已删除（2026-09-21）：
+ *   它是"从上方 28px 淡入"的**入场**动画，被 ui.js 用在"单位换阵线"上——
+ *   语义就不对（那不是移动），而且它是 CSS 动画、优先级高于内联 transform，
+ *   会把 flipByUid 正在播的平滑位移**整段抢掉**。
+ *   阵线间移动现在只有一条路径：flipByUid 的弧线关键帧。 */
+.card.death { animation: die .35s ease forwards; }
+@keyframes die { to { transform: scale(.9) rotate(3deg); opacity: 0; filter: grayscale(1); } }
+.card.dragging { opacity: .3; filter: saturate(.5); }
+.drag-ghost {
+  position: fixed; z-index: 90; pointer-events: none; width: var(--card-w); height: var(--card-h);
+  border-radius: 6px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.7); transform: translate(-50%,-50%) rotate(-3deg);
+  border: 2px solid var(--gold);
+}
+.drag-ghost img { width: 100%; height: 100%; object-fit: cover; }
+.drop-ok { outline: 2px dashed #7fd6a0; outline-offset: 3px; }
+.drop-target { box-shadow: 0 0 0 3px #d8b74a, 0 0 18px rgba(216,183,74,.7) !important; }
+/* 拖单位时把所有"能打的目标"先标出来（免得不知道往哪放） */
+.can-hit { box-shadow: 0 0 0 3px #ff7a5a, 0 0 16px rgba(255,122,90,.75) !important; }
+.can-hit.hq-card { box-shadow: 0 0 0 3px #ff7a5a, 0 0 20px rgba(255,122,90,.8) !important; }
+.card.flash-buff { animation: buffFlash .5s ease; }
+@keyframes buffFlash { 0%,100% { box-shadow: none; } 40% { box-shadow: 0 0 0 3px #7fd6a0, 0 0 18px rgba(127,214,160,.8); } }
+
+/* --------------------------------------------------- 槽位 / 总部卡 / 拖拽 */
+.slot {
+  width: var(--card-w); height: var(--card-h); border-radius: 6px; flex: 0 0 auto;
+  border: 1px dashed rgba(255,255,255,.10); background: rgba(255,255,255,.02);
+  display: flex; align-items: center; justify-content: center; position: relative;
+}
+.slot::after { content: attr(data-slot-label); color: rgba(255,255,255,.14); font-size: 15px; }
+.slot > .card { position: absolute; inset: 0; }
+/* 拖拽时的"让位"占位格：插进去以后后面的卡自动右移 */
+.slot.gap {
+  border: 2px dashed #7fd6a0; background: rgba(127,214,160,.16);
+  box-shadow: 0 0 14px rgba(127,214,160,.45); animation: gapIn .12s ease-out;
+}
+.slot.gap::after { content: ''; }
+@keyframes gapIn { from { width: 0; opacity: .2; } to { opacity: 1; } }
+body.dragging-card .slot { border-color: rgba(127,214,160,.28); }
+/* 拖牌进行中：锁住触摸手势，别让页面/手牌跟着滑（手机上尤其明显） */
+body.dragging-card, body.dragging-card * { touch-action: none !important; }
+
+.hq-card {
+  width: var(--card-w); height: var(--card-h); border-radius: 6px; flex: 0 0 auto; position: relative;
+  background: radial-gradient(circle at 50% 30%, #4a3b2f, #1b1714 70%);
+  border: 1px solid #6b5a45; box-shadow: inset 0 0 24px rgba(0,0,0,.6);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  overflow: hidden;
+}
+.hq-card.mine { border-color: #7fd6a0; }
+.hq-card.foe { border-color: #d88a7a; }
+.hq-card .hq-art { font-size: 26px; line-height: 1; color: #ffd9a0; text-shadow: 0 0 10px rgba(255,217,160,.5); }
+.hq-card .hq-hp { font-size: 26px; font-weight: 800; color: #ffe9c4; line-height: 1; }
+.hq-card .hq-sub { font-size: 10px; color: #b9ac93; }
+.hq-card .hq-label { font-size: 10px; color: var(--dim); }
+.hq-card.hit { animation: hqHit .5s ease; }
+@keyframes hqHit {
+  0%,100% { box-shadow: inset 0 0 24px rgba(0,0,0,.6); }
+  30% { box-shadow: inset 0 0 24px rgba(0,0,0,.6), 0 0 0 3px #ff6b5a, 0 0 20px #ff6b5a; }
+}
+.hq-card.targetable { box-shadow: 0 0 0 3px #d8b74a, 0 0 14px rgba(216,183,74,.6); cursor: crosshair; }
+
+/* 飘伤害数字 */
+.dmg-float {
+  position: absolute; z-index: 95; pointer-events: none; font-weight: 800; font-size: 18px;
+  color: #ff8f7a; text-shadow: 0 2px 6px rgba(0,0,0,.9); animation: dmgFloat .85s ease-out forwards;
+}
+.dmg-float.heal { color: #8ff0b0; }
+@keyframes dmgFloat { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, -46px); opacity: 0; } }
+
+/* 指令使用动画：卡牌飞到中央闪一下 */
+.order-fly {
+  position: fixed; z-index: 96; pointer-events: none; width: var(--card-w); height: var(--card-h);
+  border-radius: 6px; overflow: hidden; border: 2px solid #7fd4ff; box-shadow: 0 0 30px rgba(127,212,255,.7);
+  animation: orderFly .5s ease-in forwards;
+}
+.order-fly img { width: 100%; height: 100%; object-fit: cover; }
+@keyframes orderFly { from { transform: translate(-50%,-50%) scale(1); opacity: 1; } to { transform: translate(-50%,-50%) scale(1.35); opacity: 0; } }
+.order-flash { animation: orderFlash .5s ease; }
+@keyframes orderFlash {
+  0%,100% { box-shadow: none; }
+  35% { box-shadow: inset 0 0 60px rgba(127,212,255,.35); }
+}
+
+/* --------------------------------------------------------- 稀有度角标 */
+.rarity {
+  position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.6); box-shadow: 0 0 4px rgba(0,0,0,.6);
+}
+.rarity.gold { background: linear-gradient(140deg,#ffe28a,#c9962b); }
+.rarity.silver { background: linear-gradient(140deg,#f2f6ff,#9fb0c6); }
+.rarity.bronze { background: linear-gradient(140deg,#f0b57a,#9c5a24); }
+.rarity.iron { background: linear-gradient(140deg,#cfd6e2,#6d7684); }
+.rarity.token { background: linear-gradient(140deg,#8c8c8c,#3a3a3a); }
+.card-name.has-rarity { right: 18px; }
+
+/* 选择卡牌时显示卡图 */
+.pick-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+.pick { display:flex; flex-direction:column; align-items:center; gap:4px; max-width:120px; padding:4px; }
+.pick-art { width:88px; border-radius:6px; display:block; }
+/* 开发/选牌：完整小卡面（纯文字卡也有卡面 + 悬停详情） */
+.pick-grid .card { position: relative; width: 104px; height: 138px; cursor: pointer; }
+.pick-grid .pick-label { display: block; width: 100%; text-align: center; font-size: 11px; color: #c9cbd4; margin-top: 3px; }
+.pick-grid .ghost.pick { display: flex; flex-direction: column; align-items: center; background: none; border: 1px solid #33302a; border-radius: 8px; padding: 6px; }
+.pick-grid .ghost.pick:hover { border-color: var(--gold); }
+/* tooltip 顶部的大号卡面：给没有美术图的纯文字卡用 */
+.tooltip .card.mini-big { width: 208px; height: auto; min-height: 150px; position: relative; margin-bottom: 8px; font-size: 15px; }
+.tooltip .card.mini-big .card-name { font-size: 15px; white-space: normal; }
+.tooltip .card.mini-big .card-badges { position: static; margin-top: 4px; }
+.tooltip .card.mini-big .card-stat { width: 26px; height: 26px; font-size: 14px; }
+
+.pick span { font-size:11px; color:var(--dim); text-align:center; line-height:1.2; }
+
+/* 卡牌库检索栏 */
+.coll-filters { display:flex; flex-wrap:wrap; gap:8px; align-items:center; padding:8px 16px; border-bottom:1px solid var(--line); flex:0 0 auto; }
+.coll-filters input { flex:1 1 260px; min-width:200px; background:#23262e; border:1px solid var(--line); color:var(--text); border-radius:5px; padding:6px 8px; }
+.coll-filters select { background:#23262e; border:1px solid var(--line); color:var(--text); border-radius:5px; padding:6px 8px; }
+
+/* 新单位入场动画：从手牌方向弹出 */
+.card.enter { animation: enterPop .55s cubic-bezier(.2,1.4,.4,1); }
+@keyframes enterPop {
+  0%   { transform: scale(.4) translateY(-18px); opacity: 0; }
+  60%  { transform: scale(1.08) translateY(2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* ==========================================================================
+ * 连续过程动画层（KGAnim）—— 出牌飞行 / 冲刺 / 命中 / 死亡 / 抽牌 / 回合横幅
+ * ========================================================================== */
+
+/* 出牌飞行中的临时卡面（不参与布局，纯视觉） */
+.fly-card {
+  position: fixed; z-index: 97; pointer-events: none;
+  transform: translate(-50%, -50%);
+  border-radius: 6px; overflow: hidden;
+  border: 2px solid var(--gold);
+  box-shadow: 0 18px 44px rgba(0,0,0,.75), 0 0 22px rgba(201,162,39,.45);
+  will-change: transform, opacity;
+}
+.fly-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fly-card .fly-text { padding: 6px; font-size: 12px; color: #ffe6a8; background: #1b1f26; height: 100%; }
+.fly-card.fly-draw {
+  border-color: #7fd4ff; box-shadow: 0 18px 44px rgba(0,0,0,.75), 0 0 22px rgba(127,212,255,.55);
+}
+
+/* ---- 对手指令的"过场亮牌"：自上而下落下 → 横移到左侧 → 停留 → 移出屏外 ---- */
+/* 注意：这个浮层由 JS 全程接管 transform（位置用 translate 表达），
+   所以这里必须清掉 .fly-card 自带的 translate(-50%,-50%)，
+   改由 JS 在每一段动画里显式带上居中偏移。 */
+.opp-order {
+  z-index: 98;
+  border-color: #b8a3ff;
+  transform: none;
+  box-shadow: 0 22px 56px rgba(0,0,0,.8), 0 0 30px rgba(150,130,255,.55);
+  border-radius: 8px;
+}
+.opp-order img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.opp-order .opp-order-name,
+.opp-order .opp-order-text {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 8px 11px; font-size: 16px; line-height: 1.25;
+  color: #f0eaff; background: linear-gradient(transparent, rgba(12,10,24,.92) 38%);
+  text-shadow: 0 1px 3px #000;
+}
+.opp-order .opp-order-text {
+  position: static; height: 100%; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(150deg, #2a2244, #16121f 70%); font-size: 18px; text-align: center;
+}
+/* 停稳后加一圈呼吸光晕，提示"这是对手正在使用的牌" */
+.opp-order.settled {
+  animation: oppOrderGlow 1s ease-in-out infinite;
+}
+@keyframes oppOrderGlow {
+  0%, 100% { box-shadow: 0 22px 56px rgba(0,0,0,.8), 0 0 22px rgba(150,130,255,.45); }
+  50%      { box-shadow: 0 22px 56px rgba(0,0,0,.8), 0 0 40px rgba(170,150,255,.8); }
+}
+.opp-order.leaving { animation: none; }
+
+/* 我方打出的指令：同一套过场动画，仅换个色调（我方绿 / 对手紫）便于一眼区分 */
+.opp-order.mine {
+  border-color: #8fe0b0;
+  box-shadow: 0 22px 56px rgba(0,0,0,.8), 0 0 30px rgba(120,220,160,.55);
+}
+.opp-order.mine.settled { animation: myOrderGlow 1s ease-in-out infinite; }
+@keyframes myOrderGlow {
+  0%, 100% { box-shadow: 0 22px 56px rgba(0,0,0,.8), 0 0 22px rgba(120,220,160,.45); }
+  50%      { box-shadow: 0 22px 56px rgba(0,0,0,.8), 0 0 40px rgba(140,235,180,.8); }
+}
+
+/* 攻击命中冲击波 */
+.impact {
+  position: fixed; z-index: 94; pointer-events: none; width: 90px; height: 90px;
+  margin: -45px 0 0 -45px; border-radius: 50%;
+  border: 3px solid rgba(255,140,110,.95);
+  box-shadow: 0 0 26px rgba(255,120,90,.85), inset 0 0 20px rgba(255,140,110,.5);
+  animation: impactPop .5s cubic-bezier(.2,.9,.3,1) forwards;
+}
+.impact.heal { border-color: rgba(140,240,180,.95); box-shadow: 0 0 26px rgba(120,230,170,.8); }
+.impact.buff { border-color: rgba(160,215,255,.95); box-shadow: 0 0 26px rgba(140,200,255,.8); }
+.impact.order { border-color: rgba(180,190,255,.95); box-shadow: 0 0 34px rgba(150,170,255,.85); }
+@keyframes impactPop {
+  0%   { transform: scale(.22); opacity: 1; }
+  70%  { opacity: .8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* 命中火花 / 碎屑粒子：从命中点向外迸射 */
+.spark {
+  position: fixed; z-index: 95; pointer-events: none;
+  margin: -3px 0 0 -3px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #fff, rgba(255,190,90,.95) 45%, rgba(255,110,60,.5) 100%);
+  box-shadow: 0 0 8px rgba(255,170,80,.9);
+  opacity: .95;
+  transition: transform .58s cubic-bezier(.18,.7,.35,1), opacity .58s ease-out;
+}
+.spark.death {
+  background: radial-gradient(circle at 40% 40%, #fff, rgba(255,120,120,.9) 40%, rgba(150,40,40,.4) 100%);
+  box-shadow: 0 0 9px rgba(255,90,90,.85);
+}
+
+/* 移动/落地扬尘 */
+.dust {
+  position: fixed; z-index: 90; pointer-events: none;
+  margin: -4px 0 0 -4px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(210,200,175,.7), rgba(180,170,150,0) 70%);
+  opacity: .8;
+  transition: transform .54s ease-out, opacity .54s ease-out;
+}
+
+/* 死亡：淡出 + 灰化 + 微微旋转（比原来的 .card.death 更"是过程"） */
+.card.dying { animation: cardDie .38s ease-in forwards; pointer-events: none; z-index: 1; }
+@keyframes cardDie {
+  0%   { transform: scale(1) rotate(0); opacity: 1; filter: none; }
+  35%  { transform: scale(1.06) rotate(-2deg); opacity: .95; filter: brightness(1.6) saturate(0); }
+  100% { transform: scale(.82) rotate(4deg) translateY(10px); opacity: 0; filter: grayscale(1) brightness(.6); }
+}
+
+/* 回合横幅：全屏扫过 */
+.turn-banner {
+  position: fixed; inset: 0; z-index: 99; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(90deg, transparent, rgba(10,12,16,.82) 22%, rgba(10,12,16,.82) 78%, transparent);
+  opacity: 0;
+  transition: opacity .28s ease;
+}
+.turn-banner.show { opacity: 1; }
+.turn-banner.out { opacity: 0; transition: opacity .34s ease; }
+.turn-banner .tb-main {
+  font-size: 42px; font-weight: 800; letter-spacing: 10px; color: #ffe6a8;
+  text-shadow: 0 0 30px rgba(255,214,140,.6), 0 4px 18px rgba(0,0,0,.9);
+  transform: translateY(14px);
+  transition: transform .34s cubic-bezier(.2,1.3,.4,1);
+}
+.turn-banner.show .tb-main { transform: translateY(0); }
+.turn-banner .tb-sub { margin-top: 10px; font-size: 13px; letter-spacing: 4px; color: var(--dim); }
+.turn-banner.mine .tb-main { color: #b9f0cc; text-shadow: 0 0 30px rgba(140,240,180,.55), 0 4px 18px rgba(0,0,0,.9); }
+.turn-banner.foe .tb-main { color: #ffc3b6; text-shadow: 0 0 30px rgba(255,140,110,.55), 0 4px 18px rgba(0,0,0,.9); }
+
+/* AI 思考指示 */
+.ai-thinking {
+  position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+  z-index: 78; display: flex; align-items: center; gap: 8px;
+  background: #2a1f1c; border: 1px solid #a06a55; color: #ffd0be;
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; letter-spacing: 1px;
+  box-shadow: 0 8px 26px rgba(0,0,0,.6);
+  animation: aiThinkIn .24s ease;
+}
+@keyframes aiThinkIn { from { opacity: 0; transform: translateX(-50%) translateY(-8px); } to { opacity: 1; transform: translateX(-50%); } }
+.ai-thinking .dot { width: 6px; height: 6px; border-radius: 50%; background: #ff9b7a; animation: aiDot 1s infinite ease-in-out; }
+.ai-thinking .dot:nth-child(2) { animation-delay: .16s; }
+.ai-thinking .dot:nth-child(3) { animation-delay: .32s; }
+@keyframes aiDot { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+
+/* 战报行：刚发生的事情闪一下 */
+.log div.log-flash { animation: logFlash 1.1s ease; }
+@keyframes logFlash {
+  0%   { background: rgba(255,214,140,.28); box-shadow: inset 3px 0 0 var(--gold); }
+  100% { background: transparent; box-shadow: inset 3px 0 0 transparent; }
+}
+
+/* 移动：滑动感（配合 FLIP；FLIP 不可用时退化为这个） */
+.card.slide-in { animation: slideIn .32s cubic-bezier(.2,.8,.3,1); }
+@keyframes slideIn { from { transform: scale(.94); opacity: .55; } to { transform: none; opacity: 1; } }
+
+/* 通用脉冲高亮 */
+.pulse { animation: pulseGlow .5s ease; }
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(216,183,74,0); }
+  45%     { box-shadow: 0 0 0 3px rgba(216,183,74,.85), 0 0 20px rgba(216,183,74,.5); }
+}
+
+/* 手牌：当前可出但被"挂起反制"占用时的样式 */
+.card.suspended {
+  opacity: .78; border-color: #7fd4ff; box-shadow: 0 0 0 2px rgba(127,212,255,.55);
+  filter: saturate(.75);
+}
+.card.suspended .card-name::after {
+  content: '挂起'; position: absolute; right: 0; top: 16px;
+  background: #1d4a63; color: #b9e8ff; font-size: 9px; border: 1px solid #7fd4ff;
+  border-radius: 3px; padding: 0 3px; letter-spacing: 0;
+}
+.card.suspended.inactive { opacity: .5; filter: grayscale(.4) saturate(.4); cursor: not-allowed; }
+
+/* 挂起反制的计数条 */
+.counter-chip {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 11px;
+  background: rgba(127,212,255,.12); border: 1px solid #4a7f9c; color: #b9e8ff;
+  border-radius: 4px; padding: 1px 6px; margin: 2px 0; cursor: pointer;
+}
+.counter-chip:hover { background: rgba(127,212,255,.24); }
+.counter-chip.pending { border-style: dashed; }
+#myCounters.counter-drop-ready { display: inline-block; color: #ffe5a2; background: rgba(88, 65, 28, .7); outline: 1px solid #e8c16b; box-shadow: 0 0 12px rgba(225, 190, 100, .55); transform: translateY(-2px); }
+
+/* 前线一条线：双方单位在同一横线上，上下错开，中间虚线表示战线 */
+.frontline-wrap { padding: 4px; background: repeating-linear-gradient(90deg, rgba(201,162,39,.04), rgba(201,162,39,.04) 14px, rgba(201,162,39,.08) 14px, rgba(201,162,39,.08) 28px); border-radius: 8px; }
+.fl-common {
+  position: relative; padding: 42px 6px; align-items: center;
+}
+.fl-common::before {
+  content: ''; position: absolute; left: 8px; right: 8px; top: 50%;
+  border-top: 2px dashed #7a6428; opacity: .7; pointer-events: none;
+}
+.fl-common .foe-slot { transform: translateY(-20px); z-index: 2; }
+.fl-common .mine-slot { transform: translateY(20px); z-index: 2; }
+.fl-common .foe-slot .card { box-shadow: 0 0 0 1px rgba(255,120,100,.25), 0 4px 10px rgba(0,0,0,.5); }
+.fl-common .mine-slot .card { box-shadow: 0 0 0 1px rgba(120,220,160,.25), 0 -4px 10px rgba(0,0,0,.5); }
+/* 可攻击高亮优先级最高 */
+.fl-common .foe-slot .card.targetable,
+.fl-common .mine-slot .card.targetable {
+  box-shadow: 0 0 0 3px #d8b74a, 0 0 18px rgba(216,183,74,.8);
+}
+
+/* ==========================================================================
+ * 指向箭头（拖自己的单位时从单位中心伸出，而不是拖动卡牌本身）
+ * ========================================================================== */
+.aim-arrow { position: fixed; inset: 0; z-index: 95; pointer-events: none; overflow: visible; }
+.aim-arrow-path {
+  stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1 0;
+  filter: drop-shadow(0 0 6px rgba(255,150,90,.55));
+}
+.aim-arrow-head { fill: currentColor; filter: drop-shadow(0 0 6px rgba(255,150,90,.6)); }
+.aim-arrow-dot { fill: currentColor; opacity: .55; }
+.aim-arrow.aiming .aim-arrow-path { stroke-width: 4; filter: drop-shadow(0 0 12px rgba(255,90,68,.85)); }
+.aim-arrow.aiming .aim-arrow-head { filter: drop-shadow(0 0 12px rgba(255,90,68,.9)); }
+
+/* 伸箭头时，源单位"抬起来"一点（位置不动，只做视觉强调） */
+.card.aiming-from {
+  z-index: 40;
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 0 0 2px rgba(255,178,122,.9), 0 10px 24px rgba(0,0,0,.6) !important;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+
+/* ==========================================================================
+ * 拍桌动画（单位部署）—— 力度按防御力分级
+ *   .slam-light  def<=2 | .slam-mid def 3..5 | .slam-heavy def>=6
+ * ========================================================================== */
+.card.slam { animation-fill-mode: both; }
+/* 轻拍：小落 + 轻压 */
+.card.slam-light { animation: slamLight .42s cubic-bezier(.3,1.5,.45,1); }
+@keyframes slamLight {
+  0%   { transform: translateY(-34px) scale(1.03, .97); opacity: .25; }
+  62%  { transform: translateY(2px) scale(1.06, .93); opacity: 1; }
+  82%  { transform: translateY(0) scale(.99, 1.02); }
+  100% { transform: none; }
+}
+/* 中拍：更高落 + 更明显压扁 */
+.card.slam-mid { animation: slamMid .52s cubic-bezier(.3,1.5,.45,1); }
+@keyframes slamMid {
+  0%   { transform: translateY(-72px) scale(1.06, .94) rotate(-1.5deg); opacity: .2; }
+  58%  { transform: translateY(3px) scale(1.14, .84) rotate(.6deg); opacity: 1; }
+  76%  { transform: translateY(0) scale(.96, 1.05) rotate(-.3deg); }
+  90%  { transform: translateY(0) scale(1.02, .99); }
+  100% { transform: none; }
+}
+/* 重拍：从很高处砸下 + 歪一点 + 强压扁 + 二次回弹 */
+.card.slam-heavy { animation: slamHeavy .62s cubic-bezier(.28,1.6,.4,1); }
+@keyframes slamHeavy {
+  0%   { transform: translateY(-120px) scale(1.12, .88) rotate(-3.5deg); opacity: .15; }
+  52%  { transform: translateY(5px) scale(1.24, .74) rotate(1.2deg); opacity: 1; }
+  70%  { transform: translateY(-6px) scale(.92, 1.10) rotate(-.6deg); }
+  84%  { transform: translateY(2px) scale(1.05, .96); }
+  94%  { transform: translateY(0) scale(.99, 1.01); }
+  100% { transform: none; }
+}
+/* 拍击扬起的灰尘 */
+.slam-dust {
+  position: fixed; width: 12px; height: 6px; border-radius: 50%; z-index: 88;
+  background: radial-gradient(circle, rgba(214,198,168,.75), rgba(214,198,168,0));
+  pointer-events: none; animation: slamDust .48s ease-out forwards;
+}
+@keyframes slamDust {
+  0%   { transform: translate(-50%, 0) scale(.5); opacity: .9; }
+  100% { transform: translate(-50%, -14px) scale(1.9); opacity: 0; }
+}
+/* 震屏：拍在桌上，桌子抖一下 */
+.board-shake { animation: boardShake .16s ease-in-out 2; }
+@keyframes boardShake {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-2px, 1px); }
+  75%      { transform: translate(2px, -1px); }
+}
+.board-shake-strong { animation: boardShakeStrong .19s ease-in-out 3; }
+@keyframes boardShakeStrong {
+  0%, 100% { transform: translate(0, 0); }
+  20%      { transform: translate(-4px, 2px); }
+  50%      { transform: translate(0, -3px); }
+  80%      { transform: translate(4px, 1px); }
+}
+
+/* ⚠ .card.glide-land / @keyframes glideLand 已删除（2026-09-21，制作者口径：
+ *   「移动后不需要落地压扁」）。它的 scale 压扁同样是 CSS 动画 → 会抢掉 FLIP 的内联
+ *   transform，把位移截断成"滑一半跳过去"。落地反馈只保留音效 + 扬尘/浪花浮层。 */
+
+/* ==========================================================================
+ * 特效扩展（向原版对齐）：弹着材质 / 兵种化演出 / 指令分类演出 / 速度档位
+ * ========================================================================== */
+
+/* ---------- 命中粒子：按弹着材质换颜色 ---------- */
+.spark.shell  { background: radial-gradient(circle at 40% 40%, #fff, rgba(255,214,120,.95) 45%, rgba(255,120,40,.45) 100%); box-shadow: 0 0 10px rgba(255,170,60,.95); }
+.spark.bomb   { background: radial-gradient(circle at 40% 40%, #fff, rgba(255,160,90,.95) 40%, rgba(120,60,30,.4) 100%); box-shadow: 0 0 12px rgba(255,140,70,.9); }
+.spark.bullet { background: radial-gradient(circle at 40% 40%, #fff, rgba(255,236,170,.95) 45%, rgba(255,180,80,.4) 100%); box-shadow: 0 0 7px rgba(255,220,140,.9); }
+.spark.energy { background: radial-gradient(circle at 40% 40%, #fff, rgba(160,230,255,.95) 45%, rgba(90,120,255,.4) 100%); box-shadow: 0 0 10px rgba(120,200,255,.95); }
+.spark.death-air  { background: radial-gradient(circle at 40% 40%, #fff, rgba(255,150,110,.9) 40%, rgba(90,60,60,.35) 100%); box-shadow: 0 0 10px rgba(255,120,90,.8); }
+.spark.death-ship { background: radial-gradient(circle at 40% 40%, #fff, rgba(170,220,255,.9) 40%, rgba(60,110,150,.35) 100%); box-shadow: 0 0 10px rgba(130,200,255,.85); }
+
+/* ---------- 冲击环 ---------- */
+.shock {
+  position: fixed; z-index: 93; pointer-events: none; width: 20px; height: 20px; margin: -10px 0 0 -10px;
+  border-radius: 50%; border: 2px solid rgba(255,200,140,.95);
+  box-shadow: 0 0 18px rgba(255,170,90,.8); opacity: 0; transform: scale(.3);
+  transition: transform .5s cubic-bezier(.1,.7,.3,1), opacity .5s ease-out;
+}
+.shock.go { opacity: .95; transform: scale(4.6); }
+.shock.death.go { transform: scale(2.9); }
+.shock.bomb { border-color: rgba(255,170,120,1); box-shadow: 0 0 26px rgba(255,140,60,.9); }
+.shock.energy { border-color: rgba(150,220,255,1); box-shadow: 0 0 22px rgba(120,190,255,.9); }
+.shock.death { border-color: rgba(255,120,120,.95); box-shadow: 0 0 22px rgba(255,80,80,.85); }
+
+/* ---------- 烟 / 尾浪 ---------- */
+.smoke {
+  position: fixed; z-index: 92; pointer-events: none; margin: -10px 0 0 -10px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(70,64,60,.85), rgba(40,38,36,0) 70%);
+  opacity: .9; transition: transform .9s ease-out, opacity .9s ease-out;
+}
+.wake {
+  position: fixed; z-index: 92; pointer-events: none; width: 16px; height: 8px; margin: -4px 0 0 -8px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(190,230,255,.85), rgba(160,210,255,0) 70%);
+  opacity: .9; transition: transform .7s ease-out, opacity .7s ease-out;
+}
+
+/* ---------- 弹道 / 炮口 ---------- */
+.shell {
+  position: fixed; z-index: 93; pointer-events: none; width: 9px; height: 9px; margin: -4px 0 0 -4px;
+  border-radius: 50%; background: radial-gradient(circle at 40% 40%, #fff, #ffcf87 55%, rgba(255,140,60,.35) 100%);
+  box-shadow: 0 0 12px rgba(255,180,80,.95);
+}
+.shell.energy { background: radial-gradient(circle at 40% 40%, #fff, #9fe4ff 55%, rgba(90,140,255,.35) 100%); box-shadow: 0 0 14px rgba(120,200,255,.95); }
+.shell.bomb { width: 13px; height: 13px; margin: -6px 0 0 -6px; background: radial-gradient(circle at 40% 40%, #fff, #ffb066 50%, rgba(120,60,30,.4) 100%); box-shadow: 0 0 14px rgba(255,140,60,.9); }
+.muzzle-wrap { position: fixed; z-index: 94; pointer-events: none; }
+.muzzle {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,230,.98), rgba(255,190,90,.75) 45%, rgba(255,120,40,0) 75%);
+  animation: muzzlePop .26s ease-out forwards;
+}
+.muzzle.energy { background: radial-gradient(circle at 30% 50%, rgba(240,255,255,.98), rgba(150,220,255,.75) 45%, rgba(90,120,255,0) 75%); }
+@keyframes muzzlePop { 0% { transform: scale(.4); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+/* ---------- 指令分类演出：棋盘上的一层光效 ---------- */
+.fx-layer { position: fixed; z-index: 91; pointer-events: none; opacity: 0; animation: fxLayer .72s ease-out forwards; }
+.fx-layer.fx-fire    { background: radial-gradient(ellipse at 50% 30%, rgba(255,150,70,.3), rgba(255,80,40,0) 58%); }
+.fx-layer.fx-destroy { background: radial-gradient(ellipse at 50% 30%, rgba(255,90,80,.28), rgba(60,10,10,0) 60%); }
+.fx-layer.fx-buff    { background: radial-gradient(ellipse at 50% 78%, rgba(255,214,140,.42), rgba(216,183,74,0) 66%); }
+.fx-layer.fx-heal    { background: radial-gradient(ellipse at 50% 78%, rgba(140,240,180,.38), rgba(60,200,120,0) 66%); }
+.fx-layer.fx-debuff  { background: radial-gradient(ellipse at 50% 24%, rgba(180,140,255,.38), rgba(90,50,160,0) 66%); }
+.fx-layer.fx-intel   { background: linear-gradient(180deg, rgba(120,220,255,.34), rgba(60,160,220,0) 60%); }
+.fx-layer.fx-supply  { background: radial-gradient(ellipse at 50% 86%, rgba(150,200,255,.32), rgba(60,120,200,0) 62%); }
+.fx-layer.fx-summon  { background: radial-gradient(ellipse at 50% 70%, rgba(160,200,255,.34), rgba(80,120,220,0) 64%); }
+.fx-layer.fx-generic { background: radial-gradient(ellipse at 50% 50%, rgba(190,200,255,.2), rgba(120,140,220,0) 66%); }
+@keyframes fxLayer { 0% { opacity: 0; } 22% { opacity: 1; } 100% { opacity: 0; } }
+
+/* 分类粒子（配合 KGAnim.orderFx） */
+.puff {
+  position: fixed; z-index: 93; pointer-events: none; margin: -5px 0 0 -5px; border-radius: 50%;
+  transition: transform .76s cubic-bezier(.2,.7,.35,1), opacity .76s ease-out;
+}
+.puff.buff   { background: radial-gradient(circle, rgba(255,232,170,.95), rgba(216,183,74,0) 70%); }
+.puff.heal   { background: radial-gradient(circle, rgba(180,255,210,.95), rgba(80,220,140,0) 70%); }
+.puff.debuff { background: radial-gradient(circle, rgba(200,160,255,.9), rgba(90,50,160,0) 70%); }
+.puff.intel  { background: radial-gradient(circle, rgba(170,235,255,.9), rgba(70,170,220,0) 70%); }
+.puff.supply { background: radial-gradient(circle, rgba(210,225,255,.9), rgba(90,130,220,0) 70%); }
+.puff.summon { background: radial-gradient(circle, rgba(200,215,255,.9), rgba(90,110,220,0) 70%); }
+
+/* ---------- 兵种化：部署（空中缓缓降下 / 舰船平推入位） ---------- */
+.card.slam.slam-air { animation-name: slamAir; animation-timing-function: cubic-bezier(.25,1.1,.4,1); }
+.card.slam.slam-air.slam-light { animation-duration: .52s; }
+.card.slam.slam-air.slam-mid   { animation-duration: .65s; }
+.card.slam.slam-air.slam-heavy { animation-duration: .78s; }
+@keyframes slamAir {
+  0%   { transform: translateY(-140px) scale(.9) rotate(-4deg); opacity: 0; }
+  55%  { transform: translateY(-26px) scale(1.02) rotate(1deg); opacity: 1; }
+  78%  { transform: translateY(3px) scale(1.05,.95) rotate(-.5deg); }
+  100% { transform: none; }
+}
+.card.slam.slam-ship { animation-name: slamShip; animation-timing-function: cubic-bezier(.2,1.2,.4,1); }
+.card.slam.slam-ship.slam-light { animation-duration: .42s; }
+.card.slam.slam-ship.slam-mid   { animation-duration: .52s; }
+.card.slam.slam-ship.slam-heavy { animation-duration: .62s; }
+@keyframes slamShip {
+  0%   { transform: translateY(26px) scale(1.04,.94); opacity: .1; }
+  60%  { transform: translateY(-4px) scale(1.03); opacity: 1; }
+  100% { transform: none; }
+}
+
+/* ---------- 兵种化：出手 / 阵亡 ---------- */
+.card.atk-dive { filter: drop-shadow(0 6px 12px rgba(0,0,0,.55)); }
+.card.atk-gun  { filter: drop-shadow(0 0 10px rgba(255,180,90,.5)); }
+.card.dying.dying-air  { animation-name: cardDieAir; }
+.card.dying.dying-ship { animation-name: cardDieShip; }
+@keyframes cardDieAir {
+  0%   { transform: none; opacity: 1; }
+  30%  { transform: translateY(-12px) rotate(-8deg) scale(1.02); opacity: 1; filter: brightness(1.5); }
+  100% { transform: translateY(70px) rotate(26deg) scale(.7); opacity: 0; filter: grayscale(1) brightness(.5); }
+}
+@keyframes cardDieShip {
+  0%   { transform: none; opacity: 1; }
+  35%  { transform: translateY(4px) rotate(-6deg); opacity: 1; filter: brightness(1.3); }
+  100% { transform: translateY(34px) rotate(14deg) scale(.86); opacity: 0; filter: grayscale(1) brightness(.55); }
+}
+
+/* ---------- 老兵光柱 / 反制牌影 / 伤害数字材质色 ---------- */
+.veteran-beam {
+  position: fixed; z-index: 90; pointer-events: none; width: 46px; margin-left: -23px;
+  background: linear-gradient(0deg, rgba(255,214,140,.0), rgba(255,222,160,.55), rgba(255,214,140,0));
+  border-radius: 50%; opacity: 0; animation: vetBeam .9s ease-out forwards;
+}
+@keyframes vetBeam {
+  0%   { opacity: 0; transform: scaleY(.5); }
+  30%  { opacity: .95; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(1.25); }
+}
+.counter-chip {
+  position: fixed; z-index: 93; pointer-events: none; width: 34px; height: 48px; margin: -24px 0 0 -17px;
+  border-radius: 4px; border: 1px solid rgba(255,205,120,.95);
+  background: linear-gradient(160deg, #4a3a18, #1c1608);
+  box-shadow: 0 0 14px rgba(255,190,90,.7);
+}
+.counter-flight { z-index: 96; margin: 0; padding: 0; overflow: hidden; border-width: 2px; border-radius: 5px; }
+.counter-flight img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.counter-return { z-index: 96; border: 2px solid rgba(230, 198, 111, .9); border-radius: 6px; box-shadow: 0 7px 25px rgba(0,0,0,.6); }
+.counter-return img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dmg-float.shell  { color: #ffc078; }
+.dmg-float.bomb   { color: #ff9d6b; font-size: 21px; }
+.dmg-float.bullet { color: #ffe9a8; }
+.dmg-float.energy { color: #9fe4ff; }
+
+/* 反制触发：从"反制"堆飞出来亮卡面 */
+.counter-reveal {
+  z-index: 97; border: 2px solid #ffcd78; border-radius: 6px; overflow: hidden;
+  box-shadow: 0 0 34px rgba(255,190,90,.85);
+}
+.opp-order.interrupted { filter: grayscale(.65) brightness(1.3); }
+.counter-reveal img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- HUD 数值跳动 ---------- */
+.dmg-float.gain   { color: #9fe6b4; }
+.dmg-float.loss   { color: #ff9b8a; }
+.dmg-float.kredit { color: #ffe08a; font-size: 20px; }
+
+/* ==========================================================================
+ * 演出速度档位：body.fx-fast / body.fx-faster 覆盖 CSS 侧的固定时长
+ * （JS 侧时长由 KGAnim.ms() 同步缩放，两边保持一致）
+ * ========================================================================== */
+body.fx-fast .card.enter { animation-duration: .33s !important; }
+body.fx-fast .card.hit { animation-duration: .25s !important; }
+body.fx-fast .card.played { animation-duration: .2s !important; }
+body.fx-fast .card.dying { animation-duration: .23s !important; }
+body.fx-fast .card.slam-light { animation-duration: .25s !important; }
+body.fx-fast .card.slam-mid { animation-duration: .31s !important; }
+body.fx-fast .card.slam-heavy { animation-duration: .37s !important; }
+body.fx-fast .card.slam.slam-air { animation-duration: .47s !important; }
+body.fx-fast .card.slam.slam-ship { animation-duration: .36s !important; }
+body.fx-fast .card.flash-buff { animation-duration: .3s !important; }
+body.fx-fast .hq-card.hit { animation-duration: .3s !important; }
+body.fx-fast .impact { animation-duration: .3s !important; }
+body.fx-fast .dmg-float { animation-duration: .51s !important; }
+body.fx-fast .slam-dust { animation-duration: .29s !important; }
+body.fx-fast .board-shake { animation-duration: .1s !important; }
+body.fx-fast .board-shake-strong { animation-duration: .11s !important; }
+body.fx-fast .pulse { animation-duration: .3s !important; }
+body.fx-fast .fx-layer { animation-duration: .43s !important; }
+body.fx-fast .muzzle { animation-duration: .16s !important; }
+body.fx-fast .spark, body.fx-fast .dust, body.fx-fast .smoke, body.fx-fast .wake,
+body.fx-fast .shock, body.fx-fast .puff { transition-duration: .35s !important; }
+
+body.fx-faster .card.enter { animation-duration: .18s !important; }
+body.fx-faster .card.hit { animation-duration: .14s !important; }
+body.fx-faster .card.played { animation-duration: .11s !important; }
+body.fx-faster .card.dying { animation-duration: .12s !important; }
+body.fx-faster .card.slam-light { animation-duration: .14s !important; }
+body.fx-faster .card.slam-mid { animation-duration: .17s !important; }
+body.fx-faster .card.slam-heavy { animation-duration: .2s !important; }
+body.fx-faster .card.slam.slam-air { animation-duration: .25s !important; }
+body.fx-faster .card.slam.slam-ship { animation-duration: .19s !important; }
+body.fx-faster .card.flash-buff { animation-duration: .16s !important; }
+body.fx-faster .hq-card.hit { animation-duration: .16s !important; }
+body.fx-faster .impact { animation-duration: .16s !important; }
+body.fx-faster .dmg-float { animation-duration: .27s !important; }
+body.fx-faster .slam-dust { animation-duration: .15s !important; }
+body.fx-faster .board-shake { animation-duration: .05s !important; }
+body.fx-faster .board-shake-strong { animation-duration: .06s !important; }
+body.fx-faster .pulse { animation-duration: .16s !important; }
+body.fx-faster .fx-layer { animation-duration: .23s !important; }
+body.fx-faster .muzzle { animation-duration: .1s !important; }
+body.fx-faster .spark, body.fx-faster .dust, body.fx-faster .smoke, body.fx-faster .wake,
+body.fx-faster .shock, body.fx-faster .puff { transition-duration: .2s !important; }
+
+/* ==========================================================================
+ * 反馈类特效：情报明牌 / 反制埋设·触发 / 老兵升级 / 洗入卡组 / 抉择面板
+ * ========================================================================== */
+
+/* ---------- 情报：对手明牌小卡带 + 扫描光带 ---------- */
+.revealed-strip { display: flex; gap: 6px; align-items: center; padding: 2px 0 4px 6px; min-height: 4px; flex-wrap: wrap; }
+.revealed-strip.hidden { display: none; }
+.revealed-strip .card.revealed-mini {
+  width: 54px; height: 70px; flex: 0 0 auto;
+  border-color: #7fd4ff; box-shadow: 0 0 0 1px rgba(127,212,255,.5), 0 0 12px rgba(127,212,255,.35);
+}
+.revealed-strip .card.revealed-mini::after {
+  content: '明牌'; position: absolute; left: 2px; top: 2px; z-index: 4;
+  background: #12405a; color: #bfeaff; font-size: 9px; line-height: 13px; padding: 0 3px;
+  border-radius: 3px; border: 1px solid #7fd4ff;
+}
+.revealed-strip .card.revealed-mini .card-badges,
+.revealed-strip .card.revealed-mini .rarity { display: none; }
+
+.scan { position: fixed; z-index: 92; pointer-events: none; overflow: hidden; border-radius: 4px; opacity: 0; }
+.scan.go { animation: scanSweep .72s ease-out; }
+.scan::before {
+  content: ''; position: absolute; left: 0; right: 0; top: -45%; height: 45%;
+  background: linear-gradient(180deg, rgba(120,220,255,0), rgba(140,230,255,.8), rgba(120,220,255,0));
+}
+@keyframes scanSweep {
+  0%   { opacity: 0; }
+  18%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------- 反制：埋设封印环 / 触发爆闪 ---------- */
+.seal {
+  position: fixed; z-index: 93; pointer-events: none; width: 30px; height: 30px; margin: -15px 0 0 -15px;
+  border-radius: 50%; border: 2px dashed rgba(255,205,120,.95);
+  box-shadow: 0 0 16px rgba(255,190,90,.75), inset 0 0 10px rgba(255,200,120,.5);
+  opacity: 0; transform: scale(1.6) rotate(0deg);
+  transition: transform .5s cubic-bezier(.2,1.3,.4,1), opacity .5s ease-out;
+}
+.seal.go { opacity: .95; transform: scale(1) rotate(180deg); }
+.shock.gold { border-color: rgba(255,225,150,1); box-shadow: 0 0 24px rgba(255,205,110,.95); }
+
+/* ---------- 老兵升级：金光脉冲（同格替换成老兵形态时） ---------- */
+.card.veteran-up { animation: veteranGlow .9s ease-out; }
+@keyframes veteranGlow {
+  0%   { box-shadow: 0 0 0 0 rgba(255,214,140,0); }
+  35%  { box-shadow: 0 0 0 3px rgba(255,214,140,.95), 0 0 26px rgba(255,200,110,.8); filter: brightness(1.25); }
+  100% { box-shadow: none; filter: none; }
+}
+
+/* ---------- 洗入卡组：飞向牌库的卡影 ---------- */
+.shuffle-chip {
+  position: fixed; z-index: 92; pointer-events: none; width: 34px; height: 48px; margin: -24px 0 0 -17px;
+  border-radius: 4px; border: 1px solid rgba(190,215,255,.85);
+  background: linear-gradient(160deg, #2a3350, #141a2a); opacity: .95;
+}
+
+/* ---------- 沉默 / 压制 ---------- */
+.card.silenced { filter: grayscale(.55) brightness(.9); }
+.card.silenced::after {
+  content: '沉默'; position: absolute; right: 2px; bottom: 2px; z-index: 4;
+  background: #2a2e36; color: #aab2c0; font-size: 9px; line-height: 13px; padding: 0 3px;
+  border-radius: 3px; border: 1px solid #59606e;
+}
+.card.pinned { box-shadow: inset 0 0 0 2px rgba(255,150,110,.8); }
+.badge.muted { background: #2a2e36; color: #aab2c0; border-color: #59606e; }
+
+/* ---------- 抉择 / 发现面板入场 ---------- */
+#prompt.prompt-in { animation: promptIn .26s cubic-bezier(.2,1.3,.4,1); }
+@keyframes promptIn {
+  from { opacity: 0; transform: translateY(14px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- 光环来源高亮：来源有常驻角标，悬停时"来源 ↔ 受加成单位"双向点亮 ---------- */
+.card.aura-src::before {
+  content: '光环'; position: absolute; left: 2px; bottom: 2px; z-index: 4;
+  background: #3a2f10; color: #ffe0a0; font-size: 9px; line-height: 13px; padding: 0 3px;
+  border-radius: 3px; border: 1px solid #d8b74a;
+}
+.card.aura-hit { animation: auraHit .9s ease-out 2; }
+@keyframes auraHit {
+  0%, 100% { box-shadow: none; }
+  40% { box-shadow: 0 0 0 2px rgba(127,212,255,.95), 0 0 18px rgba(127,212,255,.75); }
+}
+.card.aura-src-on { animation: auraSrcOn .9s ease-out 2; }
+@keyframes auraSrcOn {
+  0%, 100% { box-shadow: none; }
+  40% { box-shadow: 0 0 0 2px rgba(216,183,74,.95), 0 0 18px rgba(216,183,74,.75); }
+}
+body.fx-fast .card.aura-hit, body.fx-fast .card.aura-src-on { animation-duration: .5s !important; }
+body.fx-faster .card.aura-hit, body.fx-faster .card.aura-src-on { animation-duration: .3s !important; }
+
+
+
+/* 异画：有异画的卡给个角标，右键可切换（scan-alt-art.js 生成 KG_ALT_ART）
+   ★ 2026-09-25 起角标从 ::after 伪元素改成**真实 DOM 元素**（ui.js cardEl 渲染 .alt-badge）：
+     伪元素 pointer-events:none 且没法单独绑事件，手机上"点图标切换"无从谈起。
+     桌面视觉与原先 ::after 完全一致；金色态仍由宿主 .alt-on class 驱动。 */
+.card.has-alt { position: relative; }
+.card.has-alt .alt-badge {
+  /* ★ 右上角：费用在左上、攻防在右下、卡名在底部中间 —— 只有右上角是空的。
+     以前放左下角，跟卡名/底部文字挤在一起，很难看清。 */
+  position: absolute; right: 4px; top: 4px;
+  width: 16px; height: 16px; line-height: 16px; text-align: center;
+  font-size: 11px; border-radius: 50%;
+  background: rgba(0,0,0,.62); color: #fff; pointer-events: none;
+  z-index: 3;
+}
+.card.has-alt.alt-on .alt-badge { background: #d4a017; color: #201700; }
+.card.has-alt:hover { cursor: context-menu; }
+/* 手机端：点「异」角标直接切换异画 —— 加大可点 + 透明热区外扩 5px（点旁边也算） */
+html.mobile-ui .card.has-alt .alt-badge {
+  pointer-events: auto; cursor: pointer;
+  right: 2px; top: 2px; width: 19px; height: 19px; line-height: 19px; font-size: 12px;
+  border: 1px solid rgba(255,255,255,.35);
+}
+html.mobile-ui .card.has-alt .alt-badge::before {
+  content: ""; position: absolute; inset: -6px; border-radius: 50%;
+}
+
+/* 卡牌右键菜单（切换异画 / 异画对位 / 删除卡牌）—— 深色战地风
+   （2026-09-24 重做视觉：原先白底黑字的系统右键风跟游戏画风完全脱节） */
+.card-menu {
+  position: fixed; z-index: 9999; min-width: 172px;
+  background: linear-gradient(180deg, #232833, #171b23);
+  border: 1px solid rgba(201,162,39,.55); border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.65), 0 0 14px rgba(201,162,39,.28);
+  animation: cardMenuIn 130ms cubic-bezier(.2,1.25,.4,1);
+  transform-origin: top left;
+  overflow: hidden;
+}
+@keyframes cardMenuIn {
+  from { opacity: 0; transform: scale(.9) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.card-menu-item {
+  display: block; width: 100%; text-align: left; border: 0; background: none;
+  font-size: 14px; color: #e8e0c8; letter-spacing: .5px;
+  padding: 8px 14px; border-radius: 6px; cursor: pointer;
+}
+.card-menu-item:hover { background: rgba(201,162,39,.22); color: #ffe9ad; }
+.card-menu-item.danger { color: #ff9a8a; }
+.card-menu-item.danger:hover { background: rgba(220,60,40,.3); color: #ffc2b5; }
+
+/* ==========================================================================
+   KARDS 皮肤 v1（2026-09-21）—— 目标：更接近原版的"黄铜军械 + 作战地图"质感
+   ⚠ 只改观感（颜色/纹理/边框/阴影/字号/间距微调），不动尺寸链与几何：
+     --card-w/--card-h、各行高、容器结构都保持原样，拖拽落点 / 插入下标 / FLIP 不受影响。
+   ========================================================================== */
+:root {
+  --brass: #e2c477;
+  --brass-dim: rgba(200, 162, 74, .32);
+  --khaki: #8c8158;
+  --line: #3a4150;
+}
+body {
+  background:
+    radial-gradient(1200px 620px at 50% -12%, rgba(200, 162, 74, .10), transparent 62%),
+    radial-gradient(900px 520px at 50% 112%, rgba(90, 120, 150, .10), transparent 62%),
+    linear-gradient(180deg, #15181e, #0c0e12 72%);
+}
+/* ---------------------------------------------------------------- 顶栏 */
+#topbar {
+  background: linear-gradient(180deg, #1d2128, #14171c);
+  border-bottom: 1px solid var(--brass-dim);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .65), inset 0 -1px 0 rgba(255, 255, 255, .03);
+}
+.brand { color: var(--brass); text-shadow: 0 1px 0 #000; letter-spacing: 3px; }
+.nav-btn { letter-spacing: .6px; color: #a8b0bd; }
+.nav-btn:hover { color: var(--text); background: linear-gradient(180deg, #262b34, #1d2129); border-color: var(--brass-dim); }
+.nav-btn.active {
+  color: #ffe9b8; background: linear-gradient(180deg, #33302a, #26241f);
+  border-color: rgba(200, 162, 74, .55); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35);
+}
+/* ------------------------------------------------------------ 战场（地图） */
+#boardScroll {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .028), transparent 26%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, .012) 0 2px, transparent 2px 6px),
+    radial-gradient(120% 78% at 50% 42%, rgba(140, 129, 88, .10), transparent 72%),
+    linear-gradient(180deg, #1b1e24, #13161b);
+  box-shadow: inset 0 0 130px rgba(0, 0, 0, .78);
+}
+.board-row {
+  background: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .008));
+  border: 1px solid rgba(255, 255, 255, .045);
+  border-radius: 10px;
+}
+.side.mine .board-row { border-color: rgba(200, 162, 74, .22); }
+.side.foe .board-row { border-color: rgba(210, 120, 100, .18); }
+.row-label { color: var(--khaki); letter-spacing: 1.6px; }
+.row-label::before { content: '▌'; color: rgba(200, 162, 74, .7); margin-right: 4px; }
+/* 前线：中央争夺带 */
+.frontline-bar {
+  background: linear-gradient(180deg, #2a2c31, #22252a);
+  border-top: 1px solid rgba(200, 162, 74, .3);
+  border-bottom: 1px solid rgba(200, 162, 74, .3);
+  color: #dbcfa9; letter-spacing: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045), inset 0 -1px 0 rgba(0, 0, 0, .5);
+}
+.fl-line {
+  background: repeating-linear-gradient(90deg, rgba(200, 162, 74, .04) 0 14px, rgba(200, 162, 74, .085) 14px 28px);
+  border: 1px solid rgba(255, 255, 255, .05);
+}
+/* ------------------------------------------------------------------ 卡牌 */
+.card {
+  border: 1px solid #2b3140;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(255, 255, 255, .03);
+}
+.card.selectable:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .68), 0 0 0 1px rgba(200, 162, 74, .5);
+}
+.card-cost {
+  background: linear-gradient(180deg, #2c2517, #1a160f);
+  border: 1px solid var(--gold); color: #ffdf9a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+}
+.card-name { background: linear-gradient(180deg, rgba(12, 13, 16, .86), rgba(12, 13, 16, .68)); color: #f3ecdb; }
+.card-stat { background: linear-gradient(180deg, rgba(10, 11, 14, .86), rgba(10, 11, 14, .68)); }
+/* 总部：黄铜牌匾 */
+.hq-card {
+  background: radial-gradient(circle at 50% 36%, #3b3327 0 36%, #221e18 64%, #131109 100%);
+  border: 1px solid rgba(200, 162, 74, .5);
+  box-shadow: inset 0 0 26px rgba(0, 0, 0, .7), 0 3px 12px rgba(0, 0, 0, .6);
+}
+.hq-card.mine { border-color: rgba(140, 220, 170, .55); }
+.hq-card.foe { border-color: rgba(230, 150, 130, .5); }
+.hq-card .hq-hp { font-size: 30px; font-weight: 800; color: #ffeccb; text-shadow: 0 2px 0 #000, 0 0 16px rgba(255, 220, 150, .45); }
+.hq-card .hq-art { font-size: 22px; opacity: .9; }
+.hq-card .hq-sub { color: #c9bda2; }
+.hq-card .hq-label { color: #a99f88; letter-spacing: 1px; }
+/* 牌堆 / 计数：黄铜小牌 */
+.pile {
+  background: linear-gradient(180deg, #262a33, #1b1e25);
+  border: 1px solid rgba(200, 162, 74, .3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045), 0 2px 6px rgba(0, 0, 0, .5);
+}
+.pile span { color: #ffe9b8; }
+.pile small { color: var(--khaki); letter-spacing: 1px; }
+.pile.foe-tag { background: transparent; border-color: transparent; box-shadow: none; color: var(--khaki); letter-spacing: 2px; }
+/* ------------------------------------------------------- 手牌托盘（交叠） */
+#handBar {
+  background: linear-gradient(180deg, #1b1e24, #101317);
+  border-top: 1px solid rgba(200, 162, 74, .38);
+  box-shadow: 0 -8px 22px rgba(0, 0, 0, .5);
+}
+.hand { padding-left: 12px; padding-right: 6px; }
+.hand > .card { margin-left: -12px; }
+.hand > .card:first-child { margin-left: 0; }
+.hand > .card:hover { z-index: 6; }
+/* ---------------------------------------------------------- 指挥点小方片 */
+.kredits-rail { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding: 0 2px 2px; }
+.kredits-rail .kr-pips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; max-width: 150px; }
+.kredits-rail .kr-pips i {
+  width: 9px; height: 13px; display: block; border-radius: 2px;
+  background: linear-gradient(180deg, #3a3f4a, #23262d); border: 1px solid #454b57;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+.kredits-rail .kr-pips i.on {
+  background: linear-gradient(180deg, #ffdf9a, #c8a24a); border-color: #f0d79a;
+  box-shadow: 0 0 6px rgba(255, 216, 130, .55), inset 0 1px 0 rgba(255, 255, 255, .5);
+}
+.kredits-rail .kr-num { color: #ffe9b8; font-weight: 700; letter-spacing: 1px; }
+.kredits-rail .kr-num i { color: var(--khaki); font-style: normal; font-weight: 400; }
+/* -------------------------------------------------------------- 按钮/面板 */
+button.primary, button.big {
+  background: linear-gradient(180deg, #d9b661, #a8873a);
+  color: #241c08; border: 1px solid #e9d195;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
+  box-shadow: 0 2px 0 #6f5a22, 0 5px 12px rgba(0, 0, 0, .5);
+  font-weight: 700; letter-spacing: 1px;
+}
+button.primary:hover, button.big:hover { filter: brightness(1.07); }
+button.ghost {
+  background: linear-gradient(180deg, #242832, #1a1e26);
+  border: 1px solid rgba(200, 162, 74, .32); color: #e7dfca;
+}
+button.ghost:hover { border-color: rgba(226, 196, 119, .6); color: #fff; }
+#sidePanel { background: linear-gradient(180deg, #181b21, #111419); border-left: 1px solid rgba(200, 162, 74, .22); }
+.panel-head { border-bottom: 1px solid rgba(200, 162, 74, .22); color: #eadfc4; letter-spacing: 1px; }
+.tip-line::before { color: var(--brass); }
+.log-drawer { background: #14171c; border: 1px solid rgba(200, 162, 74, .3); }
+.prompt { background: linear-gradient(180deg, #2c2416, #201b11); border: 1px solid rgba(200, 162, 74, .5); color: #ffe6a8; }
+.mulligan-bar { background: linear-gradient(180deg, #1f2a22, #16201a); border-color: rgba(120, 200, 150, .35); }
+.pick-grid .card, .tooltip .card { box-shadow: 0 4px 12px rgba(0, 0, 0, .6); }
+
+/* ==========================================================================
+   手机 / 窄屏适配（2026-09-21）
+   目标：手机上单列布局（棋盘在上、手牌在下），侧栏变右侧抽屉，触摸尺寸够大、
+         并且不依赖 hover、不让拖牌误触发页面滚动/缩放。
+   ========================================================================== */
+.only-mobile { display: none; }
+/* 触摸设备：拖牌时不要触发页面滚动/双击缩放 */
+* { -webkit-tap-highlight-color: transparent; }
+.card, .slot, .hq-card { touch-action: pan-x; }
+#boardScroll { touch-action: pan-y; }
+.hand { touch-action: pan-x; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 860px) {
+  .only-mobile { display: inline-flex; }
+  /* 顶栏：不换行，横向可滑（手机上"对战/构筑/卡牌库/规则 + ☰设置"排不下一行） */
+  #topbar { height: 46px; gap: 6px; padding: 0 8px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
+  #topbar::-webkit-scrollbar { display: none; }
+  #topbar nav { flex-wrap: nowrap; }
+  .brand { white-space: nowrap; flex: 0 0 auto; }
+  #sideToggle { flex: 0 0 auto; }
+  /* 手牌/棋盘：隐藏滚动条（触摸滑动即可，条形太丑也太占地方） */
+  .hand::-webkit-scrollbar, #boardScroll::-webkit-scrollbar, .line-units::-webkit-scrollbar, .board-row::-webkit-scrollbar, .fl-line::-webkit-scrollbar { display: none; }
+  .hand, #boardScroll, .line-units, .board-row, .fl-line { scrollbar-width: none; }
+  .brand { letter-spacing: 1px; font-size: 13px; }
+  .nav-btn { padding: 7px 9px; font-size: 12px; }
+  .pool-info { display: none; }
+
+  /* 单列：棋盘占满，手牌固定在底 */
+  #battle { grid-template-columns: minmax(0, 1fr); }
+  #boardScroll { grid-column: 1; }
+  #handBar { grid-column: 1; padding: 2px 6px 5px; }
+
+  /* 侧栏 → 右侧抽屉（默认收起，点顶栏「☰ 设置」打开） */
+  #sidePanel {
+    position: fixed; top: 46px; right: 0; bottom: 0; width: min(88vw, 340px);
+    transform: translateX(103%); transition: transform .22s ease;
+    z-index: 80; box-shadow: -12px 0 32px rgba(0, 0, 0, .65);
+    border-left: 1px solid rgba(200, 162, 74, .35);
+  }
+  body.side-open #sidePanel { transform: translateX(0); }
+  body.side-open #boardScroll { filter: brightness(.6); }
+
+  /* 手牌更紧凑；指挥点方片缩小 */
+  .hand > .card { margin-left: -18px; }
+  .kredits-rail .kr-pips { max-width: 104px; gap: 2px; }
+  .kredits-rail .kr-pips i { width: 8px; height: 11px; }
+  .turn-box { gap: 4px; }
+  button.big { padding: 10px 12px; font-size: 13px; }
+  .pile { min-width: 44px; padding: 2px 5px; }
+  .pile span { font-size: 14px; }
+  .row-label { font-size: 10px; letter-spacing: 1px; }
+  .log-drawer { left: 8px; right: 8px; width: auto; max-height: 52vh; }
+  #prompt { margin: 0 0 4px; padding: 8px; font-size: 13px; }
+  .pick-grid .card { transform: scale(.92); }
+}
+@media (max-width: 560px) {
+  :root { --card-w: 76px; --card-h: 106px; }
+  .hand > .card { margin-left: -22px; }
+}
+@media (max-width: 420px) {
+  :root { --card-w: 66px; --card-h: 92px; }
+  .hand > .card { margin-left: -24px; }
+  .nav-btn { padding: 6px 7px; }
+}
+/* 触摸设备：hover 抬起会"粘住"，去掉 */
+@media (hover: none) {
+  .card.selectable:hover { transform: none; box-shadow: 0 3px 10px rgba(0, 0, 0, .55); }
+  .nav-btn:hover { background: transparent; }
+}
+/* 横屏手机：把棋盘压扁一点，别让手牌挤掉棋盘 */
+@media (max-width: 900px) and (orientation: landscape) {
+  :root { --card-w: 74px; --card-h: 104px; }
+  #topbar { height: 40px; }
+  #sidePanel { top: 40px; }
+}
+
+/* ==========================================================================
+   手机**横屏**（主力场景）：屏幕很矮（≈390px），而且全屏后没有浏览器标题栏。
+   做法：整体收紧（卡牌 62x88、顶栏 32px、手牌条压扁），把高度都让给棋盘；
+         侧栏抽屉从 32px 起、宽度收到 72vw。
+   ========================================================================== */
+@media (orientation: landscape) and (max-height: 560px) {
+  :root { --card-w: 62px; --card-h: 88px; }
+  #topbar { height: 32px; gap: 4px; padding: 0 6px; }
+  .brand { display: none; }
+  .nav-btn { padding: 4px 7px; font-size: 11px; }
+  #sidePanel { top: 32px; width: min(72vw, 300px); }
+  #handBar { padding: 1px 6px 3px; border-top-width: 1px; }
+  .hand { min-height: calc(var(--card-h) + 2px); padding-top: 2px; padding-left: 8px; }
+  .hand > .card { margin-left: -16px; }
+  .hand-wrap { gap: 8px; }
+  .turn-box { gap: 3px; }
+  .kredits-rail { flex-direction: row; align-items: center; gap: 6px; padding: 0; }
+  .kredits-rail .kr-pips { max-width: 128px; gap: 2px; }
+  .kredits-rail .kr-pips i { width: 7px; height: 10px; }
+  button.big { padding: 7px 10px; font-size: 12px; }
+  .row-label { font-size: 9px; margin: 1px 0 0; letter-spacing: .8px; }
+  .board-row, .line-units, .fl-line { min-height: calc(var(--card-h) + 2px); }
+  .line-units { gap: 12px; }
+  .pile { min-width: 36px; padding: 1px 4px; border-radius: 5px; }
+  .pile span { font-size: 12px; }
+  .pile small { font-size: 9px; }
+  .hq-card .hq-hp { font-size: 22px; }
+  .hq-card .hq-sub, .hq-card .hq-label { font-size: 9px; }
+  .hq-card .hq-art { font-size: 16px; }
+  .frontline-bar { padding: 0; font-size: 10px; letter-spacing: 1.5px; }
+  .prompt, .mulligan-bar { margin: 2px 6px; padding: 4px 8px; font-size: 11px; }
+  .mulligan-bar button { padding: 4px 8px; font-size: 11px; }
+  .card.kw-out > .card-badges { font-size: 8px; gap: 1px; }
+  .log-drawer { max-height: 66vh; width: 340px; }
+  .side { padding: 2px 8px; }
+  .hq-row { gap: 4px; }
+}
+/* 超矮横屏（例如 640x360）：再收一档。
+   ⚠ 门槛要卡在 380：390 高的主流手机（iPhone 14 横屏 ≈390）用 62px 卡还看得清字，
+     掉到 54px 就只剩色块了。 */
+@media (orientation: landscape) and (max-height: 380px) {
+  :root { --card-w: 54px; --card-h: 76px; }
+  #topbar { height: 28px; }
+  #sidePanel { top: 28px; }
+  .hand > .card { margin-left: -18px; }
+  .kredits-rail .kr-pips i { width: 6px; height: 9px; }
+}
+/* 全屏/刘海屏：用安全区留白，别把按钮压到圆角下面 */
+@supports (padding: env(safe-area-inset-left)) {
+  #topbar { padding-left: max(8px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
+  #handBar { padding-bottom: max(3px, env(safe-area-inset-bottom)); }
+}
+/* 动态视口高度：手机地址栏收起/展开时不跳（全屏时就是满高） */
+#app { height: 100dvh; }
+@supports not (height: 100dvh) { #app { height: 100%; } }
+
+/* 效果 DSL 主栏：做大一点，方便直接手改 */
+.dsl-box {
+  width: 100%; min-height: 300px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px; line-height: 1.55; tab-size: 2;
+  white-space: pre; overflow-wrap: normal; overflow-x: auto;
+}
+/* 规范文档面板 */
+.guide-panel {
+  margin-top: 10px; border: 1px solid rgba(0,0,0,.14); border-radius: 10px;
+  background: #fff; overflow: hidden;
+}
+.guide-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-bottom: 1px solid rgba(0,0,0,.1);
+  font-weight: 600; font-size: 13px; background: rgba(0,0,0,.03);
+}
+.guide-body {
+  margin: 0; padding: 12px; max-height: 460px; overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px; line-height: 1.6; white-space: pre-wrap;
+}
+
+/* 制卡台（独立全屏界面）顶栏 */
+.editor-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,.1);
+  background: rgba(0,0,0,.03);
+}
+.editor-top h3 { margin: 0; font-size: 15px; }
+/* 编辑器现在是独立界面：内容区铺满、可滚动 */
+#screen-editor .editor-head { padding: 14px; }
+#screen-editor .dsl-box { min-height: 340px; }
+
+/* ── 制卡台：三栏布局（左=卡图与分类 / 中=数值与卡面 / 右=效果 DSL 最宽） ── */
+.editor-grid {
+  display: grid;
+  grid-template-columns: 250px minmax(300px, 1fr) minmax(420px, 1.2fr);
+  gap: 16px; padding: 16px; align-items: start;
+}
+@media (max-width: 1100px) {
+  .editor-grid { grid-template-columns: 1fr; }
+}
+.ed-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ed-artbox {
+  background: #f4f4f2; border: 1px solid rgba(0,0,0,.12); border-radius: 10px;
+  padding: 8px; text-align: center; min-height: 200px;
+}
+.ed-artbox img { max-width: 100%; max-height: 260px; border-radius: 6px; display: block; margin: 0 auto; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.stat-grid label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.dual-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 12px; }
+.grow { flex: 1 1 auto; }
+.ed-right .dsl-box { min-height: 460px; }
+
+/* ── 没有卡图的卡：CSS 占位卡面（军绿做旧质感 + 兵种色边） ── */
+.card.no-art {
+  background: linear-gradient(160deg, rgba(255,255,255,.10), rgba(0,0,0,.28) 62%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,.045) 0 6px, rgba(255,255,255,.03) 6px 12px),
+    linear-gradient(180deg, #5d6b52 0%, #4a5642 58%, #3c4636 100%);
+  border: 1px solid rgba(0,0,0,.45);
+  box-shadow: inset 0 0 0 2px rgba(230,220,190,.16), inset 0 0 26px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.35);
+}
+/* 兵种色边（区分大类的第一眼） */
+.card.no-art[data-unittype="tank"]        { box-shadow: inset 0 0 0 2px rgba(214,182,110,.35), inset 0 0 26px rgba(0,0,0,.35); }
+.card.no-art[data-unittype="infantry"]    { box-shadow: inset 0 0 0 2px rgba(150,180,120,.30), inset 0 0 26px rgba(0,0,0,.35); }
+.card.no-art[data-unittype="artillery"]   { box-shadow: inset 0 0 0 2px rgba(200,150,100,.30), inset 0 0 26px rgba(0,0,0,.35); }
+.card.no-art[data-unittype="fighter"],
+.card.no-art[data-unittype="bomber"],
+.card.no-art[data-unittype="spacefighter"] { box-shadow: inset 0 0 0 2px rgba(130,170,205,.32), inset 0 0 26px rgba(0,0,0,.35); }
+.card.no-art[data-unittype="cruiser"],
+.card.no-art[data-unittype="landcruiser"]  { box-shadow: inset 0 0 0 2px rgba(150,150,205,.32), inset 0 0 26px rgba(0,0,0,.35); }
+/* 占位卡面的卡名：居中大字（和有图卡的顶部叠字不同） */
+.card.no-art .card-name {
+  position: absolute; left: 6px; right: 6px; top: 42%;
+  transform: translateY(-50%);
+  font-size: 14px; font-weight: 700; line-height: 1.25;
+  color: #f2ecd8; text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.85);
+  overflow: hidden;
+}
+/* 兵种小字（占位卡面中部） */
+.card.no-art::before {
+  content: attr(data-unittypename);
+  position: absolute; left: 0; right: 0; top: 56%;
+  font-size: 10px; color: rgba(240,235,215,.55); text-align: center;
+  letter-spacing: 2px; pointer-events: none;
+}
+
+/* ★ 无图卡的占位卡面：提高优先级，确保在卡牌库/卡组构筑的网格里也压得住基础 .card 背景 */
+.pool-grid .card.no-art,
+.deck-list .card.no-art,
+.card.no-art {
+  background-color: #4a5642 !important;
+  background-image: linear-gradient(160deg, rgba(255,255,255,.12), rgba(0,0,0,.30) 62%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,.05) 0 6px, rgba(255,255,255,.035) 6px 12px),
+    linear-gradient(180deg, #5d6b52 0%, #4a5642 58%, #3c4636 100%) !important;
+}
+/* 占位卡面即使没配图，名字也必须看得见（否则白板一块） */
+.card.no-art .card-name { opacity: 1 !important; visibility: visible !important; }
+
+/* ★ 通用卡面：兵种水印（大号半透明符号）—— 占位卡也能一眼看出"这是哪一类单位" */
+.card.no-art::after {
+  content: attr(data-unitglyph);
+  position: absolute; left: 0; right: 0; top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px; line-height: 1; text-align: center;
+  color: rgba(240,235,215,.10);
+  pointer-events: none;
+}
+/* 通用卡面的内嵌细框（"一张卡"而不是一块色块） */
+.card.no-art .card-cost,
+.card.no-art .card-stat { z-index: 2; }
+
+/* ★★ 无图占位卡在网格里**塌成一条 2px 的线**（用户在卡牌库看到的"没有卡面"）：
+ *   .card 的高度本来是由内部 <img> 撑开的，而 .grid-card .card 又把 height 设成 auto —
+ *   没有图 → 高度 0，只剩边框，卡名/兵种名/水印全挤在一起或看不见。
+ *   补回与原画一致的宽高比（卡图 500x701 ≈ --card-w:104 / --card-h:146）。
+ *   只在网格里生效：战斗/手牌有显式 height，aspect-ratio 会自动被忽略。 */
+.grid-card .card.no-art { aspect-ratio: 104 / 146; }
+
+/* ==========================================================================
+   制卡台 / 卡牌库 / 卡组构筑 —— 界面皮肤补完（2026-09-22）
+   ⚠ 起因：KARDS 皮肤 v1（见上方"黄铜军械"段）只覆盖了**对战**界面。制卡台与卡牌库的
+     表单控件一直是**浏览器默认样式**（白底黑字 / 2px inset / 0 圆角），
+     跟深色黄铜皮肤摆在一起非常违和（用户反馈："新建卡牌界面的风格太违和"）。
+   ⚠ 只改观感（颜色 / 边框 / 圆角 / 阴影 / 内边距），**不动任何尺寸链与布局结构**；
+     对战界面的几何（拖拽落点 / 插入下标 / FLIP）完全不受影响。
+   ========================================================================== */
+:root {
+  /* 让原生控件（select 的下拉箭头、滚动条、number 微调钮、checkbox）跟随深色 ——
+     不写这条，深底上的下拉箭头是黑的，等于看不见 */
+  color-scheme: dark;
+  --field-bg: #15181d;
+  --field-bg-hi: #1c2129;
+  --field-line: rgba(200, 162, 74, .22);
+  --field-line-hi: rgba(226, 196, 119, .62);
+}
+
+/* -------------------------------------------------------------- 输入类控件 */
+#screen-editor input:not([type=checkbox]):not([type=file]),
+#screen-editor select,
+#screen-editor textarea,
+#screen-collection input:not([type=checkbox]):not([type=file]),
+#screen-collection select,
+#screen-deck input:not([type=checkbox]):not([type=file]),
+#screen-deck select {
+  background: var(--field-bg);
+  color: var(--text);
+  border: 1px solid var(--field-line);
+  border-radius: 4px;
+  padding: 4px 7px;
+  font: inherit;
+  outline: none;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+#screen-editor textarea { line-height: 1.55; }
+#screen-editor select, #screen-collection select, #screen-deck select { padding: 4px 6px; }
+#screen-editor input:not([type=checkbox]):not([type=file]):hover,
+#screen-editor select:hover,
+#screen-editor textarea:hover,
+#screen-collection input:not([type=checkbox]):not([type=file]):hover,
+#screen-collection select:hover,
+#screen-deck input:not([type=checkbox]):not([type=file]):hover,
+#screen-deck select:hover {
+  border-color: var(--field-line-hi);
+  background: var(--field-bg-hi);
+}
+#screen-editor input:not([type=checkbox]):not([type=file]):focus,
+#screen-editor select:focus,
+#screen-editor textarea:focus,
+#screen-collection input:not([type=checkbox]):not([type=file]):focus,
+#screen-collection select:focus,
+#screen-deck input:not([type=checkbox]):not([type=file]):focus,
+#screen-deck select:focus {
+  border-color: var(--field-line-hi);
+  background: var(--field-bg-hi);
+  box-shadow: 0 0 0 2px rgba(226, 196, 119, .16);
+}
+#screen-editor ::placeholder, #screen-collection ::placeholder, #screen-deck ::placeholder { color: #6d7480; }
+#screen-editor input[type=checkbox],
+#screen-collection input[type=checkbox],
+#screen-deck input[type=checkbox] { accent-color: var(--gold); }
+
+/* --------------------------------------------- 制卡台：顶栏 / 卡图框 / DSL */
+#screen-editor .editor-top {
+  background: linear-gradient(180deg, #1d2128, #14171c);
+  border-bottom: 1px solid var(--brass-dim);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .6), inset 0 -1px 0 rgba(255, 255, 255, .03);
+}
+#screen-editor .editor-top h3 { color: var(--brass); letter-spacing: 1.5px; text-shadow: 0 1px 0 #000; }
+/* 卡图占位框：深色 + 黄铜虚线边（原来是浅灰白 #f4f4f2，跟皮肤对撞） */
+#screen-editor .ed-artbox {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, .012) 0 6px, transparent 6px 12px),
+    #101318;
+  border: 1px dashed var(--field-line-hi);
+  color: var(--dim);
+  box-shadow: inset 0 0 26px rgba(0, 0, 0, .35);
+}
+/* 效果 DSL：它是**代码** → 深色代码底 + 等宽字体（原来继承原生 textarea 的白底） */
+#screen-editor .dsl-box {
+  background: #0e1116;
+  color: #d7dcc8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  tab-size: 2;
+}
+#screen-editor .guide-panel { background: #14171c; border: 1px solid var(--field-line); border-radius: 8px; }
+#screen-editor .guide-body { color: #cfd4c4; }
+#screen-editor .warn { color: #ffcf8a; }
+.parse-status { margin: 4px 0; padding: 6px 9px; border-left: 3px solid var(--line); background: rgba(0,0,0,.16); color: var(--dim); font-size: 12px; }
+.parse-status.auto-confirmed { border-color: #71b889; color: #b8e3c5; }
+.parse-status.manual-confirmed { border-color: #7da9d3; color: #c3ddf5; }
+.parse-status.needs-review { border-color: #e3a24d; color: #ffd598; }
+.parse-status.unreviewed { border-color: var(--line); color: var(--dim); }
+#screen-editor .guide-panel { margin-top: 8px; }
+
+/* ------------------------------------------- 文件按钮（<label> 包着 <input>） */
+/* ⚠ `button.ghost` 的皮肤只作用于 <button>，而 .file-btn 是 <label> → 一直拿不到背景，
+   在卡牌库顶栏里看起来像一段裸文字（截图里最扎眼的违和之一）。 */
+.file-btn.ghost, .file-btn.primary {
+  background: linear-gradient(180deg, #242832, #1a1e26);
+  border: 1px solid var(--brass-dim);
+  color: #cfd4c4;
+  transition: border-color .15s ease, color .15s ease, filter .15s ease;
+}
+.file-btn.ghost:hover { border-color: rgba(226, 196, 119, .6); color: #fff; }
+
+/* ------------------------------------------------- 卡牌库：右侧那条 380px 空栏 */
+/* ⚠ 重构遗留：`.coll-body` 还写着"卡牌网格 + 右侧 380px 编辑器"的双栏栅格
+   （`grid-template-columns: minmax(0,1fr) 380px`），但编辑器**早已搬去独立的
+   `#screen-editor` 全屏界面**，而 `.coll-body` 里只有 `#collGrid` 一个子元素
+   → 右列永远空着，宽屏下就是一大片黑（截图里最显眼的"不协调"）。
+   改成单列铺满，卡牌网格按 auto-fill 自己长出更多列。 */
+.coll-body { grid-template-columns: minmax(0, 1fr); }
+
+/* ==========================================================================
+   卡牌详情浮层（#tooltip）放大（2026-09-22，制作者："卡牌的详细界面有些小"）
+   ⚠ 只改尺寸与字号。定位是 ui.js 的 showTip **按渲染后的真实尺寸**夹取的
+     （见那里的注释：旧写法把 250/260 写死在夹取公式里，就是"手牌详情越界"那个 bug），
+     所以这里放大 / 加宽都不会跑出屏幕。
+   ⚠ 不加 overflow / max-height：tooltip 是 `pointer-events: none`，加了滚动也滚不动，
+     反而会把内容裁掉。宁可整块大一点。
+   ========================================================================== */
+.tooltip { width: 320px; padding: 14px; font-size: 14px; }
+.tooltip .t-name { font-size: 15px; }
+.tooltip img { margin-bottom: 10px; }
+/* tooltip 顶部那张"大号卡面"（也给纯文字卡用） */
+.tooltip .card.mini-big { width: 292px; font-size: 18px; }
+.tooltip .card.mini-big .card-name { font-size: 18px; }
+.tooltip .card.mini-big .card-stat { width: 30px; height: 30px; font-size: 16px; }
+.tooltip .card.mini-big .card-badges { margin-top: 6px; }
+
+/* ==========================================================================
+   指挥点显示 —— 改成原版 KARDS 的规格（2026-09-22 制作者）
+   原版规格：一个**大的指挥点数字 + K**，**K 下面的小字就是"指挥点槽"数**。
+   同时：**敌方也要能看到指挥点槽数**（原来对手那格只显示当前指挥点）。
+   ⚠ 只改观感与文本排布，不动任何数值逻辑（kredits / maxKredits 的来源不变）。
+   ========================================================================== */
+/* —— 我方：竖排（上 = 当前指挥点K，下 = 槽数）—— */
+.kredits-rail .kr-num { display: flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; }
+.kredits-rail .kr-num b {
+  font-size: 27px; font-weight: 800; color: #ffe9b8; letter-spacing: 0;
+  text-shadow: 0 1px 0 #000, 0 0 10px rgba(255, 216, 130, .25);
+}
+.kredits-rail .kr-num b::after { content: 'K'; font-size: 15px; margin-left: 2px; color: var(--khaki); letter-spacing: 0; }
+.kredits-rail .kr-num i {
+  font-size: 12px; font-style: normal; font-weight: 600; color: var(--khaki); letter-spacing: .5px;
+}
+/* ⚠ 不要在下面写"槽"这种文字标注（制作者 2026-09-22 明确要求）——
+   原版就是**纯数字**，靠"在 K 下面"这个位置来表达"指挥点槽"。 */
+
+/* —— 对手（棋盘上的 hq-row 格子）：同样竖排 —— */
+.pile .kr-enemy { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.05; }
+.pile .kr-enemy b { font-size: 21px; font-weight: 800; color: #ffe9b8; text-shadow: 0 1px 0 #000; }
+.pile .kr-enemy b::after { content: 'K'; font-size: 12px; margin-left: 1px; color: var(--khaki); }
+.pile .kr-enemy i { font-size: 11px; font-style: normal; color: var(--khaki); }
+
+/* ==========================================================================
+   场上单位左上角 = 行动花费（2026-09-22 制作者）
+   unitEl 把 .card-cost 的数字换成 KG.effOpCost（行动花费）并打上 .op 类。
+   ⚠ 必须和"部署花费"（金色）在观感上分开，否则玩家会把它读成部署费。
+     行动花费 = 青色系；0 淡化；被减费变绿、被加费变红（与角落攻防数值同一套口径）。
+   ⚠ 只改观感（配色/透明度），不动定位与尺寸链（会牵连拖拽落点与 FLIP）。
+   ========================================================================== */
+.card-cost.op {
+  border-color: #7fd4ff; color: #d6f2ff;
+  box-shadow: 0 0 6px rgba(127, 212, 255, .25);
+}
+/* 行动花费为 0（大多数单位）：淡化，但**仍然显示**——保持一致的位置语义 */
+.card-cost.op.zero { opacity: .55; }
+/* 被改过：便宜=绿、变贵=红（悬停 title 里写明"基础 → 当前"） */
+.card-cost.op.op-down { border-color: #8fe08f; color: #c8f5c8; }
+.card-cost.op.op-up { border-color: #ff9a9a; color: #ffd0d0; }
+
+/* ==========================================================================
+   攻防数字对准卡图内的原版攻防块（2026-09-22 制作者）
+   卡图（500×701 原版模板）里画着攻防块：左数字 ~25% / 右数字 ~76%（水平），
+   块中心距底 ~24.5%。项目渲染的攻防块原本贴卡底两角，和图内画的**错位两层**。
+   这里把项目块挪过去正好盖住：中心距底 24.5% = bottom 16% + 块高一半 8.5%。
+   ⚠ 只动攻防两个数字块（.card-stat.atk/.def），费用/稀有度/词条位置不动；
+     无图占位卡（no-art）没有"图内攻防块"，恢复贴角。
+   ========================================================================== */
+.card .card-stat.atk { left: 25%; right: auto; transform: translateX(-50%); }
+.card .card-stat.def { left: 76%; right: auto; transform: translateX(-50%); }
+.card .card-stat.atk,
+.card .card-stat.def {
+  bottom: 17.5%; height: 14%; min-height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px; font-size: 12px;
+}
+/* 无图占位卡：没有图内攻防块可对齐，恢复原来的贴角样式 */
+.card.no-art .card-stat.atk { left: 2px; transform: none; }
+.card.no-art .card-stat.def { left: auto; right: 2px; transform: none; }
+/* --------------------------------------------------------------------------
+   攻防数字配色（2026-09-22 制作者）：**默认白色**；
+   数值**高于基础值 → 绿**（吃到 +1+1 这类加成），**低于基础值 → 红**（受伤掉防）。
+   判定由 unitEl 给出：当前值与卡面基础值不同时给卡挂 atk-up/atk-down/def-up/def-down。
+   ⚠ 只覆盖颜色，不动下面那段的位置/尺寸；dual（巡航舰双攻击值）的两个数字同步跟上。
+   -------------------------------------------------------------------------- */
+.card .card-stat.atk,
+.card .card-stat.def { color: #ffffff; }
+.card .card-stat.atk.dual b,
+.card .card-stat.atk.dual i { color: #ffffff; }
+.card.atk-up .card-stat.atk,
+.card.def-up .card-stat.def,
+.card.atk-up .card-stat.atk.dual b,
+.card.atk-up .card-stat.atk.dual i { color: #8ef08e; }
+.card.atk-down .card-stat.atk,
+.card.def-down .card-stat.def,
+.card.atk-down .card-stat.atk.dual b,
+.card.atk-down .card-stat.atk.dual i { color: #ff8a8a; }
+/* 双攻击值中间的斜杠保持中性灰，别跟着变色 */
+.card .card-stat.atk.dual i::before { color: #b9a06a; }
+
+/* tooltip 大号卡面（mini-big）同步放大字号，块尺寸随卡高等比 */
+.tooltip .card.mini-big .card-stat.atk,
+.tooltip .card.mini-big .card-stat.def { font-size: 26px; min-height: 30px; }
+
+/* ==========================================================================
+   异画『对位』（2026-09-23 制作者）：切异画时，叠加的攻防块要跟**异画图内画的块**对齐
+   · 位置/尺寸走**内联样式**（在 ui.js 的 cardEl 模板字符串里序列化 —— 复用节点走 innerHTML，
+     渲染后再改子元素不可靠）；数据源 game/data/alt-art-ui.json。
+   · 这里只管**字号按倍数缩放**：.alt-fs 的 font-size = 基准 × var(--fs)。
+     普通卡 12px、大卡面(mini-big) 26px 各乘一次；巡航舰 dual 的 b/i 也跟着乘。
+   · --fs 缺省 = 1 → 没有对位配置的卡**完全不受影响**（乘法恒等，不碰老渲染）。
+   ========================================================================== */
+.card .card-stat.alt-fs { font-size: calc(12px * var(--fs, 1)); }
+.card .card-stat.alt-fs.dual b { font-size: calc(13px * var(--fs, 1)); }
+.card .card-stat.alt-fs.dual i { font-size: calc(10px * var(--fs, 1)); }
+.tooltip .card.mini-big .card-stat.alt-fs { font-size: calc(26px * var(--fs, 1)); }
+.tooltip .card.mini-big .card-stat.alt-fs.dual b { font-size: calc(13px * var(--fs, 1)); }
+.tooltip .card.mini-big .card-stat.alt-fs.dual i { font-size: calc(10px * var(--fs, 1)); }
+
+/* ---- 「异画对位」面板（右键卡牌 → 异画对位…） ---- */
+.alt-tune {
+  position: fixed; right: 16px; bottom: 16px; z-index: 70; width: 380px;
+  background: linear-gradient(180deg, #1f232b, #171a20);
+  border: 1px solid var(--gold); border-radius: 10px; padding: 12px 12px 10px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, .65); font-size: 12px;
+}
+.alt-tune .at-head {
+  display: flex; align-items: center; justify-content: space-between;
+  color: var(--gold); font-weight: 700; font-size: 13px; margin-bottom: 8px;
+}
+.alt-tune .at-x {
+  background: transparent; border: 1px solid var(--line); color: var(--dim);
+  border-radius: 5px; padding: 0 7px; line-height: 20px;
+}
+.alt-tune .at-x:hover { border-color: var(--gold); color: var(--gold); }
+.alt-tune .at-preview { display: flex; justify-content: center; margin: 2px 0 10px; }
+.alt-tune .at-preview .card { margin: 0; box-shadow: 0 6px 18px rgba(0, 0, 0, .5); }
+.alt-tune .at-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.alt-tune .at-tag { flex: 0 0 26px; color: var(--dim); }
+.alt-tune .at-cell { display: flex; align-items: center; gap: 3px; flex: 1 1 0; min-width: 0; }
+.alt-tune .at-cell i { font-style: normal; color: var(--dim); }
+.alt-tune .at-cell input {
+  width: 100%; min-width: 0; background: #15181d; border: 1px solid var(--line);
+  color: var(--text); border-radius: 4px; padding: 3px 4px; font-size: 12px; text-align: center;
+}
+.alt-tune .at-cell input:hover { border-color: #4a5160; }
+.alt-tune .at-cell input:focus { outline: none; border-color: var(--gold); }
+.alt-tune .at-hint { color: var(--dim); line-height: 1.45; margin: 4px 0 9px; }
+.alt-tune .at-hint b { color: var(--text); }
+.alt-tune .at-actions { display: flex; gap: 6px; }
+.alt-tune .at-actions button { flex: 1 1 auto; }
+/* 异画对位：异画图里已经画了数字时，「不画深底」只留叠加数字（加投影保证在花哨背景上也看得清） */
+.card .card-stat.alt-nobg { background: none; box-shadow: none; text-shadow: 0 2px 6px rgba(0, 0, 0, .85); }
+/* 面板里的选项行 */
+.alt-tune .at-opt { gap: 8px; margin: 2px 0 8px; }
+.alt-tune .at-check { display: flex; align-items: center; gap: 5px; color: var(--dim); flex: 1 1 auto; }
+.alt-tune .at-check input { accent-color: var(--gold); }
+.alt-tune .at-color {
+  flex: 0 0 104px; background: #15181d; border: 1px solid var(--line); color: var(--text);
+  border-radius: 4px; padding: 3px 6px; font-size: 12px;
+}
+.alt-tune .at-color:focus { outline: none; border-color: var(--gold); }
+
+/* ==================================================== 异画攻防字体：连筋（2026-09-23）
+ * 用异画时，攻防数字换「连筋」字体。字体文件 game/fonts/lianjin.ttf（数字+字母子集，9.7KB，
+ * 来源：制作者下载的 连筋英文_爱给网_aigei_com.ttf，已拷进项目 —— 这样换机器/分享游戏都带着）。
+ * 类 .alt-font 由 ui.js 挂：statAttrs 序列化进 cardEl 模板 + applyAltGeometry 就地加/摘 +
+ * 图挂了退占位时一并清掉（跟 alt-fs/alt-nobg 同一套路）。只影响**用异画时**，原图完全不变。 */
+@font-face {
+  font-family: 'KGLianJin';
+  src: url('../fonts/lianjin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.card .card-stat.alt-font {
+  /* 连筋笔画连绵、比常规数字字体矮胖，字号跟着对位表走（没配对位 = 原字号） */
+  font-family: 'KGLianJin', '连筋高手', 'LianJinGaoShou', sans-serif;
+  font-weight: normal;                 /* 手写体没有真粗体，浏览器加粗会糊 */
+  letter-spacing: .5px;
+}
+
+/* ---- 异画：数值变化时**不加高亮边框**（2026-09-23 制作者） ----
+ * 218 行给 atk-up/def-up 的块加了 1px 绿框；异画的块没有深色底（.alt-nobg），
+ * 那个框会直接套在**图里画的框**外面，两层很丑。这里用同样数量的类 + 排在后面
+ * （同特异性按顺序赢，不用 !important）把它压掉。颜色变化（绿/红）保留 —— 数字变色照样看得出来。 */
+.card.atk-up .card-stat.alt-font,
+.card.def-up .card-stat.alt-font,
+.card.atk-down .card-stat.alt-font,
+.card.def-down .card-stat.alt-font { box-shadow: none; }
+
+/* ---- 异画：**盖住图内画的数字**（2026-09-24 制作者：「仅限异画要盖住攻击力」） ----
+ * 异画图里画的攻防值可能跟真实值不一样 → 叠加块画**实心底**把图内数字盖掉，只显示真实值。
+ * ⚠ 默认底是 rgba(0,0,0,.75) **半透明，盖不住** —— 这里必须不透明。
+ * 只对**用异画**的块生效（.alt-cover 由 ui.js 在 bg:1 时挂），原图完全不受影响。
+ * 盖不住就把面板里的「宽/高」撑大。 */
+.card .card-stat.alt-cover { background: #15181d; padding: 0 7px; }
+
+/* ============================================================
+ * 隐蔽（制作者词条 2026-09-24）：对手的隐蔽单位「卡背朝上」
+ * 不透明深色遮罩盖住整卡（名字/效果/词条/攻防全部不可见），中央一个「？」。
+ * 自己的隐蔽单位不受影响；被攻击后 kws.conceal 移除 → ui.js 不再渲染遮罩。
+ * ============================================================ */
+.card .conceal-cover {
+  position: absolute; inset: 0; z-index: 6;
+  background: #15181d; border-radius: inherit;
+  display: flex; align-items: center; justify-content: center;
+  color: #5f5e5a; font-size: 44px; font-weight: 500;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   ★★★ 手机端总布局（2026-09-25）—— 全部**追加**在末尾，覆盖上面的桌面规则。
+   桌面表现完全不受影响（下面所有规则都包在 `.mobile-ui` 作用域或媒体查询里）。
+
+   为什么这么做：手机横屏可视高度只有 ~330–430px，而棋盘一行卡就要
+   (卡高 + 2) × 3 行 + 前线条 + 两组 hq-row，**纵向根本放不下**。
+   旧版做法是"整体收紧"（卡缩到 62×88、顶栏 32px）——收到底还是放不下：
+   实测 844×390 时 #boardScroll 容器 222px、内容 430px，直接裁掉一半。
+   新做法是把纵向上**按内容实际需要**分配：
+     · 顶栏 → 极薄一条（横屏时导航收进抽屉）
+     · 棋盘 → 占满剩余高度，内容超了就横向滚动 + 纵向滚动兜底
+     · 手牌 → 贴底、可横滑、不参与纵向挤压
+     · 侧栏 → 右侧抽屉（设置/战报），不占常驻宽度
+   ========================================================================== */
+
+/* 手机判定类：由 ui.js 的 KG.isMobileUI() 挂在 <html> 上（宽度 / 指针类型 / 屏幕方向），
+   比纯 CSS 媒体查询可靠 —— 平板横屏、折叠屏展开、桌面窄窗口都能落到正确的分支。 */
+html.mobile-ui .only-mobile { display: inline-flex; }
+
+/* ★ 手机横屏的**尺寸总纲**（对战屏所有规则都从这里取值，调一处即可整体缩放）：
+     · --card-w / --card-h     → **棋盘**上的牌（三条阵线要塞进 ~280px，只能小一号）
+     · --hand-card-w / -h      → **手牌**的牌（要看清、要用手指点，明显大于棋盘牌）
+     · --hand-vis              → 手牌浮层**露出屏幕**的高度（≈ 手牌卡高的一半 → "一半在屏幕底下"）
+     · --patch-w               → 屏幕左右两侧"数据贴片"的宽度 */
+html.mobile-ui {
+  --card-w: 52px;
+  --card-h: 72px;
+  --hand-card-w: 116px;
+  --hand-card-h: 162px;
+  --hand-vis: 78px;
+  --patch-w: 54px;
+}
+
+/* ---------- 手机：顶栏压到最薄 ---------- */
+html.mobile-ui #topbar {
+  height: 30px; min-height: 30px; gap: 6px; padding: 0 6px;
+  flex-wrap: nowrap; overflow: hidden;
+}
+html.mobile-ui .brand { display: none; }              /* 手机横屏不显示品牌字，省 60px */
+html.mobile-ui #topbar nav { flex: 0 0 auto; gap: 2px; }
+html.mobile-ui .nav-btn { padding: 3px 8px; font-size: 11px; border-radius: 5px; }
+html.mobile-ui #topbar .only-mobile { padding: 3px 8px; font-size: 11px; }
+html.mobile-ui .pool-info { display: none; }
+/* 首屏导航在横屏下会挤爆 → 收进「☰」抽屉里（body.nav-open 展开） */
+html.mobile-ui #navDrawerBtn { display: inline-flex; flex: 0 0 auto; }
+
+/* ---------- 手机：对战屏（以原版 KARDS 手游为蓝本，2026-09-25 重写） ----------
+   旧做法是"把每个元素都压紧"，结果仍然塞不下、而且挤成一坨。
+   新做法照抄原版的三条省空间原则：
+     ① **数据不占行** —— 指挥点/牌库/手牌数收进屏幕左右两侧的"贴片"，绝对定位浮在
+        战线两旁的空白里（战线是居中的，左右本来就空），不进文档流。
+     ② **手牌不占行** —— 手牌是贴底浮层，卡放大后下半截直接伸出屏幕外被裁掉。
+     ③ **一线一职责** —— 前线条兼做系统消息条，不再另设提示条。
+   省下来的 两条 hq-row（90px）+ 手牌行（97px）= **187px 全部还给棋盘**，
+   棋盘于是正好铺满、不再滚动。 */
+html.mobile-ui #battle {
+  position: relative;             /* 数据贴片 / 结束回合按钮 的定位上下文 */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) var(--hand-vis);
+}
+html.mobile-ui #boardScroll {
+  grid-column: 1; grid-row: 1;
+  overflow: hidden;               /* ★ 手机不滚：改造后内容正好放得下（见下方 fitBoardScale 兜底） */
+}
+html.mobile-ui #sidePanel {
+  position: fixed; top: 30px; right: 0; bottom: 0;
+  width: min(78vw, 340px); z-index: 80;
+  transform: translateX(104%); transition: transform .2s ease;
+  box-shadow: -12px 0 32px rgba(0,0,0,.65);
+}
+html.mobile-ui body.side-open #sidePanel { transform: translateX(0); }
+html.mobile-ui body.side-open #boardScroll,
+html.mobile-ui body.side-open #handBar { filter: brightness(.55); }
+
+/* ---------- 手机：棋盘三条阵线（纵向预算 ~282px，一线不多给） ---------- */
+html.mobile-ui .row-label { display: none; }   /* 手机不占行：敌我已由上下两组贴片标明 */
+html.mobile-ui .frontline-bar {
+  height: 16px; min-height: 16px; margin: 0; padding: 0 6px;
+  font-size: 10px; letter-spacing: 1px; gap: 8px;
+}
+html.mobile-ui .side { padding: 0 6px; }
+html.mobile-ui .hq-card .hq-hp { font-size: 17px; }
+html.mobile-ui .hq-card .hq-art { font-size: 12px; }
+html.mobile-ui .hq-card .hq-sub,
+html.mobile-ui .hq-card .hq-label { font-size: 8px; }
+
+/* ★★ 手机横屏：每一行的**上内边距**必须留给"卡外竖排词条"那一列 ——
+   词条列是 `right: calc(100% + 1px)` 挂在卡左侧的，卡贴到行顶时它会溢出到上一行去，
+   视觉上和上面那条阵线糊在一起。给它 12px 呼吸位。
+   行的 min-height 因此 = 卡高 + 14（12 上 + 2 下），**卡不再被压扁**。 */
+html.mobile-ui .board-row,
+html.mobile-ui .fl-line {
+  min-height: calc(var(--card-h) + 14px);
+  padding: 12px 4px 2px;
+}
+/* ★ 阵线**缩短并居中**（制作者："阵线不需要那么长可以缩短"）：
+   手机上最多也就 5 格，横贯全屏既空旷又和左右两边的贴片/按钮抢地方。
+   收到 78% 宽居中后，左右各留出 ~90px —— 数据贴片、结束回合按钮各就各位，
+   再也不会压在阵线末端的卡上。拖拽落点判定不受影响（仍按 .line-units 的几何算）。
+   ⚠ 用 width + align-self 居中，**不要**用 margin:auto ——
+   横向 auto 外边距会吃掉 flex 交叉轴的拉伸，行会缩到只剩内容宽（实测 826px → 62px）。
+   ★ 2026-09-25 追加：**前线整块**（.frontline-wrap = 条纹底 + 前线条 + 分隔条）
+   之前没有跟着缩，视觉上前线比两条支援线宽一截 —— 现在整块一起缩到同宽，
+   .fl-line 在块内铺满（width:100%），三条线视觉宽度完全一致（制作者报"前线太宽"）。 */
+html.mobile-ui .board-row {
+  width: 78%; align-self: center;
+}
+html.mobile-ui .frontline-wrap {
+  width: 78%; align-self: center;
+}
+html.mobile-ui .fl-line {
+  width: 100%;
+}
+/* ⚠ 这里**必须保持 center**：总部的位置由 `p.hqSlot` 决定（开局 = defaultHqSlot），
+   但线上只有总部一张卡时，它"在第几格"看不出来 —— 真正决定它贴左还是居中的是
+   justify-content。曾经改成 flex-start，结果开局总部贴在最左边（制作者 2026-09-25 报）。 */
+html.mobile-ui .line-units {
+  gap: 14px; justify-content: center;
+  min-height: var(--card-h);
+}
+html.mobile-ui [id="foeSupport"], html.mobile-ui #mySupport,
+html.mobile-ui #frontline { overflow-x: auto; overflow-y: hidden; }
+html.mobile-ui .revealed-strip { flex-wrap: nowrap; overflow-x: auto; padding: 1px 0 2px 4px; }
+html.mobile-ui .revealed-strip .card.revealed-mini { flex: 0 0 auto; }
+
+/* ---------- 手机：左右"数据贴片"（原版：浮在战线两旁的空白里，不占横行） ---------- */
+/* ★ #boardInner 承担两件事：
+   ① **定位上下文**：它有时会被 JS 加 transform（fitBoardScale），而 transform 会让它
+      自己变成包含块 —— 不给 position:relative，数据贴片的位置就会在"有缩放 / 无缩放"
+      两种状态下跳到不同的参考系里（实测跳了 78px）。
+   ② **撑满 / 摊开**：min-height:100% + 纵向 flex ——
+      · 机型更矮（内容放不下）→ JS 整体 scale 到刚好塞进去，仍不出滚动条；
+      · 机型更高（内容有余量）→ 三条阵线**均分多余高度并各自居中**，
+        棋盘真正铺满屏幕，而且线之间有呼吸空隙（不再"挤成一坨"）。 */
+html.mobile-ui #boardInner {
+  position: relative;
+  display: flex; flex-direction: column; min-height: 100%;
+}
+html.mobile-ui #boardInner > .side.foe,
+html.mobile-ui #boardInner > .side.mine,
+html.mobile-ui #boardInner > .frontline-wrap { flex: 1 1 auto; justify-content: center; }
+html.mobile-ui #boardInner > .side.foe,
+html.mobile-ui #boardInner > .side.mine { display: flex; flex-direction: column; }
+html.mobile-ui .side > .hq-row {
+  position: absolute; z-index: 16;
+  width: var(--patch-w);
+  flex-direction: column; align-items: stretch;
+  flex-wrap: nowrap; gap: 3px; margin: 0; padding: 0;
+  pointer-events: none;            /* 纯展示，别挡住底下的拖拽落点 */
+}
+/* 上下对称：敌方贴片贴在敌方支援线的左端，我方贴片贴在我方支援线的左端 */
+html.mobile-ui .side.foe > .hq-row  { left: 4px; top: 2px; }
+html.mobile-ui .side.mine > .hq-row { left: 4px; bottom: 2px; }
+html.mobile-ui .side > .hq-row .pile {
+  min-width: 0; width: 100%; padding: 1px 4px; border-radius: 5px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 3px;
+  background: rgba(24,27,33,.92);
+}
+html.mobile-ui .side > .hq-row .pile span { font-size: 13px; }
+html.mobile-ui .side > .hq-row .pile small { font-size: 8px; letter-spacing: 0; }
+html.mobile-ui .side > .hq-row .pile .kr-enemy b { font-size: 18px; }
+html.mobile-ui .side > .hq-row .pile .kr-enemy b::after { font-size: 10px; }
+html.mobile-ui .side > .hq-row .pile .kr-enemy i { font-size: 9px; }
+/* 删减：手机上不要"敌/我"标签（上下位置已经说明一切）和"反制"计数（看得少、占地方） */
+html.mobile-ui .side > .hq-row .pile.foe-tag,
+html.mobile-ui .side > .hq-row .pile.hide-mobile { display: none; }
+
+/* ---------- 手机：手牌浮层（卡放大，下半截伸出屏幕外） ----------
+   原版就是这么干的：手牌**不占文档流高度**，底部只露出上半截，
+   于是棋盘拿到几乎全部纵向空间。这里露出 --hand-vis（≈ 卡高一半），
+   剩下的一半被屏幕底边裁掉 —— 正好是制作者要的"一半在屏幕底下"。 */
+html.mobile-ui #handBar {
+  grid-column: 1; grid-row: 2;
+  position: relative;              /* 提示条 / 结束回合 的定位上下文 */
+  height: var(--hand-vis);
+  padding: 0 4px;
+  border-top: none; background: transparent;
+  overflow: visible;               /* ★ 卡要能伸出屏幕外，这里绝不能裁 */
+}
+html.mobile-ui .hand-wrap { gap: 0; align-items: flex-start; min-height: 0; }
+html.mobile-ui .hand {
+  min-height: 0; height: 100%;
+  padding: 2px 8px 0;
+  align-items: flex-start; justify-content: center; flex-wrap: nowrap;
+  /* ⚠ 绝不能给 .hand 设 overflow-x:auto —— 一设，overflow-y 就被浏览器算成 auto，
+     卡伸出屏幕外的那一半会被裁掉（"一半在屏幕底下"直接失效）。
+     所以手牌改为**负 margin 叠放**来容纳多张牌，不靠横向滚动。 */
+  overflow: visible;
+}
+html.mobile-ui .hand > .card {
+  width: var(--hand-card-w); height: var(--hand-card-h);
+  margin-left: -46px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.65);
+}
+html.mobile-ui .hand > .card:first-child { margin-left: 0; }
+html.mobile-ui .hand > .card.kw-out > .card-badges { display: none; }  /* 叠放时会糊成一片 */
+/* ★ 换牌高亮（制作者 2026-09-25 报"准备阶段选牌没有高亮了"）：
+   上面这条 .hand > .card 的盒阴影（特异性 0,2,1）把桌面 `.card.selected`
+   的蓝色选框（0,2,0）**覆盖掉了** —— 必须在这里显式补回来。
+   选中 = 蓝圈 + 整张上浮；未选中的可点牌微微上浮表示"能点"。 */
+html.mobile-ui .hand > .card.selected {
+  box-shadow: 0 0 0 3px #6cc0ff, 0 8px 20px rgba(0, 0, 0, .65);
+  transform: translateY(-14px);
+}
+html.mobile-ui .hand > .card.selectable {
+  transform: translateY(-5px);
+}
+
+/* 结束回合：原版在**右侧中部**，独立于手牌区，不抢底部空间 */
+html.mobile-ui .turn-box {
+  position: absolute; right: 6px; bottom: calc(100% + 6px);
+  z-index: 28; gap: 0; padding: 0;
+}
+html.mobile-ui .turn-box .kredits-rail { display: none; }  /* 指挥点已在左下贴片里 */
+html.mobile-ui button.big { padding: 8px 14px; font-size: 13px; letter-spacing: .5px; }
+
+/* ---------- 手机：换牌条 / 提示条 压成一行 ---------- */
+html.mobile-ui #mulliganBar,
+html.mobile-ui .mulligan-bar,
+html.mobile-ui #prompt,
+html.mobile-ui .prompt {
+  margin: 2px 6px; padding: 4px 8px; font-size: 11px; border-radius: 6px;
+}
+html.mobile-ui .mulligan-bar { gap: 6px; }
+html.mobile-ui .mulligan-bar span { font-size: 11px; }
+html.mobile-ui .mulligan-bar button { padding: 4px 8px; font-size: 11px; }
+html.mobile-ui #prompt button { padding: 3px 7px; font-size: 11px; margin: 2px 4px 0 0; }
+/* ★ 手机：换牌条 / 提示条**脱离文档流浮在手牌上方**，绝不挤压手牌与棋盘。
+   横屏高度只有 390px，一条 40px 的提示条会直接吃掉手牌的一半 —— 划不来。
+   做成浮层后：棋盘、手牌的高度完全不受提示条有无的影响（布局稳定，不会跳）。
+   `bottom: calc(100% + 4px)` = 贴着手牌浮层的**上沿**（#handBar 就是定位上下文）。 */
+html.mobile-ui #mulliganBar,
+html.mobile-ui .mulligan-bar,
+html.mobile-ui #prompt,
+html.mobile-ui .prompt {
+  position: absolute; left: 6px; right: 6px; bottom: calc(100% + 4px); z-index: 30;
+  margin: 0;
+  background: linear-gradient(180deg, rgba(30,58,42,.97), rgba(22,32,26,.97));
+  box-shadow: 0 6px 20px rgba(0,0,0,.6);
+}
+html.mobile-ui #prompt,
+html.mobile-ui .prompt {
+  background: linear-gradient(180deg, rgba(44,36,22,.97), rgba(32,27,17,.97));
+}
+html.mobile-ui .mulligan-bar.hidden,
+html.mobile-ui #prompt.hidden { display: none !important; }
+/* 浮层模式必须让父容器成为定位上下文 */
+html.mobile-ui #handBar { position: relative; }
+
+/* ---------- 手机：词条竖排一行太占地方 → 缩小并允许溢出 ---------- */
+html.mobile-ui .card.kw-out > .card-badges { font-size: 8px; gap: 1px; right: calc(100% + 1px); }
+html.mobile-ui .card.kw-out > .card-badges .badge { padding: 2px 0; }
+
+/* ---------- 手机：战报面板 ---------- */
+html.mobile-ui .log-drawer {
+  left: 6px; right: 6px; width: auto; bottom: 6px;
+  max-height: 62vh;
+}
+
+/* ==========================================================================
+   手机：其余屏（卡组构筑 / 卡牌库 / 制卡台 / 规则）—— 横屏纵向极浅，
+   一律走"左侧一条 + 右侧主区"或"整屏可滚动"的形态，绝不出现横向溢出。
+   ========================================================================== */
+/* 手机：其余屏（卡组构筑 / 卡牌库 / 制卡台 / 规则）—— 横屏纵向极浅，
+   一律走"整体纵向可滚"的形态，绝不出现横向溢出。
+   （选择器从 html.mobile-ui 出发，特异性 0,2,0 级 —— 不会和上方桌面规则打架。） */
+
+/* 卡组构筑：**保持原版的"左卡组 / 右卡池"** —— 横屏虽然矮，但宽度够（844px），
+   没必要退成上下堆叠（那样卡组列表会把卡池挤到屏幕外，得滚两屏才能构筑）。
+   两栏各自内部滚动，谁都不挤谁。 */
+html.mobile-ui #screen-deck .deck-layout {
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-auto-rows: minmax(0, 1fr);
+  overflow: hidden;
+}
+html.mobile-ui #playerDeckSide { overflow-y: auto; padding: 6px 8px; }
+html.mobile-ui .deck-side { padding: 8px; }
+html.mobile-ui #playerDeckSide .deck-lib { max-height: 96px; }
+html.mobile-ui .deck-list { min-height: 60px; flex: 1 1 auto; }
+html.mobile-ui .deck-actions { margin-bottom: 6px; }
+html.mobile-ui .deck-actions button { padding: 4px 8px; font-size: 11px; }
+html.mobile-ui .pool-main { min-height: 0; overflow: hidden; }
+html.mobile-ui .filters { padding: 5px 8px; gap: 5px; }
+html.mobile-ui .filters input { min-width: 110px; }
+html.mobile-ui .filters select,
+html.mobile-ui .filters button { font-size: 11px; padding: 3px 6px; }
+/* ★ 卡池网格：列宽用 `--card-w`，而手机横屏的卡牌变量是 62px —— 于是 604px 的主区
+   只排出 3~4 列（截图里卡池"瘦成一条"）。这里给一个**独立的列宽上限**，
+   让卡池按 68~84px 铺满整行（列数从 3 提到 7~8），密度接近桌面端。
+   ⚠ 只改 .pool-grid 自己的列宽，不动 --card-w（战场上的卡牌尺寸依赖它）。 */
+html.mobile-ui .pool-grid {
+  padding: 6px 8px; gap: 5px; overflow-y: auto;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+}
+html.mobile-ui .grid-card .meta { font-size: 9px; }
+html.mobile-ui .grid-card .count-badge { font-size: 10px; padding: 0 5px; }
+
+/* 卡牌库 / 导入：头部操作按钮横滑，不换行堆高 */
+html.mobile-ui #screen-collection { overflow: auto; }
+html.mobile-ui .coll-head { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px; }
+html.mobile-ui .coll-head h3 { margin: 0; font-size: 13px; }
+html.mobile-ui .coll-head .hint { font-size: 11px; margin: 2px 0 0; }
+html.mobile-ui .coll-actions {
+  display: flex; gap: 6px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px;
+}
+html.mobile-ui .coll-actions > * { flex: 0 0 auto; }
+html.mobile-ui .coll-actions::-webkit-scrollbar,
+html.mobile-ui .coll-filters::-webkit-scrollbar { display: none; }
+html.mobile-ui .coll-filters { display: flex; gap: 6px; overflow-x: auto; flex-wrap: nowrap; padding: 6px 8px; }
+html.mobile-ui .coll-filters > * { flex: 0 0 auto; }
+html.mobile-ui .coll-filters input { min-width: 150px; }
+html.mobile-ui .coll-body { min-height: 0; }
+html.mobile-ui .import-status { padding: 4px 8px; font-size: 11px; }
+
+/* 制卡台：三栏 → 单栏纵向堆叠，可滚动 */
+html.mobile-ui #screen-editor { overflow: auto; }
+html.mobile-ui .editor-top { padding: 8px; gap: 6px; }
+html.mobile-ui .editor-top h3 { font-size: 13px; }
+html.mobile-ui .editor-row { display: flex; gap: 6px; flex-wrap: wrap; }
+html.mobile-ui .editor-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 8px; }
+html.mobile-ui .ed-artbox { min-height: 140px; }
+html.mobile-ui .ed-artbox img { max-height: 180px; }
+html.mobile-ui .ed-right .dsl-box,
+html.mobile-ui #screen-editor .dsl-box { min-height: 240px; font-size: 12px; }
+html.mobile-ui .stat-grid { grid-template-columns: repeat(2, 1fr); }
+html.mobile-ui #screen-editor .guide-body { max-height: min(55vh, 420px); }
+html.mobile-ui .parse-status { font-size: 11px; }
+
+/* 窄窗口也切成单栏；不依赖触屏设备检测，桌面分屏同样能完整编辑。 */
+@media (max-width: 720px) {
+  #screen-editor { overflow: auto; }
+  #screen-editor .editor-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 8px; }
+  #screen-editor .ed-right .dsl-box { min-height: 220px; }
+  #screen-editor .guide-body { max-height: 55vh; }
+  .coll-head { padding: 8px; gap: 8px; }
+  .coll-actions { max-width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+  .coll-actions > * { flex: 0 0 auto; }
+}
+
+/* 规则：整屏可滚，字号收一档 */
+html.mobile-ui #screen-help { overflow: auto; }
+html.mobile-ui .help { padding: 10px 12px; font-size: 12px; }
+html.mobile-ui .help h3 { font-size: 14px; margin: 10px 0 4px; }
+html.mobile-ui .help ul { padding-left: 18px; }
+
+/* ---------- 手机：顶部导航抽屉（横屏时把导航收进来） ---------- */
+#navDrawerBtn { display: none; }
+html.mobile-ui #navDrawer {
+  position: fixed; left: 0; top: 30px; z-index: 85;
+  background: linear-gradient(180deg, #1d2128, #14171c);
+  border: 1px solid var(--brass-dim); border-left: none; border-top: none;
+  border-radius: 0 0 8px 0; padding: 6px; display: none;
+  flex-direction: column; gap: 4px; min-width: 132px;
+  box-shadow: 8px 12px 28px rgba(0,0,0,.6);
+}
+html.mobile-ui body.nav-open #navDrawer { display: flex; }
+html.mobile-ui #navDrawer button {
+  text-align: left; padding: 8px 12px; font-size: 13px;
+  background: transparent; border: 1px solid transparent; color: var(--dim); border-radius: 6px;
+}
+html.mobile-ui #navDrawer button.active { color: #ffe9b8; background: #2a2f39; border-color: var(--brass-dim); }
+
+/* ==========================================================================
+   ★ 手机：详细卡面（点卡展开的 tooltip）
+   桌面是"320px 宽竖排"：上面一张 292px 宽的卡图（按比例 ≈410px 高）+ 下面文字。
+   手机横屏只有 ~390px 高 —— 这张图一张就能撑爆视口（制作者 2026-09-25 报"详细卡面太大了"）。
+   改成**横向**：左边一张受控高度的小卡面，右边文字区（超了内部滚动）。
+   整体尺寸锁在视口内，绝不溢出。
+   ⚠ 依赖 JS 把文字包进 `.t-body`（否则所有 <div> 会变成 flex 兄弟横着排开）。
+   ========================================================================== */
+/* ★★ 手机上详情走**底部横条**，不是跟随卡牌的浮窗：
+   横屏只有 390px 高，任何"浮在卡旁边"的浮层都会压住阵线（实测 560px 宽的浮层
+   正好盖掉整条前线）。改成贴底的横条 + 自身半透明，只吃掉下方一小条，
+   棋盘的上三分之二始终可见 —— 看卡面时还能对照场上局势。
+   位置由 JS 强制写死（showTip 后面会把 left/top 覆盖掉，所以这里用 !important 防守）。 */
+/* ★★ 手机上详情 = **全屏检视（inspect）**：点卡 → 整屏暗下来，卡面居中放大，无框无面板。
+   试过的历史版本（制作者都不满意）：
+     · 跟随卡牌的浮窗 → 560px 宽的浮层正好压掉整条前线；
+     · 贴底横条 → 133px 高就把我方支援阵线整条盖住；
+     · 贴右侧竖条面板 → 制作者 2026-09-25 报"把详情页面那个雷霆大框去掉，
+       详情卡牌居中再放大" —— 带边框的面板本身就是问题。
+   现版：半透明黑幕铺满（顶栏以下），卡面（卡图或 mini-big 大卡）**居中 + 放大**，
+   文字详情排在卡面下方；没有边框、没有面板感。点空白处 / ✕ 关闭。
+   ⚠ !important 仍是必须的：桌面端 `width:320px` 和 showTip 的内联 left/top 都得压住。
+   ⚠ 居中用 **margin:auto** 而不是 justify-content:center —— 内容比容器高时
+     justify-content:center 会把上沿裁掉且滚不回去（flex 经典坑），margin:auto 会安全退化。 */
+html.mobile-ui .tooltip {
+  position: fixed !important;
+  inset: 30px 0 0 0 !important;
+  width: auto !important; max-width: none !important; min-width: 0 !important;
+  max-height: none !important; margin: 0 !important;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; padding: 10px 14px 14px;
+  background: rgba(5, 7, 10, .9) !important;
+  border: none !important; border-radius: 0 !important;
+  box-shadow: none !important;
+  pointer-events: auto;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  z-index: 88;
+}
+html.mobile-ui .tooltip > img,
+html.mobile-ui .tooltip > .card.mini-big {
+  flex: 0 0 auto;
+  margin: auto 0 6px;                    /* 上下的 auto = 安全居中 */
+  width: min(56vw, calc((100vh - 130px) * .72), 330px);
+  height: auto; max-height: calc(100vh - 110px);
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, .8);   /* 只给卡本身一点立体感，不是"框" */
+}
+html.mobile-ui .tooltip > .card.mini-big {
+  font-size: 13px; min-height: 0;
+}
+html.mobile-ui .tooltip .card.mini-big .card-name { font-size: 13px; line-height: 1.3; white-space: normal; }
+html.mobile-ui .tooltip .card.mini-big .card-stat {
+  width: 24px; height: 24px; min-height: 0; font-size: 13px; padding: 0 3px;
+}
+html.mobile-ui .tooltip .card.mini-big .card-stat.atk,
+html.mobile-ui .tooltip .card.mini-big .card-stat.def { font-size: 14px; min-height: 0; }
+html.mobile-ui .tooltip .card.mini-big .card-badges { margin-top: 4px; font-size: 10px; }
+html.mobile-ui .tooltip .t-body {
+  flex: 0 0 auto; margin: 0 auto auto;   /* 底部 auto：整体在空间富余时垂直居中 */
+  min-width: 0; max-width: min(88vw, 560px);
+  overflow: visible; max-height: none;
+  text-align: center; font-size: 12px; line-height: 1.55;
+}
+html.mobile-ui .tooltip .t-name { font-size: 14px; line-height: 1.35; }
+html.mobile-ui .tooltip .t-kw { font-size: 11px; }
+/* 关闭按钮：手机上必须显式给一个（点别的地方不一定收得掉） */
+.tooltip .t-close { display: none; }
+html.mobile-ui .tooltip .t-close {
+  display: block; position: absolute; top: 4px; right: 6px; z-index: 2;
+  background: rgba(0,0,0,.5); border: 1px solid var(--line); color: var(--dim);
+  border-radius: 5px; padding: 0 7px; line-height: 20px; font-size: 12px;
+}
+/* 大号卡面的攻防块：手机上卡面只有 92px 宽，26px 的字号会糊成一团 */
+html.mobile-ui .tooltip .card.mini-big .card-stat.alt-fs { font-size: calc(12px * var(--fs, 1)); }
+
+/* ---------- 手机：工具栏（右上角常驻：全屏 / 设置） ---------- */
+html.mobile-ui #topbar { justify-content: space-between; }
+html.mobile-ui #mobileTools { display: flex; gap: 4px; flex: 0 0 auto; margin-left: auto; }
+#mobileTools { display: none; }
+
+/* ==========================================================================
+   卡组构筑：按**原版 KARDS** 的排布 —— 左边是"放进去的卡"（我的卡组），右边是卡池，
+   AI 卡组收进**右侧抽屉**（原来它占掉一整栏，手机上更没地方放）。
+   ⚠ 只动布局：两个列表的渲染逻辑、卡池点击加卡的逻辑完全没碰。
+   ========================================================================== */
+.deck-layout { grid-template-columns: 300px minmax(0, 1fr); }
+#playerDeckSide { border-right: 1px solid var(--line); }
+/* AI 卡组栏 → 抽屉（默认收起，由左栏「AI 卡组 ▸」开关） */
+.deck-drawer {
+  position: fixed; top: 48px; right: 0; bottom: 0; width: 320px; z-index: 78;
+  transform: translateX(104%); transition: transform .2s ease;
+  border-right: none; border-left: 1px solid var(--line);
+  background: #171a1f; box-shadow: -12px 0 32px rgba(0, 0, 0, .6);
+}
+body.ai-deck-open .deck-drawer { transform: translateX(0); }
+#aiDeckToggle.on { color: #ffe9b8; border-color: rgba(200, 162, 74, .55); background: #2a2f39; }
+/* 手机上顶栏只有 30px，抽屉跟着下移 */
+html.mobile-ui .deck-drawer { top: 30px; width: min(80vw, 320px); }
+
+/* ==========================================================================
+   手机**竖屏**引导层：竖屏下战场必然互相遮挡（一行卡 156px 宽，竖屏只有 ~390px）。
+   不假装能用 —— 直接盖一层提示引导转横屏。纯 CSS 媒体查询控制显隐。
+   ⚠ 只在"手机竖屏"出现：高度 > 宽度 且 宽度 ≤ 1000。
+     折叠屏展开 / 平板竖屏（宽 > 1000）不拦。
+   ========================================================================== */
+#rotateHint { display: none; }
+@media (orientation: portrait) and (max-width: 1000px) and (pointer: coarse) {
+  #rotateHint {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 10px; text-align: center;
+    position: fixed; inset: 0; z-index: 200;
+
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(200, 162, 74, .12), transparent 60%),
+      linear-gradient(180deg, #15181e, #0c0e12 72%);
+    padding: 24px; box-sizing: border-box;
+  }
+  #rotateHint .rh-icon {
+    font-size: 56px; line-height: 1;
+    animation: rhSpin 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px rgba(226, 196, 119, .5));
+  }
+  #rotateHint .rh-title {
+    font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #ffe9b8;
+    text-shadow: 0 2px 0 #000;
+  }
+  #rotateHint .rh-sub { font-size: 13px; line-height: 1.7; color: var(--dim); max-width: 340px; }
+  #rotateHint .rh-sub br { display: block; }
+}
+@keyframes rhSpin {
+  0%, 40% { transform: rotate(0deg); }
+  60%, 100% { transform: rotate(-90deg); }
+}
+
+/* ==========================================================================
+   ★ 卡组选择（#screen-decklib）—— 卡组构筑的**上级界面**（制作者 2026-09-25）
+   原来是"顶栏点卡组 → 直接进构筑"，构筑界面里既要放卡组库又要放当前卡组，
+   左栏被切成两半 → 手机上牌小得看不清。现在拆成两级：
+     ① 选择卡组（本界面）：卡组库 + 新建/复制/改名/删除/分享/导入
+     ② 构筑（#screen-deck）：左栏整条都给"当前卡组"，卡池的牌放大到一排 4~5 张
+   ========================================================================== */
+#screen-decklib { padding: 14px 16px; overflow: auto; }
+.deckset-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.deckset-title h3 { margin: 0 0 2px; }
+.deckset-title .hint { margin: 0; font-size: 12px; }
+.deckset-go { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+.deckset-go .hint { margin: 0; }
+/* 卡组库：一行一副 → **卡片式网格**（手指好点，一眼看清有哪几副） */
+#screen-decklib .deck-lib {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px; align-content: start; padding: 0;
+}
+#screen-decklib .deck-lib-item { padding: 10px 12px; font-size: 13px; min-height: 46px; }
+#screen-decklib .deck-lib-item.active { box-shadow: inset 0 0 0 1px #3d6fa8; }
+#screen-decklib .deck-lib-empty { color: var(--dim); font-size: 12px; padding: 4px 6px; }
+
+/* ⚠ 这里**绝不能写 display** —— `.screen{display:none}` 只会被 `display:flex` 盖掉，
+   于是没激活的卡组选择屏也会占着布局（实测吃掉 87px，把棋盘从 282px 挤到 195px）。
+   纵向排布交给 `.screen.active{display:flex;flex-direction:column}` 即可。 */
+html.mobile-ui #screen-decklib { padding: 8px 10px; gap: 8px; }
+html.mobile-ui .deckset-head { flex-direction: row; align-items: center; gap: 10px; }
+html.mobile-ui .deckset-title h3 { font-size: 15px; }
+html.mobile-ui .deckset-title .hint { font-size: 11px; }
+html.mobile-ui .deckset-head .deck-actions { flex-wrap: nowrap; overflow-x: auto; margin: 0; }
+html.mobile-ui .deckset-head .deck-actions::-webkit-scrollbar { display: none; }
+html.mobile-ui .deckset-go { margin: 0; gap: 8px; }
+html.mobile-ui #screen-decklib .deck-lib {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  overflow-y: auto; min-height: 0;
+}
+html.mobile-ui #screen-decklib .deck-lib-item { padding: 8px 10px; font-size: 12px; min-height: 42px; }
+
+/* ==========================================================================
+   ★ 构筑 / 卡牌库：把牌**放大**（制作者："对战手牌和卡牌库的卡牌太小了"
+     "现在显示卡组构筑中将卡牌放大，一排拍个 4、5 张足够了"）
+   棋盘上的 --card-w 只有 52px（三条阵线要塞进 ~280px，没办法），
+   但这两个界面**没有这个约束** —— 给它们各自一套卡牌变量，棋盘尺寸不受影响。
+   ⚠ 变量挂在 #screen-* 上，靠继承传下去；不会污染全局的 --card-w。
+   ========================================================================== */
+html.mobile-ui #screen-deck,
+html.mobile-ui #screen-collection { --card-w: 112px; --card-h: 157px; }
+/* 卡池网格回到"按卡宽自动排"的原生规则（前面那条 72px 的临时收紧作废） */
+html.mobile-ui .pool-grid {
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+  gap: 8px; padding: 8px;
+}
+html.mobile-ui .grid-card .meta { font-size: 10px; }
+html.mobile-ui .grid-card .count-badge { font-size: 11px; padding: 1px 6px; }
+html.mobile-ui #screen-deck .deck-layout { grid-template-columns: 216px minmax(0, 1fr); }
+html.mobile-ui #deckList .deck-item,
+html.mobile-ui #aiDeckList .deck-item { font-size: 12px; padding: 4px 6px; }
+
+/* ==========================================================================
+   ★ 手机：构筑界面重排（2026-09-25 二轮 —— 制作者报"名称/返回/AI/数量/花费
+     全部移走，不能占用显示卡组里的卡牌的位置"）
+   做法：#screen-deck 激活时改成 **3 行 Grid**，
+     第 1 行 = 头部（← 卡组库 · 卡组名 · AI 卡组）—— 横跨两列的瘦条
+     第 2 行 = 操作（自动构筑/清空/保存）+ 统计（共 n 张 · 各费曲线，右对齐）
+     第 3 行 = **纯卡区**：左卡组列表 | 右卡池，全部高度给牌
+   用 `display:contents` 把 .deck-layout / #playerDeckSide "拆掉"，子元素直接成为
+   网格项分配 area —— **零 DOM 改动、零 JS 搬移**（沙箱迷你 DOM 的 appendChild 不摘
+   源节点，JS 搬移在 uitest 里会复制节点，绝不能走那条路）。
+   ⚠ 必须挂在 .active 上：否则会盖掉 .screen{display:none}（踩过：吃掉 87px）。 */
+html.mobile-ui #screen-deck.active {
+  display: grid;
+  grid-template-columns: minmax(150px, 196px) minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    "head head"
+    "act  stats"
+    "list pool";
+  gap: 4px 6px;
+  padding: 3px 6px 6px;
+  overflow: hidden;
+}
+html.mobile-ui #screen-deck .deck-layout { display: contents; }
+html.mobile-ui #screen-deck #playerDeckSide { display: contents; }
+html.mobile-ui #screen-deck .deck-side-head { grid-area: head; margin: 0; padding: 1px 0; }
+html.mobile-ui #screen-deck .deck-side-head h3 { font-size: 13px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.mobile-ui #screen-deck .deck-actions { grid-area: act; margin: 0; }
+html.mobile-ui #screen-deck #deckStats {
+  grid-area: stats; margin: 0; align-self: center;
+  text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 11px; line-height: 1.4;
+}
+html.mobile-ui #screen-deck #deckStats br { display: none; }   /* 三行 → 一行 */
+html.mobile-ui #screen-deck #deckStats .deck-name { color: #ffe9b8; }
+html.mobile-ui #screen-deck #deckList {
+  grid-area: list; min-height: 0; overflow-y: auto;
+  padding: 4px 2px; border-top: 1px solid var(--line);
+}
+html.mobile-ui #screen-deck .pool-main {
+  grid-area: pool; display: flex; flex-direction: column;
+  min-height: 0; overflow: hidden;
+}
+html.mobile-ui #screen-deck .pool-grid { flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+
+/* ★ 卡牌库（#screen-collection）同步修滚动：.coll-body 是 grid、.editor 占右侧
+   380px —— 手机上收到 220px，把宽度还给卡池；卡池列自己内部滚。 */
+html.mobile-ui .coll-body { grid-template-columns: minmax(0, 1fr) 220px; }
+html.mobile-ui #collGrid { min-height: 0; overflow-y: auto; }
+
+/* ==========================================================================
+   ★ 手机：列表**能滑了**（制作者报"卡组构筑和卡牌库根本没法滑动翻页"）
+   病根：全局 `.card, .slot, .hq-card { touch-action: pan-x }`（战场横向滚用的）——
+   卡池/卡组里**每一张卡**都把纵向滚动手势掐死了，摸哪都不滚。
+   这两个界面里全部放开为 pan-y。
+   ⚠ 卡上拖拽（加卡/移卡）由 JS 的"竖向意图取消拖拽"逻辑配合（见 ui.js）：
+     手指主要往下走 = 想滚列表 → 拖拽自动让路。
+   ========================================================================== */
+html.mobile-ui #screen-deck .card,
+html.mobile-ui #screen-deck .grid-card,
+html.mobile-ui #screen-deck .deck-item,
+html.mobile-ui #screen-collection .card,
+html.mobile-ui #screen-collection .grid-card,
+html.mobile-ui .pool-grid,
+html.mobile-ui .deck-list,
+html.mobile-ui #collGrid {
+  touch-action: pan-y;
+}
+/* 触屏列表不显示滚动条（省 ~10px，手势滚动自带位置感） */
+html.mobile-ui .pool-grid::-webkit-scrollbar,
+html.mobile-ui .deck-list::-webkit-scrollbar,
+html.mobile-ui #collGrid::-webkit-scrollbar { display: none; }
+html.mobile-ui .pool-grid,
+html.mobile-ui .deck-list,
+html.mobile-ui #collGrid { scrollbar-width: none; }
+
+/* ==========================================================================
+   ★ 手机：toast 提示**居中 + 不挡拖拽**（制作者 2026-09-25）
+   桌面的 toast 贴底居中 —— 手机上手牌浮层正占着底部，提示会压在手牌上，
+   而且它没设 pointer-events:none，elementFromPoint 会被它接住，
+   拖拽落点判定被它搅了。改成屏幕正中 + 彻底透明给指针。
+   ========================================================================== */
+html.mobile-ui #toast {
+  top: 42%; bottom: auto; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 120;
+  max-width: 82vw;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .55);
+}
+
+/* ==========================================================================
+   ★ 手机：制卡台（#screen-editor）横屏重排（2026-09-25 二轮）
+   第一轮给的是"单列纵向堆叠"——横屏 844×390 下是**最差布局**：改个卡名要滚过
+   整个图+分类栏。现在改成：
+     ┌────────┬──────────────────────┐
+     │ 卡图   │  卡名 / 数值 / 词条   │   ← 左窄右宽，一屏基本看全
+     │ +分类  │  / 卡面文本 / 按钮    │
+     ├────────┴──────────────────────┤
+     │ 效果 DSL（JSON，全宽，垫底）    │   ← 高级功能，宽度大才好手改
+     └───────────────────────────────┘
+   纯 CSS 网格，覆盖第一轮的单列规则（同特异性、写在后面 → 生效）。
+   ========================================================================== */
+html.mobile-ui .editor-grid {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-areas:
+    "left mid"
+    "right right";
+  gap: 8px 10px;
+  padding: 6px 8px 10px;
+  align-items: start;
+}
+html.mobile-ui .ed-left  { grid-area: left; }
+html.mobile-ui .ed-mid   { grid-area: mid; }
+html.mobile-ui .ed-right { grid-area: right; }
+/* 左栏图框收小，别跟 150px 的栏打架 */
+html.mobile-ui .ed-artbox { min-height: 96px; }
+html.mobile-ui .ed-artbox img { max-height: 136px; }
+/* 数值四件套横屏宽度够 → 一行四列（原来 2×2 占两行） */
+html.mobile-ui .stat-grid { grid-template-columns: repeat(4, 1fr); }
+/* ★ 触屏输入：字号一律 16px —— 小于 16px 的输入框在 iOS 聚焦时会把整页放大
+   （viewport 缩放），聚焦一次页面就歪一次。顺便加高触点。 */
+html.mobile-ui #screen-editor input:not([type=checkbox]):not([type=file]),
+html.mobile-ui #screen-editor select {
+  font-size: 16px; min-height: 34px; padding: 5px 8px;
+}
+html.mobile-ui #screen-editor textarea {
+  font-size: 16px; padding: 6px 8px; line-height: 1.5;
+}
+/* 两个 textarea 的 rows 属性是给桌面看的：手机上用 CSS 接管高度 */
+html.mobile-ui #edText    { height: auto; min-height: 92px; }
+html.mobile-ui #edEffects { height: auto; min-height: 200px; }
+/* 顶栏按钮行（批量加入×2 / 规范文档 / 关闭）：一行横滑，不换行堆高 */
+html.mobile-ui .editor-top .editor-row {
+  flex-wrap: nowrap; overflow-x: auto; flex: 1 1 auto; min-width: 0;
+}
+html.mobile-ui .editor-top .editor-row::-webkit-scrollbar { display: none; }
+html.mobile-ui .editor-top .editor-row > * { flex: 0 0 auto; }
+/* DSL 指南面板（规范文档）在手机上直接铺满屏宽 */
+html.mobile-ui .guide-panel { max-width: none; }
+html.mobile-ui .guide-body { max-height: 50vh; }
+
+/* ==========================================================================
+   ★ 手机：攻防数字块**回贴两下角**（2026-09-25 制作者："默认在最左下角和右下角，
+     不再和卡图数字对齐"）
+   桌面 2026-09-22 那条"对准卡图内原版攻防块"（left 25%/76%、bottom 17.5%）在
+   手机的小卡上没有意义（图里的数字小到看不清，还容易和贴上去的块错位感）。
+   手机一律恢复基础贴角样式：攻=左下、防=右下、transform 清掉。
+   ★ 2026-09-25 补：**异画卡（.alt-on）不贴角** —— 异画的叠加块要走
+   alt-art-ui.json 对位（盖住图内画的块）。此前贴角条的 transform:none 与
+   异画内联 left/bottom 打架：内联赢 left、CSS 赢 transform → 中心偏 15%+、
+   def 数字被右缘裁剩 10px（手机探针实测）。:not(.alt-on) 排除后异画卡回落
+   桌面对位规则（left/bottom/height 内联接管 + translateX(-50%) 回来），
+   原图卡维持贴角不变。
+   ========================================================================== */
+html.mobile-ui .card:not(.alt-on) .card-stat.atk,
+html.mobile-ui .card:not(.alt-on) .card-stat.def {
+  bottom: 2px; height: auto; min-height: 0;
+  padding: 0 5px; transform: none;
+}
+html.mobile-ui .card:not(.alt-on) .card-stat.atk { left: 2px; right: auto; }
+html.mobile-ui .card:not(.alt-on) .card-stat.def { left: auto; right: 2px; }
+/* 异画卡（手机）：对位接管 —— 清掉桌面 18px 最小高（52px 小卡上块高会被顶穿），
+   字号战场小卡单独缩（52/104 = 桌面的一半，见下方字号段）。 */
+html.mobile-ui .card.alt-on .card-stat.atk,
+html.mobile-ui .card.alt-on .card-stat.def { min-height: 0; }
+/* 无图占位卡本来就是贴角，不受影响；双攻击块保持紧随攻块之后（display 已由桌面规则给） */
+
+/* ==========================================================================
+   ★ 手机：前线卡区**上下 padding 收紧**（2026-09-25 制作者报"只要有单位在
+     前线，前线就变得巨宽"）
+   病根（真机探针实锤）：桌面 `.fl-common { padding: 42px 6px }` 是给
+   "敌上我下错开 ±20px"留的空间 —— 手机原样继承后，前线行高 =
+   42 + 卡72 + 42 + 条纹底padding 8 = **164px**，比两条支援线（88px）高出一倍；
+   fitBoardScale 一量内容超高 → 整个棋盘被 scale 压小（实测 0.75），
+   前线那块条纹底在屏幕上就显得又高又宽 —— 即"巨宽"。
+   修法：padding 收到 10px、错位减半到 ±9px（错位是 transform 不占布局，
+   10px 够容纳）。行高 164 → 100，棋盘几乎不再缩放。
+   ========================================================================== */
+html.mobile-ui .fl-common { padding: 10px 6px; }
+html.mobile-ui .fl-common .foe-slot { transform: translateY(-9px); }
+html.mobile-ui .fl-common .mine-slot { transform: translateY(9px); }
+
+/* ==========================================================================
+   ★ 手机：拖拽部署不再被浏览器手势掐死（2026-09-25 制作者"拖十几次部署不到前线"）
+   病根（触摸仿真采样实锤）：全局 `.card/.slot/.hq-card { touch-action: pan-x }`
+   （战场横滚用的）把竖向手势交给了浏览器 —— 手牌在底部、阵线在上方，部署是
+   **纯竖向**拖拽，位移 ~10px 就被浏览器 pointercancel（touch-action 在**手势开始
+   时**就定型，body.dragging-card 的 none!important 是拖拽开始后才加的，救不了）。
+   采样证据：ghost 在拖拽第 2 步就消失（onPointerUp 被 cancel 触发收尾）、
+   落点判定失效 → toast"没放到有效位置"。偶尔成功只是先横后竖骗过斜率判定。
+   手机上这三类表面本来就不滚：手牌负 margin 叠放不滚、#boardScroll overflow:hidden，
+   pan-x 毫无用处 → 全部收成 none，拖拽手势完全归 JS。
+   构筑/卡牌库列表的 pan-y 规则（#screen-deck/.coll 作用域，特异性更高）不受影响。
+   ========================================================================== */
+html.mobile-ui .hand,
+html.mobile-ui .hand > .card,
+html.mobile-ui .slot,
+html.mobile-ui .slot > .card,
+html.mobile-ui .hq-card {
+  touch-action: none;
+}
+
+/* ==========================================================================
+   ★ 十一轮：向原版 KARDS 对齐的手机对战屏瘦身（2026-09-25 Alan 拍板"全做"）
+   蓝图三联图（现状标注 / 原版参照 / 优化蓝图）已给制作者过目。
+   病根：菜单栏 + 贴片两摞 + 支援线大空框 + 前线说明条 + 手牌 78px，
+   五层叠在 375px 高里，"全部挤在一起"。
+   原则（照抄原版官方截图）：棋盘独占全屏、数据贴边、装饰让位暗区。
+   高度账：26(顶栏) + 253(棋盘三条线) + 96(手牌) = 375px。
+   仅手机（html.mobile-ui），桌面零改动。
+   ========================================================================== */
+
+/* ① 对战屏藏主菜单（nav 四钮整条隐藏；☰抽屉/全屏/设置保留），顶栏 30→26px。
+   当前屏由 ui.js show() 写到 body[data-screen] 上。 */
+html.mobile-ui body[data-screen="battle"] #topbar { height: 26px; min-height: 26px; }
+html.mobile-ui body[data-screen="battle"] #topbar nav { display: none; }
+
+/* ② 数据贴片：竖摞三块 → 单行小条（敌方右上、我方左下棋盘底部，仍 pointer-events:none） */
+html.mobile-ui .side > .hq-row {
+  width: auto; flex-direction: row; align-items: center; gap: 5px;
+}
+html.mobile-ui .side.foe > .hq-row { left: auto; right: 4px; top: 0; }
+html.mobile-ui .side.mine > .hq-row { left: 4px; bottom: 1px; }
+
+/* ③ 支援线去空框：不画带边框的大盒子，只留一条中线虚线轨道（原版连这个都没有） */
+html.mobile-ui .side .board-row {
+  border-color: transparent; background: transparent;
+  position: relative;
+}
+html.mobile-ui .side .board-row::before {
+  content: ""; position: absolute; left: 10px; right: 10px; top: 50%; height: 0;
+  border-top: 1px dashed rgba(255, 255, 255, .16);
+}
+html.mobile-ui .side .row-label { display: none; }   /* "支援阵线"小标签不占地方 */
+
+/* ④ 前线说明条（"前线（双方共抢）格子 x/5 空…"）整条删除 —— 无信息量占一行 */
+html.mobile-ui .frontline-bar { display: none; }
+
+/* ⑤ 手牌露出 78 → 96px：费用角标和卡名上沿可见（原版手机版露出约四成） */
+html.mobile-ui { --hand-vis: 96px; }
+
+/* ⑥ 结束回合：收窄、贴右缘垂直中部（fixed 脱离 handBar 定位上下文；turn-box 不在
+   #boardInner 里，不受 fitBoardScale transform 影响，视口即坐标系） */
+html.mobile-ui .turn-box {
+  position: fixed; right: 4px; top: 44%; bottom: auto;
+}
+html.mobile-ui .turn-box button.big { padding: 7px 10px; font-size: 12px; }
+
+/* ⑦ 战场氛围：中央微提亮 + 四角渐暗（渐晕），外围彻底让位给暗色 —— 原版观感的关键 */
+html.mobile-ui #boardScroll {
+  background:
+    radial-gradient(ellipse 120% 90% at 50% 40%, rgba(255, 244, 214, .05), rgba(255, 244, 214, 0) 55%),
+    radial-gradient(ellipse 130% 110% at 50% 50%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, .55) 100%);
+}
+
+/* ==========================================================================
+   ★ AI 卡组构筑界面（制作者 2026-09-25：decklib 里的独立入口「AI 卡组构筑 ▸」）
+   跟普通构筑同一个 #screen-deck，但 body.ai-build（由 S.aiBuild 独立状态控制，
+   不看 deckMode —— 普通构筑里开抽屉也会把 deckMode 置 'ai'，两个语义不能混）：
+     · 左栏整条换成 AI 卡组：抽屉原地"落座"成左栏（position:static），DOM 零搬移
+     · 普通左栏（#playerDeckSide）藏掉；「✕ 收起」没意义 → 藏；
+       「← 卡组库」只在 AI 形态显示（#aiBuildBack）
+   ⚠ 桌面 grid 显式指列：#playerDeckSide display:none 后 auto-placement 会按源顺序
+     把 .pool-main 排进第一列（它在 DOM 里排在 #aiDeckSide 前面）—— 必须显式
+     grid-column 钉死 AI 在左、卡池在右。
+   ========================================================================== */
+#aiBuildBack { display: none; }
+body.ai-build #screen-deck #playerDeckSide { display: none; }
+/* ⚠ 桌面专属两条必须挂 :not(.mobile-ui)：手机的 3 行 grid 里 .pool-main 靠
+   grid-area:pool 落在 row3 —— 不加排除的话，下面 grid-row:1 会把它钉进第一行
+   （优先级与 html.mobile-ui 规则打平、源顺序靠后反而赢），row1 被撑到 300px+、
+   AI 列表只剩一条缝，拖拽全部落空（2026-09-25 手机探针抓到的）。 */
+html:not(.mobile-ui) body.ai-build #screen-deck #aiDeckSide {
+  position: static; transform: none; width: auto; z-index: auto;
+  box-shadow: none; border-left: none; border-right: 1px solid var(--line);
+  grid-column: 1; grid-row: 1;
+}
+html:not(.mobile-ui) body.ai-build #screen-deck .pool-main { grid-column: 2; grid-row: 1; }
+body.ai-build #screen-deck #aiDeckClose { display: none; }
+body.ai-build #screen-deck #aiBuildBack { display: inline-block; }
+
+/* 手机：构筑屏是 3 行 grid（head/act/stats/list/pool），#playerDeckSide 是
+   display:contents —— AI 形态下同样把 #aiDeckSide 的壳子拆掉（display:contents），
+   让它的子元素按同样的 area 落位；#deckStats 的手机规则不命中 #aiDeckStats，
+   曲线统计的样式要复制过来。 */
+html.mobile-ui body.ai-build #screen-deck #playerDeckSide { display: none; }
+html.mobile-ui body.ai-build #screen-deck #aiDeckSide { display: contents; }
+html.mobile-ui body.ai-build #screen-deck #aiDeckSide .deck-actions { grid-area: act; }
+html.mobile-ui body.ai-build #screen-deck #aiDeckSide #aiDeckStats {
+  grid-area: stats; margin: 0; align-self: center;
+  text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: 11px; line-height: 1.4;
+}
+html.mobile-ui body.ai-build #screen-deck #aiDeckSide #aiDeckStats br { display: none; }
+html.mobile-ui body.ai-build #screen-deck #aiDeckSide #aiDeckList {
+  grid-area: list; min-height: 0; overflow-y: auto;
+  padding: 4px 2px; border-top: 1px solid var(--line);
+}
+html.mobile-ui body.ai-build #screen-deck #aiDeckClose { display: none; }
+html.mobile-ui body.ai-build #screen-deck #aiBuildBack { display: inline-block; }
+/* 触屏列表不显示滚动条（与普通构筑的 #deckList 同口径） */
+html.mobile-ui body.ai-build #screen-deck #aiDeckList::-webkit-scrollbar { display: none; }
+
+/* ==========================================================================
+   联机日志侧边栏（2026-09-25）：同步/不同步全程日志的折叠抽屉。
+   抽屉本体复用 .log-drawer（桌面右下 380px / 手机左右贴边 62vh），
+   这里只补日志列表、错误行、把手徽标态。
+   ========================================================================== */
+#mpLogDrawer .mp-log-list {
+  padding: 8px 10px; overflow-y: auto; min-height: 0;
+  font-size: 12px; line-height: 1.55; font-family: Consolas, 'Courier New', monospace;
+}
+.mp-log-line { color: var(--dim); padding: 2px 0; border-bottom: 1px dashed rgba(255,255,255,.05); word-break: break-all; }
+.mp-log-line.err { color: #ff9d7a; }
+.mp-log-line.err::before { content: '⚠ '; }
+#mpLogToggle.mp-log-alert {
+  color: #ffb08a; border-color: rgba(255, 140, 90, .55);
+  background: rgba(255, 120, 70, .12);
+}
+html.mobile-ui #mpLogDrawer .mp-log-list { font-size: 11px; max-height: 46vh; }
+
+/* ==========================================================================
+   ★ 手机构筑：卡池筛选区三行压一行（制作者 2026-09-25："这一大坨太占空间了，全部修改"）
+   .filters（搜索 + 4 个下拉 + 2 个复选框 + 翻页器）在 812 宽横屏下 wrap 成三行、
+   吃掉 ~100px 竖向 —— 390 高的屏上卡池每屏少看半张卡。全部收紧字号 / padding /
+   gap，横屏一行流；竖屏（≤560 宽）塞不下自动 wrap，可接受（竖屏高度富余）。
+   ⚠ 只动 html.mobile-ui 作用域，桌面 .filters 零回归。
+   ⚠ .filters input 会命中 checkbox —— 搜索框必须用 #cardSearch 限定，
+     否则复选框会被 flex:1 拉宽。
+   ========================================================================== */
+html.mobile-ui #screen-deck .filters { gap: 4px; padding: 4px 6px; }
+html.mobile-ui #screen-deck #cardSearch {
+  min-width: 0; flex: 1 1 90px; width: auto; padding: 3px 6px; font-size: 12px;
+}
+html.mobile-ui #screen-deck .filters select {
+  flex: 0 0 auto; width: auto; padding: 3px 2px; font-size: 12px; max-width: 74px;
+}
+html.mobile-ui #screen-deck .filters .chk { font-size: 11px; gap: 2px; white-space: nowrap; }
+html.mobile-ui #screen-deck .pager { margin-left: auto; gap: 3px; font-size: 11px; flex: 0 0 auto; }
+html.mobile-ui #screen-deck .pager button { padding: 2px 5px; font-size: 11px; }
+/* 补：桌面 .filters input{min-width:180px} 会把手机复选框拉宽到 110px 撑爆一行
+   （checkbox 也是 input）—— 显式收回固定尺寸。 */
+html.mobile-ui #screen-deck .filters .chk input { min-width: 0; width: 13px; height: 13px; flex: 0 0 auto; }
+/* 补定稿：卡池区在手机上只有 ~598px 宽（左 196 给卡组列表），筛选内容 ~740px
+   物理塞不进一行 → 筛选条改**横向滑动**：竖向只占一行，功能一个不少。
+   touch-action:pan-x 只声明在 .filters 上（它自身不需要纵向滚），卡池的竖向
+   滚动由 #poolGrid 的 pan-y 管，互不干扰。 */
+html.mobile-ui #screen-deck .filters {
+  flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+  touch-action: pan-x; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+html.mobile-ui #screen-deck .filters::-webkit-scrollbar { display: none; }
+html.mobile-ui #screen-deck .filters #cardSearch { flex: 0 0 auto; min-width: 110px; width: 110px; }
+html.mobile-ui #screen-deck .filters select,
+html.mobile-ui #screen-deck .filters .chk,
+html.mobile-ui #screen-deck .pager { flex: 0 0 auto; margin-left: 0; }
+
+/* ==========================================================================
+   ★ 手机异画：战场小卡的攻防字号重定基准（2026-09-25 制作者"异画攻防对位
+     重新测定偏移量"）
+   异画对位的 x/y/h 全是百分比（随卡自适应），唯一固定像素的是字号：
+   .alt-fs = 12px × var(--fs)（fs 配 2~3 → 24~36px）。手机棋盘卡 52×72 = 桌面
+   104×146 的一半，36px 字占 69% 卡宽直接爆掉 → 战场基准减半到 6px（占比与
+   桌面一致）；手牌卡 116×162 ≈ 桌面 104×146，12px 基准不动。
+   ⚠ 只命中棋盘（.line-units）里的异画块，手牌/检视/构筑不在此列。
+   ========================================================================== */
+html.mobile-ui .line-units .card .card-stat.alt-fs { font-size: calc(6px * var(--fs, 1)); }
+html.mobile-ui .line-units .card .card-stat.alt-fs.dual b { font-size: calc(6.5px * var(--fs, 1)); }
+html.mobile-ui .line-units .card .card-stat.alt-fs.dual i { font-size: calc(5px * var(--fs, 1)); }
+html.mobile-ui .line-units .card .card-stat.atk,
+html.mobile-ui .line-units .card .card-stat.def { padding: 0 3px; }
+html.mobile-ui .line-units .card .card-stat.alt-cover { padding: 0 4px; }
+
+/* ========================================================================
+   战斗交互精修：桌面点选和所有平台的拖拽使用同一组合法目标提示；手机卡牌轻触只开详情。
+   选中牌用黄铜色，合法目标用脉冲描边；减少动画偏好下保持静态描边。
+   ======================================================================== */
+#boardScroll {
+  background:
+    radial-gradient(ellipse 76% 44% at 50% 50%, rgba(111, 105, 72, .18), transparent 78%),
+    radial-gradient(ellipse 120% 95% at 50% 42%, rgba(205, 188, 134, .07), transparent 72%),
+    repeating-linear-gradient(0deg, rgba(224, 214, 180, .014) 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, #252821 0%, #171b18 48%, #252821 100%);
+}
+.side.foe .board-row,
+.side.mine .board-row {
+  background: linear-gradient(180deg, rgba(10, 12, 10, .16), rgba(181, 165, 111, .045) 48%, rgba(10, 12, 10, .24));
+  border-color: rgba(195, 175, 119, .20);
+  box-shadow: inset 0 1px 0 rgba(232, 219, 178, .045), inset 0 -12px 28px rgba(0, 0, 0, .14);
+}
+#frontline {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(14, 17, 15, .36), rgba(122, 111, 72, .11) 50%, rgba(14, 17, 15, .36)),
+    repeating-linear-gradient(90deg, rgba(213, 193, 128, .055) 0 1px, transparent 1px 30px);
+  border-top: 1px solid rgba(212, 186, 111, .22);
+  border-bottom: 1px solid rgba(212, 186, 111, .22);
+  box-shadow: inset 0 14px 26px rgba(0, 0, 0, .20), inset 0 -14px 26px rgba(0, 0, 0, .20);
+}
+#sidePanel {
+  background: linear-gradient(180deg, #1e211e, #151816 45%, #1c1f1c);
+  border-left-color: rgba(201, 174, 105, .3);
+  box-shadow: -10px 0 26px rgba(0, 0, 0, .22);
+}
+#sidePanel .panel-head { background: linear-gradient(180deg, rgba(221, 202, 157, .06), transparent); }
+#handBar {
+  background:
+    linear-gradient(180deg, rgba(166, 143, 90, .12), transparent 12px),
+    linear-gradient(180deg, #1d211d, #101311);
+  border-top-color: rgba(221, 193, 119, .56);
+  box-shadow: 0 -10px 28px rgba(0, 0, 0, .58), inset 0 1px 0 rgba(250, 225, 168, .06);
+}
+.card { border-color: rgba(202, 184, 143, .25); }
+.card-cost { box-shadow: 0 2px 6px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 241, 196, .2); }
+.hq-card.mine { box-shadow: inset 0 0 24px rgba(0, 0, 0, .65), 0 0 0 1px rgba(154, 191, 128, .16), 0 4px 14px rgba(0, 0, 0, .52); }
+.hq-card.foe { box-shadow: inset 0 0 24px rgba(0, 0, 0, .65), 0 0 0 1px rgba(192, 124, 103, .14), 0 4px 14px rgba(0, 0, 0, .52); }
+.card.selected {
+  z-index: 8;
+  transform: translateY(-5px);
+  box-shadow: 0 0 0 2px #f0d58e, 0 0 18px rgba(216, 183, 74, .46), 0 8px 20px rgba(0, 0, 0, .62);
+}
+html.mobile-ui .hand > .card.selected {
+  box-shadow: 0 0 0 2px #f0d58e, 0 0 16px rgba(216, 183, 74, .44), 0 8px 18px rgba(0, 0, 0, .62);
+}
+.card.targetable,
+.hq-card.targetable {
+  border-color: #f4d789;
+  box-shadow: 0 0 0 2px rgba(244, 215, 137, .92), 0 0 16px rgba(216, 183, 74, .48);
+  animation: legalTarget 1.25s ease-in-out infinite alternate;
+}
+@keyframes legalTarget {
+  from { filter: brightness(1); }
+  to { filter: brightness(1.16); }
+}
+.card.playable {
+  box-shadow: 0 0 0 1px rgba(226, 193, 104, .9), 0 4px 14px rgba(201, 162, 39, .22);
+}
+.card.playable:hover,
+.hand > .card.playable:hover {
+  box-shadow: 0 0 0 2px #f0d58e, 0 0 20px rgba(216, 183, 74, .42), 0 12px 26px rgba(0, 0, 0, .68);
+}
+.slot.drop-ok,
+.slot.drop-target {
+  border-color: rgba(169, 213, 157, .8);
+  background: linear-gradient(145deg, rgba(111, 151, 92, .2), rgba(38, 57, 36, .5));
+  box-shadow: inset 0 0 20px rgba(137, 192, 117, .16), 0 0 14px rgba(137, 192, 117, .24);
+}
+.prompt {
+  background: linear-gradient(180deg, rgba(49, 43, 29, .98), rgba(27, 26, 22, .98));
+  border-color: rgba(226, 193, 104, .78);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .62), inset 0 1px 0 rgba(255, 239, 194, .07);
+}
+.turn-banner { background: none; position: fixed; isolation: isolate; }
+.turn-banner::before {
+  content: ''; position: absolute; z-index: -1; left: 0; right: 0; top: 42%; height: 16%;
+  background: linear-gradient(90deg, transparent, rgba(13, 15, 15, .92) 18%, rgba(24, 27, 24, .94) 50%, rgba(13, 15, 15, .92) 82%, transparent);
+  border-top: 1px solid rgba(211, 179, 97, .62); border-bottom: 1px solid rgba(211, 179, 97, .42);
+  box-shadow: 0 0 36px rgba(0, 0, 0, .5), inset 0 0 20px rgba(211, 179, 97, .08);
+}
+.turn-banner .tb-main { font-size: 36px; letter-spacing: 7px; }
+.turn-banner .tb-sub { color: #d0c39d; }
+#turnLabel.is-mine { color: #f0d58e; text-shadow: 0 0 12px rgba(216, 183, 74, .2); }
+#turnLabel.is-foe { color: #c3a49a; }
+#turnLabel.is-over { color: #d9cda8; }
+#endTurnBtn:disabled { filter: saturate(.35); box-shadow: none; }
+.card-action {
+  position: absolute; z-index: 20; right: 5px; bottom: 5px; min-width: 30px; min-height: 28px;
+  padding: 3px 7px; border: 1px solid rgba(230, 198, 111, .9); border-radius: 4px;
+  color: #f4e4b0; background: linear-gradient(180deg, rgba(76, 61, 31, .96), rgba(31, 29, 24, .98));
+  box-shadow: 0 2px 7px rgba(0, 0, 0, .65), inset 0 1px rgba(255, 244, 202, .16);
+  font-size: 11px; font-weight: 700; line-height: 1.1; cursor: pointer; touch-action: manipulation;
+}
+.card-action:active { transform: translateY(1px); filter: brightness(1.2); }
+.mulligan-toggle { left: 5px; right: auto; }
+.pick-grid .ghost.pick { background: linear-gradient(180deg, rgba(49, 43, 29, .94), rgba(27, 26, 22, .97)); }
+.pick-grid .pick-select {
+  min-height: 28px; margin-top: 2px; padding: 4px 12px; border: 1px solid rgba(222, 190, 103, .68);
+  border-radius: 4px; color: #f1dda2; background: linear-gradient(180deg, #51452a, #29271f);
+  box-shadow: inset 0 1px rgba(255, 245, 210, .12); font-weight: 700; cursor: pointer;
+}
+.pick-grid .pick-select:hover { border-color: #f1d27a; filter: brightness(1.12); }
+@media (max-width: 600px) {
+  .turn-banner .tb-main { font-size: 27px; letter-spacing: 4px; }
+  .turn-banner .tb-sub { font-size: 11px; letter-spacing: 2px; }
+  .card-action { min-width: 34px; min-height: 32px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card.targetable, .hq-card.targetable { animation: none; }
+}
+
+/* ==========================================================================
+   ★ 阵线卡宽自适应（2026-09-25，制作者提议"按阵线宽度调整卡牌大小"）：
+     ui.js fitFrontCards 按三条线（双方支援线 + 前线）的卡数算出都放得下的最大卡宽，
+     上限按视口高度分档（≥950→150 / ≥800→112 / 否则=基准），写到 #boardInner 的
+     --fl-card-w / --fl-card-h。卡少放大、满线 10 张自动收缩防溢出。
+     变量缺省回落 --card-w/--card-h → 手机与未启用路径**零影响**。
+     只作用于棋盘行内（手牌/tooltip/拖拽 ghost 不吃）。
+     异画对位 x/y/h 全百分比自动跟随；攻防/费用字号暂不跟随（150px 卡上略小可读）。
+   ========================================================================== */
+#boardInner .line-units .card,
+#boardInner .line-units .hq-card {
+  width: var(--fl-card-w, var(--card-w));
+  height: var(--fl-card-h, var(--card-h));
+}
+#boardInner .line-units .slot {
+  width: var(--fl-card-w, var(--card-w));
+  height: var(--fl-card-h, var(--card-h));
+}
+
+
+/* ★ 主国/盟国选择条（2026-09-25） */
+.nation-bar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:3px 6px; margin:2px 0 4px; }
+.nation-bar.off { opacity:.55; }
+.nation-bar .chk { display:inline-flex; align-items:center; gap:4px; font-size:12px; white-space:nowrap; }
+.nation-bar .chk input { min-width:0; width:13px; }
+.nation-bar select { flex:1 1 78px; min-width:0; font-size:12px; }
+#deckStats .deck-warn { color:#e06c5a; }
+#deckStats .muted { color:#8a8f98; }
+
+/* ★ 联机：房主"该发哪个地址"列表（2026-09-27，UU 加速器 / 虚拟局域网用）
+   房主建房后从服务器 /kg-net 拉本机所有网卡地址，按分类列出来，每条一个复制按钮。
+   UU / TAP 这类虚拟局域网地址标金色，提醒用户"跨网要发这条，别发物理局域网 IP"。 */
+.mp-addr-list { display:flex; flex-direction:column; gap:3px; font-size:11px; line-height:1.5; }
+.mp-addr-list.hidden { display:none; }
+.mp-addr-head { color:var(--dim); }
+.mp-addr { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.mp-addr .u { color:var(--text); font-family:ui-monospace, Menlo, Consolas, monospace; word-break:break-all; }
+.mp-addr .k { color:var(--gold); }
+.mp-addr .nm { color:#6f757f; }
+.mp-addr button.small { padding:1px 5px; font-size:10px; }
+
+/* ★★★ 桌面化 / 去"网页感"（2026-09-27，独立窗口版手感） ★★★
+   目标：玩起来像个桌面游戏，而不是一张网页 ——
+   · 打到一半拖鼠标不会把界面上任何文字"刷蓝选中"
+   · 卡图不会被当成图片拖走（浏览器原生拖拽 = 幽灵缩略图跟着跑）
+   · 滚动条从"系统灰条"变成嵌进暗色 UI 的窄条（原版里根本看不见滚动条） */
+/* ① 全局禁选中：对战/卡牌库/构筑全程不需要"选字"。
+   豁免：输入框 / 文本域 / 帮助页正文（.selectable 圈出来）——
+   分享码、卡面文本仍可手动选中复制。 */
+body { -webkit-user-select: none; user-select: none; }
+input, textarea, .selectable, .selectable * { -webkit-user-select: text; user-select: text; }
+/* 帮助页正文 / 战报 / 联机日志：允许选中复制（规则讲解、报错信息都可能要贴给别人看） */
+#screen-help, #screen-help *, #battleLog, #battleLog *, #mpLogList, #mpLogList * { -webkit-user-select: text; user-select: text; }
+/* ② 任何 <img> 都不当原生拖拽源（卡面已设，这里补全局：棋盘外的大图/头像/图标） */
+img { -webkit-user-drag: none; }
+/* ③ 拖牌时指针给"抓着"的反馈（dragging-card 由拖拽开始/结束统一挂摘） */
+body.dragging-card, body.dragging-card * { cursor: grabbing !important; }
+/* ④ 滚动条：默认几乎隐形，悬停/滚动时才亮出暗金细条 —— 原版里滚动条不存在于视觉
+   （桌面端才生效；手机端早已 display:none，别覆盖）。 */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(216,183,74,.18); border-radius: 5px; border: 2px solid transparent; background-clip: content-box; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(216,183,74,.4); border: 2px solid transparent; background-clip: content-box; }
+  ::-webkit-scrollbar-corner { background: transparent; }
+}
+
+/* ★★★ 手感层（2026-09-27）：对齐原版 KARDS 的"牌在手里、目标弹起来" ★★★ */
+/* ① 手牌 hover：上浮 + 放大 + 亮边。原版的手牌是"随时可拎"的，hover 没反馈就等于
+   桌面上没有这张牌。transition 只动 transform/box-shadow（不碰 FLIP 的位移动画）。 */
+.hand > .card { transition: transform .16s cubic-bezier(.2,.8,.3,1), box-shadow .16s ease, z-index 0s; }
+.hand > .card:hover {
+  transform: translateY(-16px) scale(1.16) rotate(0deg);
+  box-shadow: 0 14px 34px rgba(0,0,0,.65), 0 0 0 2px rgba(216,183,74,.55);
+}
+/* ② 拖拽攻击：目标在指针悬上来的瞬间"弹起来"接你（原版最关键的命中反馈），
+   比描边强一档 —— 玩家能确认"松手就是它"。 */
+.card, .hq-card { transition: transform .12s cubic-bezier(.2,.8,.3,1), box-shadow .12s ease; }
+.drop-target { transform: scale(1.07) !important; }
+.drop-target.can-hit { transform: scale(1.1) !important; }
+/* ③ 无效松手回弹时禁用过渡打架（flyGhostBack 自己管 left/top） */
+.drag-ghost { will-change: left, top, opacity; }
+
+/* ④ 按下即"拎起"：指针压到手牌/自己单位上的那一帧就有反馈，不用等拖出 6px。
+   （moved 之后由 ghost / aiming-from 接管，pressing 摘掉 —— 两段动画无缝衔接。） */
+.card.pressing {
+  transform: translateY(-8px) scale(1.06);
+  box-shadow: 0 12px 26px rgba(0,0,0,.6), 0 0 0 2px rgba(216,183,74,.65) !important;
+  z-index: 7;
+}
+
+/* ================================================================
+   原版观感 · 对战氛围重做（2026-09-27，参考原版 KARDS 对战截图）
+   目标：整个屏幕就是战场 —— 木桌 + 斜铺织锦桌布、锯齿中线、
+   扇形手牌、大号 HQ 卡；顶栏/侧栏在对局中自动收起（hover 展开）。
+   ★ 全部挂在 body.in-battle（renderBattle 里按"有对局且未结束"同步），
+     其他界面/导航态一概不受影响。只动视觉层，不碰任何判定逻辑。
+   ================================================================ */
+
+/* ---- A. 沉浸模式：收起页面 chrome ---- */
+#topbar { transition: transform .28s ease; z-index: 80; }
+body.in-battle #topbar { position: absolute; inset: 0 0 auto; transform: translateY(-100%); }
+/* 顶栏滑走后，屏幕上缘留 10px 热区：鼠标贴上去顶栏滑回来（不点击，零误触风险） */
+body.in-battle #topbar::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 10px;
+}
+body.in-battle #topbar:hover { transform: translateY(-100%); }
+
+#battle { position: relative; }
+body.in-battle #battle { grid-template-columns: minmax(0, 1fr) 0; }
+body.in-battle #sidePanel {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 262px; z-index: 65;
+  /* 收起只推 100%-30px：右缘留 30px 露出 ::before 把手（原来 translateX(100%)
+     把把手一起推出屏外，"hover 右缘展开"从未生效过，桌面只能靠 ☰ 开侧栏） */
+  transform: translateX(105%);
+  visibility: hidden;
+  transition: transform .3s ease;
+  box-shadow: -14px 0 34px rgba(0, 0, 0, .55);
+  border-left: 1px solid rgba(200, 162, 74, .3);
+}
+/* 右缘露一条 30px 把手（竖排字），鼠标碰上去整个面板滑出来 */
+body.in-battle #sidePanel::before {
+  content: none;
+  position: absolute; left: 2px; top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl; letter-spacing: 3px;
+  font-size: 12px; color: #cdbd92; opacity: .75;
+  padding: 14px 0;
+}
+body.in-battle #sidePanel:hover { transform: translateX(105%); }
+
+/* ---- B. 木桌 + 斜铺织锦桌布（纯 CSS，无图片素材） ---- */
+body.in-battle #screen-battle {
+  background:
+    radial-gradient(1400px 800px at 50% 40%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, .5) 100%),
+    /* 木桌面：横向板条 + 细木纹 */
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, .22) 0 2px, transparent 2px 90px),
+    repeating-linear-gradient(91deg, #241a10 0 3px, #2a1e12 3px 6px, #20160d 6px 9px, #2b2013 9px 14px),
+    linear-gradient(180deg, #221810, #170f09);
+}
+/* 中央斜铺的桌布：织物纹理 + 暗金斜边（z-index:-1 沉到战场内容之下） */
+body.in-battle #battle::before {
+  content: ''; position: absolute; inset: -3% -2%; z-index: -1;
+  background:
+    repeating-linear-gradient(48deg, rgba(255, 255, 255, .013) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-48deg, rgba(0, 0, 0, .05) 0 2px, transparent 2px 6px),
+    radial-gradient(1050px 640px at 50% 46%, #43392c 0%, #362d22 52%, #26201638 100%),
+    linear-gradient(160deg, #38302a, #29221b);
+  clip-path: polygon(7% 0, 100% 10%, 93% 100%, 0 88%);
+  box-shadow: 0 0 80px rgba(0, 0, 0, .45);
+}
+body.in-battle #battle::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0, 0, 0, .42) 100%);
+}
+
+/* ---- C. 战场容器弱化：卡牌直接"摆在桌上"，去掉条状容器感 ---- */
+body.in-battle .row-label { opacity: .55; letter-spacing: 2px; text-shadow: 0 1px 2px #000; }
+body.in-battle .board-row, body.in-battle .frontline-wrap {
+  background: transparent;
+  border-color: rgba(214, 178, 94, .14);
+  box-shadow: none;
+}
+body.in-battle #handBar { background: transparent; border-top-color: rgba(214, 178, 94, .12); }
+body.in-battle .hq-row { background: transparent; }
+body.in-battle .hq-row .pile { background: rgba(12, 10, 8, .55); border-color: rgba(200, 162, 74, .28); }
+
+/* ---- D. 锯齿中线（原版那种胶片齿孔分隔线） ---- */
+body.in-battle .frontline-bar {
+  background: transparent; border: none;
+  position: relative; height: 26px; overflow: visible;
+}
+body.in-battle .frontline-bar::before {
+  content: ''; position: absolute; left: 4%; right: 4%; top: 50%;
+  height: 5px; transform: translateY(-50%);
+  background: repeating-linear-gradient(90deg,
+    rgba(214, 178, 94, .55) 0 9px, transparent 9px 18px);
+  border-top: 1px solid rgba(0, 0, 0, .6);
+  border-bottom: 1px solid rgba(0, 0, 0, .6);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .7));
+}
+body.in-battle .frontline-bar > span {
+  position: relative; z-index: 1;
+  background: rgba(16, 13, 10, .82);
+  border: 1px solid rgba(200, 162, 74, .4);
+  border-radius: 4px;
+  padding: 1px 10px;
+  text-shadow: 0 1px 2px #000;
+}
+
+/* ---- E. HQ 大卡：原版那种竖版大总部卡（金边 + 深红织锦 + 金色大血量） ---- */
+body.in-battle .hq-card {
+  width: calc(var(--card-w) * 1.34);
+  height: calc(var(--card-h) * 1.3);
+  border: 2px solid rgba(214, 178, 94, .75);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 24%, #6a2620 0 26%, #471a15 58%, #230f0c 100%);
+  box-shadow: inset 0 0 34px rgba(0, 0, 0, .78), 0 8px 26px rgba(0, 0, 0, .65),
+    inset 0 0 0 1px rgba(255, 226, 160, .12);
+}
+body.in-battle .hq-card .hq-hp {
+  font-size: 46px; font-weight: 900; color: #f4c95d;
+  text-shadow: 0 2px 0 #3d2405, 0 0 24px rgba(244, 201, 93, .55);
+}
+body.in-battle .hq-card .hq-art { font-size: 30px; }
+body.in-battle .hq-card .hq-sub, body.in-battle .hq-card .hq-label { text-shadow: 0 1px 2px #000; }
+
+/* ---- F. 手牌扇形（--fan-r/--fan-y 由 layoutHandFan() 写到每张卡上） ---- */
+body.in-battle #myHand { overflow-y: visible; padding-top: 10px; }
+body.in-battle #myHand > .card {
+  transform: rotate(var(--fan-r, 0deg)) translateY(var(--fan-y, 0px));
+  transform-origin: 50% 130%;
+}
+body.in-battle #myHand > .card:hover {
+  transform: rotate(calc(var(--fan-r, 0deg) * .35))
+             translateY(calc(var(--fan-y, 0px) - 18px)) scale(1.14);
+}
+body.in-battle #myHand > .card.pressing {
+  transform: rotate(calc(var(--fan-r, 0deg) * .5))
+             translateY(calc(var(--fan-y, 0px) - 10px)) scale(1.06);
+}
+/* 扇形下边缘卡会往下溢：给手牌条留出溢出空间，别被裁切 */
+body.in-battle #handBar { overflow: visible; }
+
+/* ---- B2. 背景修正（首版截屏发现：#boardScroll 不透明背景把木纹/布纹全盖住了） ----
+ * isolation: isolate 让 #screen-battle 自己成为 stacking context ——
+ * #battle::before 的 z-index:-1 才能正确夹在「#screen-battle 背景」之上、「战场内容」之下。 */
+body.in-battle #screen-battle { isolation: isolate; }
+body.in-battle #boardScroll {
+  background: transparent;
+  box-shadow: none;
+}
+body.in-battle #handBar {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ---- B3. 背景修正二（#frontline 用 ID 定义背景，specificity 压过 class 规则；布纹调形提亮） ---- */
+body.in-battle #frontline {
+  background: transparent;
+  border-top-color: rgba(214, 178, 94, .14);
+  box-shadow: none;
+}
+body.in-battle .board-row { border-color: rgba(214, 178, 94, .10) !important; }
+body.in-battle .side.mine .board-row, body.in-battle .side.foe .board-row { box-shadow: none; }
+body.in-battle .fl-line {
+  background: repeating-linear-gradient(90deg, rgba(201, 162, 39, .03) 0 14px, rgba(201, 162, 39, .055) 14px 28px);
+}
+/* 布纹重画：收窄铺面多露木桌，中央提一点暖光（对准 HQ 与前线的视觉焦点） */
+body.in-battle #battle::before {
+  background:
+    repeating-linear-gradient(48deg, rgba(255, 255, 255, .016) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-48deg, rgba(0, 0, 0, .06) 0 2px, transparent 2px 6px),
+    radial-gradient(900px 560px at 50% 44%, #4c4132 0%, #3b3226 55%, #2a2318 100%),
+    linear-gradient(160deg, #3a322a, #2a231a);
+  clip-path: polygon(15% 3%, 99% 15%, 86% 99%, 1% 85%);
+}
+
+/* ---- B4. 细节：暗角收轻（别糊成一团黑）、「你的回合」横幅改原版金色 ---- */
+body.in-battle #battle::after {
+  background: radial-gradient(120% 90% at 50% 50%, transparent 62%, rgba(0, 0, 0, .3) 100%);
+}
+body.in-battle .turn-banner.mine .tb-main {
+  color: #f2d489;
+  text-shadow: 0 0 34px rgba(242, 212, 137, .5), 0 4px 18px rgba(0, 0, 0, .9);
+}
+
+/* ---- G. 手牌居中（原版手牌在底部中央；auto 边距法保证卡多溢出时仍能滚动到最左） ---- */
+body.in-battle #myHand > .card:first-child { margin-left: auto; }
+body.in-battle #myHand > .card:last-child { margin-right: auto; }
+
+/* ---- H. 结束回合按钮：左边缘垂直居中（制作者 2026-09-27；原右侧 turn-box 不再放它） ----
+   ⚠ 不能用 translate(-50%) 之外的依赖：按钮 hover 无 transform，Y 居中用 translateY 安全。 */
+body.in-battle #endTurnBtn {
+  position: fixed; left: auto; right: 24px; top: 50%; transform: translateY(-50%);
+  z-index: 9; margin: 0;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .55);
+}
+/* 换牌阶段不挪（还在手牌条原位，避免和中间大卡/提示条抢视线） */
+html:not(.mobile-ui) body.mulligan-phase #endTurnBtn {
+  position: static; transform: none; box-shadow: none;
+}
+
+/* ================================================================
+   原版观感 · 准备阶段（mulligan）换牌（2026-09-27）
+   换牌时手牌以大尺寸呈现在屏幕中间；确认后 JS FLIP 平滑落回手牌区。
+   body.mulligan-phase 由 renderMulligan() toggle。
+   ================================================================ */
+/* ① 换牌阶段：手牌放大提到屏幕中间（fixed 居中，脱离 handBar 底部）。
+   只作用于桌面端；手机保持原换牌交互。 */
+html:not(.mobile-ui) body.mulligan-phase #handBar {
+  background: transparent; border-top-color: transparent; box-shadow: none;
+}
+html:not(.mobile-ui) body.mulligan-phase .hand {
+  position: fixed; left: 50%; bottom: 38vh; transform: translateX(-50%);
+  flex: 0 0 auto; overflow: visible; padding: 0; gap: 20px; z-index: 6;
+}
+/* ⚠ 尺寸必须用 #myHand 声明：下面 ③ 的 #myHand 是 ID 规则，.hand 上的变量会被它压掉 */
+html:not(.mobile-ui) body.mulligan-phase #myHand {
+  --card-w: 152px; --card-h: 214px;   /* 换牌大图形态 */
+}
+/* ② 提示条跟到中间手牌下方（确认按钮就在眼前） */
+html:not(.mobile-ui) body.mulligan-phase #mulliganBar {
+  position: fixed; left: 50%; bottom: 29vh; transform: translateX(-50%);
+  width: auto; max-width: 82vw; margin: 0; z-index: 7;
+  background: linear-gradient(180deg, rgba(20,26,22,.92), rgba(14,18,15,.92));
+  border-color: rgba(120, 200, 150, .45); backdrop-filter: blur(4px);
+}
+
+/* ③ 正常对局：手牌区的卡放大一档（约 1.18x，布局/间距自动跟上）。
+   基准值与全局断点一一对应，断点缩放不脱节。 */
+html:not(.mobile-ui) #myHand { --card-w: calc(104px * 1.18); --card-h: calc(146px * 1.18); }
+@media (max-height: 900px) { html:not(.mobile-ui) #myHand { --card-w: calc(96px * 1.18); --card-h: calc(135px * 1.18); } }
+@media (max-height: 820px) { html:not(.mobile-ui) #myHand { --card-w: calc(88px * 1.18); --card-h: calc(124px * 1.18); } }
+@media (max-height: 720px) { html:not(.mobile-ui) #myHand { --card-w: calc(78px * 1.18); --card-h: calc(110px * 1.18); } }
+
+/* ================================================================
+   原版观感 · 选卡面板居中（2026-09-27）
+   对战中所有「从一组卡/选项里挑一个」的请求（pick-grid 卡面网格 / 文字按钮），
+   面板从底部提示条挪到屏幕正中 + 背景暗化；**选手牌（点手牌）与
+   选场上单位（点棋盘）不动**。body.picking-center 由 renderPrompt() toggle。
+   ================================================================ */
+/* ⚠ 暗化层原来写在 body.picking-center::before（根层叠上下文 z7）——**已作废并移到
+   文件末尾**：#prompt 被 #screen-battle{isolation:isolate} 困在自己的 stacking context
+   里，z-index:8 出不去，body 级的 z7 反而盖在面板上把候选卡的点击全吃掉了。
+   详见文末「修『开发/抉择/选牌』选卡面板点不中（2026-09-28）」段。 */
+html:not(.mobile-ui) body.picking-center #prompt {
+  position: fixed; inset: 0; margin: auto;   /* 不用 transform 居中：避开 promptIn 动画的 transform 冲突 */
+  width: max-content; height: max-content;
+  max-width: min(76vw, 820px); max-height: 72vh; overflow: auto;
+  z-index: 8; padding: 14px 18px;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, .65), 0 0 0 1px rgba(216, 183, 74, .25);
+  backdrop-filter: blur(6px);
+}
+/* ② 选卡面板 = 换牌同款（制作者 2026-09-27）：有卡面网格时面板"素面"——
+   摘掉面板背景/边框，大卡直接浮在暗化遮罩上；无按钮无标签，点卡即选。 */
+html:not(.mobile-ui) body.picking-center #prompt.pick-plain {
+  background: transparent; border: 0; box-shadow: none; backdrop-filter: none;
+  max-width: 92vw;
+}
+html:not(.mobile-ui) body.picking-center .pick-grid { gap: 26px; margin-top: 12px; }
+html:not(.mobile-ui) body.picking-center .pick-grid .ghost.pick {
+  border: 0; background: none; padding: 0; max-width: none;
+}
+html:not(.mobile-ui) body.picking-center .pick-grid .card {
+  width: 152px; height: 214px;                /* 换牌大图同款尺寸 */
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .6);
+}
+html:not(.mobile-ui) body.picking-center .pick-grid .ghost.pick.has-card { cursor: pointer; }
+html:not(.mobile-ui) body.picking-center .pick-grid .ghost.pick.has-card:hover .card {
+  transform: translateY(-12px) scale(1.06);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .7), 0 0 0 2px var(--gold), 0 0 22px rgba(216, 183, 74, .45);
+}
+
+/* ================================================================
+   导航打通（2026-09-27，制作者：对战界面根本没法和原本的界面连接）
+   常驻「☰」按钮：一键同时滑出侧栏 + 下拉顶栏（nav 回到卡组/卡牌库/规则），再点收起。
+   ================================================================ */
+#sidePinBtn { display: none; }
+/* ★ 2026-10-02 修「胜利/失败后右侧侧边栏消失」：原来只有 body.in-battle 才显示 ☰，
+   而对局一结束 renderBattle 就摘 in-battle（退出沉浸模式）→ ☰ display:none。
+   手机端另一个入口 #sideToggle 早被改版二号藏了 → **对局结束后没有任何按键能
+   拉出侧边栏**，而「重开」按钮就在侧边栏里 = 卡死在结算画面。
+   补充条件：只要还在对战屏（data-screen="battle"，show() 维护）就显示 ☰，
+   对局结束（in-battle 已摘）也照常可用；切去卡组/卡牌库等屏自动消失。 */
+body.in-battle #sidePinBtn,
+body[data-screen="battle"]:not(.in-battle) #sidePinBtn {
+  display: flex; position: fixed; right: 12px; top: 12px; z-index: 85;
+  width: 36px; height: 36px; align-items: center; justify-content: center;
+  border-radius: 8px; cursor: pointer;
+  background: rgba(14, 17, 21, .82); border: 1px solid rgba(216, 183, 74, .5);
+  color: #e8d5a8; font-size: 17px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .5);
+}
+body.in-battle #sidePinBtn:hover,
+body[data-screen="battle"]:not(.in-battle) #sidePinBtn:hover { border-color: var(--gold); color: #fff; }
+body.in-battle.side-pinned #sidePinBtn { background: rgba(50, 40, 18, .92); }
+body.in-battle.side-pinned #topbar { transform: translateY(0); }
+body.in-battle.side-pinned #sidePanel,
+html.mobile-ui body.in-battle.side-open #sidePanel { transform: translateX(0); visibility: visible; }
+
+/* ================================================================
+   ★ 手机：选卡面板居中（2026-09-27 修"抉择候选卡选不了 / 卡在左上"）
+   桌面同日已加 picking-center 居中样式，但全部挂在 html:not(.mobile-ui) 下
+   —— 手机分支的 #prompt 仍是"浮在手牌上方"的绝对定位：844×390 矮视口里
+   面板顶被裁、候选卡整组卡在左上角（真机探针实测 rect y=-16）。
+   这里对齐桌面观感：面板正中 + 大阴影。
+   ⚠ **不加 body::before 暗化层**：#prompt 在 fitBoardScale 缩放过的
+     #boardInner（transform）里，z 被困在它的上下文内——任何 body 级
+     正 z 背景都会盖在面板上把候选卡的点击全吃掉（真机探针实测）。
+   ⚠ 特异性 (1 id,2 class,2 type) 压过 `html.mobile-ui #prompt`(1,1,1) 的
+     absolute/bottom 定位，无需 !important。
+   ================================================================ */
+/* ⚠ side-open 给 #handBar 的 brightness filter 会把它变成 fixed 后代的
+   containing block —— 抽屉开着时居中面板会被劫持进 96px 高的手牌条里。
+   （桌面没有这条 filter，手机必须摘掉。） */
+html.mobile-ui body.picking-center #handBar,
+html.mobile-ui body.picking-center #boardScroll { filter: none; }
+html.mobile-ui body.picking-center #prompt {
+  position: fixed; inset: 0; margin: auto;
+  width: max-content; height: max-content;
+  max-width: 94vw; max-height: 80vh; overflow: auto;
+  z-index: 41; padding: 10px 14px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .6), 0 0 0 1px rgba(216, 183, 74, .22);
+}
+html.mobile-ui body.picking-center #prompt.pick-plain {
+  background: transparent; border: 0; box-shadow: none;
+  max-width: 96vw;
+}
+html.mobile-ui body.picking-center .pick-grid { gap: 14px; margin-top: 8px; }
+html.mobile-ui body.picking-center .pick-grid .ghost.pick {
+  border: 0; background: none; padding: 0; max-width: none;
+}
+html.mobile-ui body.picking-center .pick-grid .card {
+  width: 120px; height: 168px;                /* 桌面 152×214 的手机档（390 高放得下） */
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .6);
+}
+html.mobile-ui body.picking-center .pick-grid .ghost.pick.has-card { cursor: pointer; }
+
+/* ================================================================
+   ★ 桌面：侧栏收起动画期间锁住 :hover（2026-09-27 修"收不回去"配套）
+   根因（真机探针实锤）：#sidePinBtn 原在 #screen-battle 内，被 3205 行
+   isolation: isolate 困进 stacking context（z85 出不来），对战点☰展开后
+   顶栏滑回（z80, root context）反而盖住按钮 → 第二次点击被顶栏 poolInfo
+   吃掉 → toggle('side-pinned') 不执行 → 面板永远开着。
+   按钮已搬至 #app 直下（见 index.html）。这里补次生坑：收起动画 300ms 内
+   面板仍在屏内，鼠标路过右侧会命中 :hover 把面板又拉出来 → side-closing
+   期间 :hover 不再展开（特异性 1,3,1 压过 3106 的 1,2,1）。
+   JS 侧（ui.js ☰ handler）在收起时加 side-closing、420ms 后摘除；
+   重新展开时立即摘除，否则面板会开不出来。
+   ================================================================ */
+body.in-battle.side-closing #sidePanel:hover { transform: translateX(105%); }
+
+/* Desktop battle HUD: one kredit display, quiet counters and a clear right-hand action. */
+html:not(.mobile-ui) body.in-battle .side.mine .hq-row .pile:first-child { display: none; }
+html:not(.mobile-ui) body.in-battle .hq-row .pile {
+  background: transparent; border: 0; box-shadow: none; min-width: 42px;
+}
+html:not(.mobile-ui) body.in-battle .row-label { opacity: .6; font-size: 11px; letter-spacing: 1px; }
+html:not(.mobile-ui) body.in-battle .board-row { padding-right: 120px; }
+html:not(.mobile-ui) body.in-battle #myKreditRail { position: fixed; right: 28px; bottom: 28px; z-index: 10; }
+html:not(.mobile-ui) body.in-battle #endTurnBtn {
+  width: 106px; min-height: 54px; padding: 10px 8px; border-radius: 4px;
+  font-size: 16px; font-weight: 700; white-space: nowrap;
+}
+html:not(.mobile-ui) body.in-battle #endTurnBtn:disabled { opacity: .5; box-shadow: none; }
+
+/* mobile 抽屉收起态维持原观感（全隐藏、不响应 hover）：3090 的 body.in-battle
+   #sidePanel 与 1995 的 html.mobile-ui #sidePanel 特异性同为 (1,1,1)，后写的
+   3092 收起值实际也在给 mobile 供值——桌面"露 30px 把手"会顺带让窄屏右缘
+   常驻一条 30px 面板边并响应 hover 弹出。这里钉死 mobile：收起 = 104% 全隐藏。
+   ⚠ 必须带 :not(.side-open)，否则会压过 2001 的展开规则（type 计数更高）。 */
+html.mobile-ui body.in-battle:not(.side-open) #sidePanel { transform: translateX(104%); }
+html.mobile-ui body.in-battle:not(.side-open) #sidePanel:hover { transform: translateX(104%); }
+
+/* ================================================================
+   ★ 网页版废弃标注（2026-09-27，Alan：「网页版已经废弃，做好标注」）
+   桌面壳（Electron）与纯浏览器共用本页 —— ui.js 按 UA 判别：
+   UA 含 Electron = 桌面版，横幅不显示（hidden 不摘）；纯浏览器 = 显示。
+   fixed 挂顶、z 90（压过 topbar 80，低于 sidePinBtn 85 之外的所有 UI）；
+   对战沉浸（body.in-battle）时藏起，别往战场里杵一条警示带。
+   ================================================================ */
+#webDeprecated {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 5px 14px;
+  background: linear-gradient(90deg, rgba(84, 44, 8, .96), rgba(64, 32, 6, .96));
+  border-bottom: 1px solid rgba(216, 183, 74, .55);
+  color: #ffe9bd; font-size: 12.5px; letter-spacing: .5px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .5);
+  pointer-events: auto;
+}
+#webDeprecated .wd-text b { color: #ffd166; }
+#webDeprecated #webDepClose {
+  flex: 0 0 auto; border: 1px solid rgba(216, 183, 74, .4); background: rgba(0, 0, 0, .25);
+  color: #cdbd92; font-size: 11px; padding: 1px 7px; border-radius: 4px; cursor: pointer;
+}
+#webDeprecated #webDepClose:hover { color: #fff; border-color: var(--gold); }
+/* ★ 不写 body.in-battle 时隐藏 —— 页面加载即自动开局（mulligan-phase），那等于永远不显示。
+   改为：每次加载显示 8 秒自动淡出（ui.js 定时加 .wd-fade），✕ 可立即关（本会话不再出）。 */
+#webDeprecated { transition: opacity .5s ease; }
+#webDeprecated.wd-fade { opacity: 0; pointer-events: none; }
+
+/* ================================================================
+   ★ 修「开发 / 抉择 / 选牌」选卡面板的候选卡点不中（2026-09-28）
+   ------------------------------------------------------------------
+   症状：面板能看到（被压暗），但候选卡**完全点不动**。
+   根因（CDP 真机探针实锤，脚本 _audit/probe_picking_hit.js）：
+     暗化层原先挂在 body.picking-center::before（**根**层叠上下文，z-index:7），
+     而 #prompt 在 #screen-battle 里，后者被 3207 行的
+     `body.in-battle #screen-battle { isolation: isolate }` 变成了 stacking context
+     → #prompt 的 z-index:8 只在 #screen-battle 内部排序，**出不去**；
+     整个 #screen-battle 在根上下文里算 z=auto(0)，于是 z7 的暗化层反而盖在面板之上。
+     探针结果：elementFromPoint(候选卡中心) → body；真实派发鼠标点击 → 收到 0 次 click。
+   修法：暗化层搬进 #screen-battle 内部（::before），与 #prompt **同一个**层叠上下文里
+     比大小 —— 遮罩 86 < 面板 87，候选卡重新可点；同时遮罩仍盖住棋盘/手牌/侧栏（内部
+     最高 z78），"挡误点"的原意不变。
+   ⚠ z 值口径：86/87 只在 #screen-battle 内部有意义；外部（顶栏 z80、飞行层 z90+、
+     tooltip z9999）在根上下文里依旧浮于其上，与改动前一致，别拿这些值跨层比较。
+   ⚠ 这是 isolation 坑的第二次发作（第一次：#sidePinBtn 被困 → 被顶栏盖住 → 侧栏收不回，
+     见 3390 段）。**在 #screen-battle 里做任何"全屏浮层"前，先想清楚 z 出不出去。**
+   ================================================================ */
+html:not(.mobile-ui) body.picking-center #screen-battle::before {
+  content: ''; position: fixed; inset: 0; background: rgba(5, 7, 9, .55);
+  z-index: 86;   /* 暗化 + 挡住战场/侧栏（内部最高 78）的误点 */
+}
+html:not(.mobile-ui) body.picking-center #prompt {
+  z-index: 87;   /* 必须高于上面的暗化层，否则候选卡的点击被它吃掉 */
+}
+
+/* ================================================================
+   ★ 页面内输入框 .kg-ask（2026-09-29）：顶掉 Electron 里废掉的 prompt()
+   ------------------------------------------------------------------
+   背景：Electron 的 Chromium **不支持 prompt()** —— `typeof prompt === 'function'`
+   是 true 但一调用就抛 `Uncaught Error: prompt() is not supported`（实测 ui.js 卡组
+   「导入代码」）。ui.js 里改成自造模态输入框 askText()，样式就是这一段。
+   ⚠ 两条硬约束：
+     ① 浮层挂 **document.body**，不要挂进 #screen-battle（那边有 isolation:isolate，
+        z-index 出不去，这坑已发作两次 —— #sidePinBtn、#prompt）。
+     ② z-index 400：压过顶栏 z80 / #webDeprecated z90 / 飞行层 z90+；
+        够不着 tooltip z9999，但模态打开时不会有 tooltip，不影响。
+   非对战界面（卡组构筑）的控件本来就吃不到皮肤段，所以输入框在这里**显式描边配色**，
+   不依赖 `button.primary/.ghost` 之外的继承（那两个类是有的，直接复用）。
+   ================================================================ */
+.kg-ask-mask {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(5, 7, 9, .62);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.kg-ask {
+  width: min(560px, 100%); max-height: 100%;
+  display: flex; flex-direction: column; gap: 10px;
+  background: linear-gradient(180deg, #1f232b, #15181d);
+  border: 1px solid rgba(200, 162, 74, .38);
+  border-radius: 10px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .62), inset 0 1px 0 rgba(255, 255, 255, .04);
+  padding: 16px 18px;
+}
+.kg-ask-title {
+  color: #eadfc4; font-size: 15px; font-weight: 700; letter-spacing: 1px;
+}
+.kg-ask-label { color: #b9c0cb; font-size: 13px; }
+/* ★ 确认框（askConfirm）正文：要能滚 —— 删除内置卡的确认文案带卡片清单式长文本，
+   手机横屏 435px 高下不滚会把按钮顶出屏幕，看着像"按钮点不到"。 */
+.kg-ask-body {
+  color: #b9c0cb; font-size: 13px; line-height: 1.55;
+  white-space: pre-wrap; word-break: break-word;
+  max-height: 46vh; overflow: auto;
+}
+.kg-ask-acts button.danger {
+  background: #7a2320; border-color: #b4453c; color: #ffd9d0;
+}
+.kg-ask-acts button.danger:hover { background: #8f2b26; }
+.kg-ask-field {
+  width: 100%; font: inherit; color: var(--text);
+  background: #10131a;
+  border: 1px solid var(--line, #333844);
+  border-radius: 6px;
+  padding: 8px 10px;
+  outline: none;
+  resize: vertical;
+}
+.kg-ask-field:focus {
+  border-color: rgba(226, 196, 119, .7);
+  box-shadow: 0 0 0 2px rgba(200, 162, 74, .16);
+}
+textarea.kg-ask-field { min-height: 120px; line-height: 1.5; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+.kg-ask-field[readonly] { color: #cfd5de; background: #0d1015; }
+.kg-ask-hint { color: var(--dim, #9aa1ad); font-size: 12px; line-height: 1.5; }
+.kg-ask-acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 2px; }
+.kg-ask-acts button { padding: 7px 16px; }
+
+/* ==========================================================================
+   ★★★ 手机端改版二号（2026-10-02 Alan 指示）：
+     ① 顶边栏整条取消 → 导航全部走左侧抽屉（对战/卡牌库/卡组构筑/界面设置）
+     ② 手牌区缩小，高度让给战场（--hand-* 变量整体下调）
+     ③ 新增「界面设置」屏（音效音量 + 界面大小，菜单系界面 zoom）
+     ④ 上下白边 → html 深色底 + overscroll 关闭（APK WebView 溢出滚动露白）
+   桌面全部不受影响（全部包在 html.mobile-ui 作用域里）。
+   ========================================================================== */
+
+/* ---------- ① 顶边栏取消，菜单键浮出 ---------- */
+html.mobile-ui #topbar { display: none; }
+/* ☰ 浮动菜单键：挂 #app 直下（不在被隐藏的 topbar 里），左上角常驻 */
+html.mobile-ui #navDrawerBtn {
+  position: fixed; top: 8px; left: 8px; z-index: 96;
+  width: 34px; height: 34px; padding: 0;
+  align-items: center; justify-content: center;
+  font-size: 16px; border-radius: 8px;
+  background: rgba(25, 28, 34, .92); border: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+}
+/* 工具组（⛶全屏 / ★设置）同样浮出右上角；★设置 与右侧常驻 ☰ 重复 → 藏掉它 */
+html.mobile-ui #mobileTools {
+  position: fixed; top: 8px; right: 8px; z-index: 96;
+  gap: 4px; margin-left: 0;
+}
+html.mobile-ui #sideToggle { display: none; }
+/* 抽屉：顶栏没了，从屏幕顶端下拉展开；桌面端补一条 display:none 兜底
+   （旧规则只在 html.mobile-ui 作用域里定义过 display，桌面一直裸奔只是没人看见） */
+#navDrawer { display: none; }
+html.mobile-ui #navDrawer {
+  top: 48px; min-width: 148px; padding: 8px; gap: 2px;
+  border-radius: 0 10px 10px 0; border-top: 1px solid var(--brass-dim);
+}
+html.mobile-ui body.nav-open #navDrawer { display: flex; }
+html.mobile-ui #navDrawer button {
+  padding: 11px 14px; font-size: 14px; border-radius: 7px;
+}
+html.mobile-ui #navDrawer button.active { color: #ffe9b8; background: #2a2f39; border-color: var(--brass-dim); }
+
+/* ---------- ② 手牌区缩小，高度让给战场 ----------
+   手牌 162→136 高、露出 78→58；战场因此多出 ~20px，fitBoardScale 会自动放大棋盘 */
+html.mobile-ui {
+  --hand-card-w: 100px;
+  --hand-card-h: 136px;
+  --hand-vis: 58px;
+}
+html.mobile-ui .hand .card { box-shadow: 0 -2px 8px rgba(0, 0, 0, .45); }
+
+/* ---------- ③ 界面设置屏 ---------- */
+#screen-settings { display: none; }
+#screen-settings.active { display: flex; }
+html.mobile-ui #screen-settings.active { display: flex; }
+#screen-settings .settings-wrap {
+  margin: auto; width: min(92vw, 420px); padding: 24vh 0 0;
+}
+#screen-settings .settings-card {
+  background: linear-gradient(180deg, #1d2128, #14171c);
+  border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px 14px;
+}
+#screen-settings h3 { margin: 0 0 14px; color: var(--brass, #e2c477); font-size: 17px; }
+#screen-settings .set-row {
+  display: flex; align-items: center; gap: 10px; margin: 12px 0;
+}
+#screen-settings .set-row label { flex: 0 0 auto; width: 4.5em; color: var(--text); font-size: 13px; }
+#screen-settings .set-row input[type="range"] { flex: 1 1 auto; accent-color: var(--brass, #e2c477); }
+#screen-settings .set-val { flex: 0 0 3.2em; text-align: right; color: var(--dim, #9aa1ad); font-size: 12px; font-variant-numeric: tabular-nums; }
+#screen-settings .hint { margin: 10px 0 0; font-size: 11px; line-height: 1.6; }
+
+/* 「界面大小」zoom：只作用于菜单系界面（对战固定 —— 缩放会破坏拖拽判定） */
+html.mobile-ui #screen-decklib,
+html.mobile-ui #screen-collection,
+html.mobile-ui #screen-deck,
+html.mobile-ui #screen-editor,
+html.mobile-ui #screen-settings {
+  zoom: var(--ui-zoom, 1);
+}
+
+/* ---------- ④ 上下白边 ----------
+   html 深色底：APK WebView 溢出回弹 / 过滚动时露的是 html 的背景色，
+   原来没设 → 白。再关掉回弹，从根上不让它滚出去。 */
+html { background: #0f1114; overscroll-behavior: none; }
+body { overscroll-behavior: none; }
+
+/* ---------- 手机改版二号补丁：浮动键避开战场数据贴片（2026-10-02） ----------
+   顶栏取消后战场从 y=0 开始，右上角是敌方数据贴片（0K/手牌/牌库）——
+   ⛶全屏 和 ☰常驻键原来浮在那儿正好压住数字。改：工具键收进左上菜单键下方
+   竖排；右侧 ☰ 下移到贴片下方。 */
+html.mobile-ui #mobileTools {
+  top: 50px; left: 8px; right: auto;
+  flex-direction: column; gap: 6px;
+}
+html.mobile-ui body.in-battle #sidePinBtn,
+html.mobile-ui body[data-screen="battle"]:not(.in-battle) #sidePinBtn {
+  top: 64px; right: 8px;
+}
+
+/* ---------- 手机改版三号（2026-10-02 Alan）---------- */
+/* ① 换牌条不做长条：缩成方框收在左下角（手牌层上方），竖排文案+按钮 */
+html.mobile-ui #mulliganBar,
+html.mobile-ui .mulligan-bar {
+  position: fixed; left: 8px; bottom: calc(var(--hand-vis, 58px) + 12px);
+  right: auto; top: auto; width: max-content; max-width: 44vw;
+  flex-direction: column; align-items: flex-start; gap: 6px;
+  margin: 0; padding: 8px 10px; border-radius: 10px;
+  background: rgba(22, 32, 26, .94);
+  border: 1px solid rgba(120, 200, 150, .4);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .55);
+  z-index: 88;
+}
+html.mobile-ui .mulligan-bar span { font-size: 11px; line-height: 1.5; white-space: normal; }
+html.mobile-ui .mulligan-bar button { padding: 6px 12px; font-size: 12px; }
+
+/* ---------- 手机改版三号补丁②（修订 2026-10-02）：非选牌的纯文字提示 → 左下角方框 ----------
+   ★ 用 body:not(.picking-center) 区分，**不依赖 :has()**（旧版用 :has 会在不支持的
+   WebView 上整条失效 → 真机提示退回长条）。选牌面板（body.picking-center，含 pick-grid）
+   居中大网格原样，不动。 */
+html.mobile-ui body:not(.picking-center) #prompt,
+html.mobile-ui body:not(.picking-center) .prompt {
+  position: fixed; left: 8px; bottom: calc(var(--hand-vis, 58px) + 12px);
+  right: auto; top: auto; width: max-content; max-width: 60vw;
+  flex-direction: column; align-items: flex-start; gap: 6px;
+  margin: 0; padding: 8px 10px; border-radius: 10px;
+  max-height: 55vh; overflow: auto;
+  background: rgba(20, 24, 20, .94);
+  border: 1px solid rgba(216, 183, 74, .45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .55);
+  z-index: 88;
+}
+html.mobile-ui body:not(.picking-center) .prompt > span,
+html.mobile-ui body:not(.picking-center) .prompt > div { font-size: 11px; line-height: 1.5; white-space: normal; }
+
+/* ---------- 手机改版三号补丁③：换牌（mulligan）阶段仿 PC 居中 + 平滑移动 ----------
+   body.mulligan-phase 由 renderMulligan() toggle。手牌固定居中大图；确认后由
+   confirmMulligan() 的 FLIP（captureHandRects/flyHandToBar）平滑落回手牌区。
+   mulliganBar 也跟到中间手牌下方（覆盖补丁②的方框规则，特异性更高）。
+
+   ⚠⚠ 竖屏是重灾区（2026-10-02 真机反馈"还是不居中"）：.hand 宽 = 4 张 116px + 3 个
+   负 margin ≈ 388px，**竖屏视口只有 390/412px 宽** → 横向溢出被压到 x≈0 贴边，
+   看着就是"没居中"。且 vh-based 的 bottom 在竖屏（844 高）把手牌推到屏幕中上部。
+   修法（横竖屏通吃）：
+     ① 手牌容器用 left:0;right:0 + justify-content:center —— flex 居中不依赖内容宽度，
+        溢出时两侧对称溢出仍是"居中"的（不像 translateX(-50%) 会整体偏出）。
+     ② 卡宽按视口宽度夹紧：min(116px, (100vw - 24px) / 4)，4 张牌永远塞得下。
+     ③ 竖屏时 bottom 改小（竖屏屏幕高，手牌该靠中间偏上），用 max-height 媒询切。 */
+html.mobile-ui body.mulligan-phase #handBar {
+  background: transparent; border-top-color: transparent; box-shadow: none;
+}
+html.mobile-ui body.mulligan-phase .hand {
+  position: fixed; left: 0; right: 0; bottom: 40vh;
+  transform: none;                    /* 不用 translateX(-50%)，改 flex 居中（见上） */
+  flex: 0 0 auto; overflow: visible; padding: 0; gap: 10px; z-index: 6;
+  height: auto;   /* ⚠ 覆盖手机 .hand 的 height:100%——fixed 后它参照视口撑满整屏（实测贴顶被裁） */
+  justify-content: center; align-items: flex-end; flex-wrap: nowrap;
+}
+/* 卡宽夹紧：4 张 + 间距必须 ≤ 视口宽，否则竖屏溢出贴边 */
+html.mobile-ui body.mulligan-phase .hand {
+  --hand-card-w: min(116px, calc((100vw - 30px) / 4));
+  --hand-card-h: calc(var(--hand-card-w) * 1.4);
+}
+/* 手机卡尺寸走 --hand-card-w/h；只把负 margin 叠放松开一些，换牌阶段摊开便于逐张点「换」 */
+html.mobile-ui body.mulligan-phase .hand > .card { margin-left: -14px; }
+html.mobile-ui body.mulligan-phase .hand > .card:first-child { margin-left: 0; }
+html.mobile-ui body.mulligan-phase #mulliganBar {
+  position: fixed; left: 50%; bottom: 12vh; transform: translateX(-50%);
+  width: auto; max-width: 92vw; margin: 0; z-index: 7;
+  background: linear-gradient(180deg, rgba(20,26,22,.92), rgba(14,18,15,.92));
+  border-color: rgba(120,200,150,.45);
+}
+/* 竖屏：视口高 → 手牌带（40vh 太高）压到 26vh，提示条跟到 6vh，两者都留得下战场 */
+@media (orientation: portrait) {
+  html.mobile-ui body.mulligan-phase .hand { bottom: 26vh; }
+  html.mobile-ui body.mulligan-phase #mulliganBar { bottom: 6vh; }
+}

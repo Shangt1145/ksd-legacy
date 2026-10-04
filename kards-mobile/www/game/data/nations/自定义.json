@@ -1,0 +1,58 @@
+{
+ "nation": "自定义",
+ "cards": {
+  "custom/new-mulelwt6-550": {
+   "id": "custom/new-mulelwt6-550",
+   "src": "自定义/空中霸权.png",
+   "art": "../自定义/空中霸权.png",
+   "name": "空中霸权",
+   "set": "自定义",
+   "sub": "",
+   "system": null,
+   "cardType": "order",
+   "unitType": null,
+   "cost": 4,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": false,
+   "text": "开发一张巡地舰。对所有地面单位造成3点伤害。",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "manual",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "develop",
+       "filter": {
+        "cardType": "unit",
+        "unitType": "landcruiser"
+       }
+      },
+      {
+       "op": "damage",
+       "amount": 3,
+       "target": {
+        "sel": "all",
+        "side": "enemy"
+       },
+       "filter": {
+        "unitType": "nonspace"
+       }
+      }
+     ]
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-28T15:40:42.977Z",
+   "notes": "制卡台保存（2026-09-27 存储唯一化：直接落 nations，只能手动修改）"
+  }
+ }
+}

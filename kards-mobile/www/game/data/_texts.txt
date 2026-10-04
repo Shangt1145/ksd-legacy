@@ -1,0 +1,1070 @@
+### 1 | 补给 | order | cost=2 atk=null def=null op=null | kw=
+抽一张牌
+
+### 星盟/c/-1 | 团结一致 | order | cost=3 atk=null def=null op=null | kw=抉择
+抉择：将三张星盟通用大驱加入手牌
+或者两张奋起反抗
+
+### 星盟/c/-10 | 协约国指挥部 | order | cost=6 atk=null def=null op=null | kw=
+使场上所有USG和星盟单位获得+2+3
+
+### 星盟/c/-11 | 武装抵抗 | order | cost=2 atk=null def=null op=null | kw=
+对一个随机友方单位造成1点伤害
+对一个单位造成4点伤害
+
+### 星盟/c/-12 | 反侵略同盟 | order | cost=3 atk=null def=null op=null | kw=
+指向一个单位，每有一个敌方单位使该单位获得+1+1
+
+### 星盟/c/-13 | 新生力量 | order | cost=4 atk=null def=null op=null | kw=航天步兵,闪击
+将两张航天步兵加入手牌，使获得+1+1和闪击
+
+### 星盟/c/-14 | 战术空袭 | order | cost=6 atk=null def=null op=null | kw=
+开发一张协约国空军。
+如果剩余指挥点不小于4，
+随机消灭一个敌方单位。
+
+### 星盟/c/-15 | 支援 | order | cost=10 atk=null def=null op=null | kw=闪击
+将卡组顶的单位加入战场，如果可能，
+加入前线。使其获得+2+3和闪击
+
+### 星盟/c/-16 | 安德森计划 | order | cost=7 atk=null def=null op=null | kw=
+开发一张花费不小于7的单位，
+并使其加入战场。回合结束时，将其消灭
+
+### 星盟/c/-17 | 崛起 | order | cost=4 atk=null def=null op=null | kw=
+额外获得一个指挥额槽，如果剩余指挥点不小于3，
+对所有敌方单位造成1点伤害，将一张复制洗入卡组
+
+### 星盟/c/-18 | 生产 | order | cost=6 atk=null def=null op=null | kw=
+开发一张主国单位，如果其不在构筑内
+在开发一张盟国指令
+
+### 星盟/c/-19 | 抗敌 | order | cost=3 atk=null def=null op=null | kw=压制
+压制一个敌方单位，如果其已被压制
+随机消灭一个敌方单位。抽一张牌
+
+### 星盟/c/-2 | 中环计划 | order | cost=9 atk=null def=null op=null | kw=
+下一友方回合开始时，获得3个指挥点
+抽1张牌，将一张团结一致置入卡组底
+
+### 星盟/c/-20 | 协约国研发成果 | order | cost=7 atk=null def=null op=null | kw=
+抉择：将一张远征一期工程加入手牌
+或者一张Av76军事研发
+
+### 星盟/c/-21 | 侦察 | order | cost=2 atk=null def=null op=null | kw=
+抽一张牌。若敌方手中具有明牌，
+具有减2花费
+
+### 星盟/c/-3 | 倾盆式空投 | order | cost=7 atk=null def=null op=null | kw=
+消灭一个位于前线的单位，
+将三张航天步兵加入手牌；
+然后如果前线没有单位，将其加入前线。
+
+### 星盟/c/-4 | 奋起反抗 | order | cost=7 atk=null def=null op=null | kw=
+抉择：开发一张协约国单位
+对所有目标造成1点伤害
+或将一张A.A.A.A.加入手牌
+
+### 星盟/c/-5 | A.A.A.A. / US Armament Alliance Accord | order | cost=12 atk=null def=null op=null | kw=
+抉择：将一张奋起反抗加入手牌，
+或者一张中环计划
+
+### 星盟/c/-6 | 胁迫 | order | cost=3 atk=null def=null op=null | kw=
+双方抽两张牌，
+下一回合敌方失去两个指挥点
+
+### 星盟/c/-7 | 短暂一春 | order | cost=3 atk=null def=null op=null | kw=
+将一张中环计划和一张经济复苏加入手牌
+
+### 星盟/c/-8 | 反抗 | order | cost=3 atk=null def=null op=null | kw=
+将4张胁迫洗入卡组，抽一张牌
+
+### 星盟/c/-9 | 内环盟友 | order | cost=4 atk=null def=null op=null | kw=
+选择一张手牌，
+将其随机转换为一个USG单位
+
+### 星盟/u/-1 | 航天步兵 | unit/infantry | cost=2 atk=3 def=4 op=2 | kw=
+无法被压制和撤退
+
+### 星盟/u/-10 | 古洛亚第104工兵团 | unit/infantry | cost=1 atk=0 def=4 op=4 | kw=
+友方单位被消灭时，使总部获得加2防御力
+
+### 星盟/u/-11 | 古洛亚第32团 | unit/infantry | cost=4 atk=5 def=4 op=2 | kw=伏击
+部署：结束回合
+
+### 星盟/u/-12 | 古洛亚第24团 | unit/infantry | cost=4 atk=4 def=4 op=2 | kw=游击
+部署：使场上所有游击单位获得+2+2
+
+### 星盟/u/-13 | 古洛亚Mk2坦克 | unit/infantry | cost=4 atk=4 def=5 op=3 | kw=闪击
+部署：若场上有友方步兵，获得-2行动花费
+
+### 星盟/u/-14 | 太空鱼雷 | unit | cost=4 atk=4 def=1 op=0 | kw=隐蔽
+消灭受到本单位对战伤害的太空单位
+
+### 星盟/u/-15 | 尔古Mk38(a)坦克 | unit/tank | cost=6 atk=4 def=4 op=null | kw=
+部署：对一个坦克造成4点伤害
+
+### 星盟/u/-16 | 卫星联盟通用驱逐舰 | unit | cost=4 atk=4 def=6 op=2 | kw=
+每有一张“星盟通用大驱”,,对战太空单位时具有+1攻击力
+
+### 星盟/u/-17 | 尔古盒子183团 | unit/infantry | cost=7 atk=2 def=7 op=null | kw=守护,亡计
+亡计：消灭场上所有受伤单位
+
+### 星盟/u/-18 | 武装空间站 | unit | cost=4 atk=6 def=4 op=6 | kw=
+无法攻击空军
+
+### 星盟/u/-19 | 古洛亚Mk3坦克 | unit/tank | cost=6 atk=9 def=9 op=3 | kw=重甲1
+部署：-3-7，直至下一友方回合开始。
+
+### 星盟/u/-2 | 古洛亚Mk1(b)坦克 | unit/tank | cost=2 atk=2 def=2 op=1 | kw=闪击
+(无)
+
+### 星盟/u/-20 | 古洛亚Mk3(a)坦克 | unit/tank | cost=6 atk=6 def=5 op=3 | kw=重甲1
+友方坦克具有+1攻击力
+
+### 星盟/u/-21 | 尔古盒子第二集团军 | unit/infantry | cost=6 atk=7 def=7 op=2 | kw=烟幕
+(无)
+
+### 星盟/u/-22 | Mk2(b)坦克-尔古 | unit/tank | cost=8 atk=6 def=6 op=3 | kw=重甲2,闪击
+部署：将一张奋起反抗加入手牌
+
+### 星盟/u/-23 | Mk2(a)坦克-尔古 | unit/tank | cost=9 atk=6 def=6 op=3 | kw=重甲2,闪击
+友方部署一辆Mk坦克后，升为老兵
+
+### 星盟/u/-24 | Mk2(a)坦克-尔古 | unit/tank | cost=9 atk=7 def=7 op=3 | kw=重甲2,闪击,老兵
+友方回合开始时，将一张随机Mk坦克加入手牌
+
+### 星盟/u/-25 | Mk3(a)坦克-尔古 | unit/tank | cost=10 atk=10 def=8 op=8 | kw=重甲3
+(无)
+
+### 星盟/u/-26 | Mk3(a)坦克-尔古 | unit/tank | cost=4 atk=6 def=4 op=undefined | kw=伏击
+友方游击单位具有+2攻击力和冲击
+
+### 星盟/u/-3 | 古洛亚Mk1坦克 | unit/tank | cost=2 atk=2 def=3 op=2 | kw=
+(无)
+
+### 星盟/u/-4 | 尔古-Mk1坦克 | unit/tank | cost=2 atk=2 def=3 op=2 | kw=
+友方相邻陆军具有+1攻击力
+
+### 星盟/u/-5 | 古洛亚飞艇 | unit/bomber | cost=2 atk=1 def=2 op=2 | kw=流亡,闪击
+(无)
+
+### 星盟/u/-6 | L-81装甲兵团 | unit/infantry | cost=3 atk=2 def=2 op=1 | kw=游击,闪击
+(无)
+
+### 星盟/u/-7 | Mk2(b)坦克-SPK | unit/tank | cost=2 atk=1 def=3 op=2 | kw=流亡
+友方单位部署时，使其获得减1行动花费
+
+### 星盟/u/-8 | 暴风雪-航天战机早期型 | unit | cost=2 atk=2 def=4 op=2 | kw=流亡
+本单位不会受到来自陆军的反击伤害
+
+### 星盟/u/-9 | 第446侦察团 | unit/infantry | cost=4 atk=2 def=2 op=2 | kw=闪击,游击,轻甲1,亡计
+亡计：随机消灭一个
+攻击力不大于3的敌方单位
+
+### av76/command/-1 | 经济复苏 | order | cost=0 atk=null def=null op=null | kw=
+获得两个指挥点，抽一张牌
+
+### av76/command/-10 | 新地及卡尔拉研发 | order | cost=3 atk=null def=null op=null | kw=
+抉择：将四张经济复苏加入手牌
+或者新地及卡尔拉扩展研发
+
+### av76/command/-11 | 新地及卡尔拉扩展研发 | order | cost=6 atk=null def=null op=null | kw=
+抉择：将一张蜂鸟突击舰和一张新地及卡尔拉高级研发加入手牌，或者新地及卡尔拉额外研发
+
+### av76/command/-12 | 新地及卡尔拉高级研发 | order | cost=9 atk=null def=null op=null | kw=
+抉择：将一张AV76突击师加入手牌
+或者将20张ADC洗入卡组
+
+### av76/command/-13 | 新地及卡尔拉额外研发 | order | cost=10 atk=null def=null op=null | kw=
+抉择：将四张支援政策洗入卡组，
+或者一张空中打击
+
+### av76/command/-14 | 远程打击 | counter | cost=5 atk=null def=null op=null | kw=
+一个单位的部署效果触发时，将其反制
+消灭该单位
+
+### av76/command/-15 | 空中打击 | order | cost=5 atk=null def=null op=null | kw=
+对所有敌方目标造成5点伤害
+抽一张牌
+
+### av76/command/-16 | 迫在眉睫 | order | cost=5 atk=null def=null op=null | kw=
+抉择：对双方总部造成4点伤害
+或双方抽四张牌。弃掉手中的空袭
+
+### av76/command/-17 | 进攻 | order | cost=null atk=null def=null op=null | kw=
+2费打5|0打2|6灭1|12打5,+2+2|0全图打1|
+3全图打2|10全图打6|6打7|5三张工业化
+4-4经济复苏|6-4支援政策
+
+### av76/command/-18 | 快速支援 | order | cost=6 atk=null def=null op=null | kw=
+将数张新地反应部队加入支援阵线，直到阵线已满。
+
+### av76/command/-19 | 最后一搏 | order | cost=7 atk=null def=null op=null | kw=
+消灭所有受伤单位，每消灭一个，将一张随机进攻洗入卡组，抽数张牌直到手牌数为7
+
+### av76/command/-2 | 支援政策 | order | cost=1 atk=null def=null op=null | kw=
+造成一点伤害，抽一张牌
+
+### av76/command/-20 | 铁幕之下 | order | cost=8 atk=null def=null op=null | kw=
+压制所有单位，对其造成两点伤害，
+抽一张牌
+
+### av76/command/-21 | 工业化 | order | cost=10 atk=null def=null op=null | kw=
+开发两张坦克，将四张经济复苏洗入卡组
+
+### av76/command/-22 | 孤注一掷 | order | cost=6 atk=null def=null op=null | kw=
+使场上所有单位受到6点伤害
+
+### av76/command/-3 | 老旧资产 | order | cost=1 atk=null def=null op=null | kw=
+开发一张卡组中花费不大于3的牌
+
+### av76/command/-4 | 反击 | order | cost=2 atk=null def=null op=null | kw=
+开发一张进攻
+
+### av76/command/-5 | 兵贵神速 | order | cost=3 atk=null def=null op=null | kw=闪击
+使一个单位获得闪击和行动花费减为0
+
+### av76/command/-6 | 召集令 | order | cost=3 atk=null def=null op=null | kw=
+选择并弃一张单位，获得等同于其防御力的指挥点
+
+### av76/command/-7 | 突袭 | order | cost=3 atk=null def=null op=null | kw=
+使一个单位失去等同于其花费的防御力
+
+### av76/command/-8 | 炸弹战争 | order | cost=3 atk=null def=null op=null | kw=
+将两张空袭加入双方手牌中
+
+### av76/command/-9 | 空袭 | order | cost=2 atk=null def=null op=null | kw=
+选择并弃一张牌，
+对所有单位造成一点伤害。抽一张牌
+
+### av76/units/-1 | 第一军 | unit/infantry | cost=1 atk=1 def=1 op=0 | kw=部署
+部署：
+抽一张“第一军”
+
+### av76/units/-10 | 第36侦察连 | unit/infantry | cost=3 atk=1 def=3 op=1 | kw=闪击,游击,部署
+闪击 游击
+部署：压制一个单位
+
+### av76/units/-11 | 卡尔拉第二团 | unit/infantry | cost=3 atk=3 def=3 op=1 | kw=亡计
+亡计：将一张反击洗入卡组
+
+### av76/units/-2 | ADC | unit | cost=1 atk=2 def=1 op=2 | kw=闪击,硬铝弹
+闪击 硬铝弹
+
+### av76/units/-3 | 新地第32工兵营 | unit/infantry | cost=1 atk=0 def=4 op=4 | kw=烟幕
+友方获得额外指挥点时，
+对敌方总部造成1点伤害
+
+### av76/units/-4 | 卡尔拉第八装甲步兵团 | unit/infantry | cost=2 atk=4 def=3 op=2 | kw=烟幕
+本单位可以在同一回合内移动并攻击
+
+### av76/units/-5 | 鲨鱼师 | unit/infantry | cost=2 atk=3 def=2 op=2 | kw=动员,奋战
+本单位消灭一个敌方单位后，升为老兵
+
+### av76/units/-6 | 鲨鱼师 | unit/infantry | cost=2 atk=3 def=4 op=2 | kw=老兵,游击,收缴
+(无)
+
+### av76/units/-7 | 卡尔拉113mm高射炮 | unit/artillery | cost=2 atk=3 def=1 op=2 | kw=
+对战太空单位具有+3攻击力
+
+### av76/units/-8 | 巴斯特A1坦克 | unit/tank | cost=4 atk=2 def=4 op=1 | kw=流亡
+友方单位对战并存活后获得+2防御力
+
+### av76/units/-9 | 火药机 | unit/fighter | cost=2 atk=3 def=1 op=0 | kw=闪击
+本单位攻击后，消灭本单位
+
+### av76/units/12 | 1-8-4轰炸机 | unit/bomber | cost=3 atk=2 def=2 op=1 | kw=
+(无)
+
+### av76/units/13 | 4-6-3攻击机 | unit/fighter | cost=3 atk=2 def=3 op=1 | kw=
+(无)
+
+### av76/units/14 | 新地反应部队 | unit/infantry | cost=3 atk=3 def=4 op=1 | kw=闪击,游击
+闪击 游击
+
+### av76/units/15 | B-13 曙光 | unit/bomber | cost=3 atk=3 def=2 op=2 | kw=闪击
+闪击
+
+### av76/units/16 | 第38轻装甲旅 | unit/infantry | cost=4 atk=1 def=2 op=2 | kw=烟幕,动员
+烟幕 动员
+
+### av76/units/17 | 第39侦察连 | unit/infantry | cost=4 atk=1 def=4 op=2 | kw=游击
+游击
+
+### av76/units/18 | K-36坦克 | unit/tank | cost=5 atk=6 def=5 op=2 | kw=armor,重甲1
+重甲1
+
+### av76/units/19 | K-44坦克 | unit/tank | cost=5 atk=5 def=5 op=2 | kw=闪击
+闪击
+
+### av76/units/20 | K-27a坦克 | unit/tank | cost=6 atk=6 def=4 op=3 | kw=闪击,armor,重甲1
+本单位受到指令重甲减伤
+
+### av76/units/21 | 蜂鸟突击舰 | unit | cost=7 atk=2 def=8 op=2 | kw=闪击,冲击,烟幕,部署
+闪击 冲击 烟幕
+部署：将两张“经济复苏”加入手牌。
+友方回合开始时，将一张“经济复苏”加入手牌
+
+### av76/units/22 | 呼啸战斗机 | unit | cost=5 atk=3 def=6 op=1 | kw=闪击
+闪击
+
+### av76/units/23 | 战壕 | unit/infantry | cost=5 atk=1 def=9 op=2 | kw=armor,守护,重甲3
+重甲3 守护
+移上前线时，前线至多有三个单位。
+
+### av76/units/24 | 中山师 | unit/infantry | cost=5 atk=6 def=7 op=2 | kw=守护
+守护
+友方单位部署时，
+随机对一个敌方单位造成一点伤害
+
+### av76/units/25 | k-45坦克 | unit/infantry | cost=7 atk=6 def=6 op=1 | kw=armor,守护,重甲1
+重甲1 守护
+友方单位被消灭时，将一张“卡尔拉第二团”加入支援阵线
+
+### av76/units/26 | 7-4-7歼击机 | unit/infantry | cost=7 atk=5 def=7 op=2 | kw=闪击,烟幕
+闪击 烟幕
+友方总部受到伤害时，
+对敌方总部造成3点伤害
+
+### av76/units/27 | 380装甲车 | unit/infantry | cost=7 atk=4 def=6 op=2 | kw=armor,重甲1
+重甲1
+对战步兵伤害翻倍
+友方回合开始时，将一张“卡尔拉第二团”加入支援阵线
+
+### av76/units/28 | Av76突击师 | unit/infantry | cost=7 atk=8 def=6 op=2 | kw=伏击
+伏击
+单位被消灭时，将一张“反击”加入手牌
+
+### av76/units/29 | 斯卡塔尔轰炸机 | unit/bomber | cost=8 atk=6 def=4 op=3 | kw=重甲1
+本单位攻击时，将目标单位的攻击力设为0.
+
+### av76/units/30 | K-47坦克 | unit/tank | cost=10 atk=8 def=8 op=8 | kw=重甲1,shock,闪击,冲击
+无法失去冲击，无法被抑制
+对战重甲单位具有+4攻击力
+
+### av76/units/31 | GMs-Mk3坦克 | unit/tank | cost=10 atk=10 def=12 op=2 | kw=重甲,shock,流亡,重甲3,冲击
+无法被压制
+在手牌中时，友方每使用一张情报牌，获得-1花费
+
+### av76/units/32 | 第353工兵营 | unit/infantry | cost=1 atk=2 def=2 op=null | kw=
+一回合一次，友方使用指令时，抽一张牌
+
+### av76/units/33 | 后勤营 | unit/infantry | cost=2 atk=0 def=2 op=2 | kw=烟幕
+友方补给具有减一花费，
+友方额外抽一张牌时，获得一个指挥点
+
+### cru | 巡洋舰 / CRUISER | undefined | cost=undefined atk=undefined def=undefined op=null | kw=
+攻击太空单位时造成x点伤害
+否则造成y点伤害
+
+### custom/new-mucqyr0z-2id | 新地一师 | unit/infantry | cost=2 atk=2 def=4 op=1 | kw=
+部署：将一张“第一军”加入总部相邻处，将一张“支援政策”加入手牌。
+
+### custom/new-mucr2iux-1nv | 大规模轰炸 | order | cost=8 atk=1 def=1 op=0 | kw=
+降低等同于场上友方轰炸机最高攻击力的花费。对所有敌方目标造成3点伤害。
+
+### custom/new-mucr5elb-14w | Mk(b)-SPK | unit/tank | cost=4 atk=6 def=3 op=2 | kw=
+友方单位具有-1行动花费
+
+### custom/new-mucr74q6-6xq | 恶魔师 | unit/infantry | cost=3 atk=3 def=4 op=1 | kw=
+本单位攻击后，控制被攻击单位，并使该单位获得+2+2.
+
+### custom/new-muffi9r2-97 | 斯派克国防军第31团 | unit/infantry | cost=1 atk=1 def=1 op=1 | kw=
+也算作是太空战机。
+
+### custom/new-muffjev2-417 | Mk11(a)坦克-SPK | unit/tank | cost=3 atk=1 def=3 op=2 | kw=
+友方部署其他奋战单位时，本单位获得+1攻击力。
+
+### custom/new-muffklkd-14q | 敢死队 | unit/infantry | cost=2 atk=1 def=2 op=0 | kw=
+消灭受到本单位对战伤害的单位
+
+### custom/new-muffrtmx-2zx | 斯派克国防军第328团 | unit/infantry | cost=1 atk=2 def=1 op=1 | kw=
+部署：场上每有一个友方单位，获得一次+1+1
+
+### custom/new-mufftamo-3eo | 332工程步兵团 | unit/infantry | cost=2 atk=1 def=2 op=2 | kw=
+下一个加入战场的友方单位获得守护并失去烟幕
+
+### custom/new-muffu9an-3le | 斯派克国防军第544团 | unit | cost=2 atk=3 def=3 op=2 | kw=
+亡计：将一张“抵抗”加入手牌
+
+### custom/new-muffw3di-6tn | 卫星计划 | order | cost=1 atk=1 def=1 op=0 | kw=
+将一张“332工程步兵团”加入支援阵线，使其具有闪击。
+
+### custom/new-muffz69h-3ll | K-74装甲车-SPK | unit/tank | cost=6 atk=5 def=5 op=1 | kw=
+友方回合开始时，对敌方总部造成等同于敌方明牌数的伤害。
+
+### custom/new-mulelwt6-550 | 空中霸权 | order | cost=4 atk=null def=null op=null | kw=
+开发一张巡地舰。对所有地面单位造成3点伤害。
+
+### custom/new-mumk9cnl-6ed | 伟大航道 | order | cost=5 atk=1 def=1 op=0 | kw=
+将一张补给和一张经济复苏加入手牌
+
+### deran/command/_1 | 搜查 | order | cost=1 atk=null def=null op=null | kw=
+若可能，揭示一张隐蔽单位，抽一张牌
+
+### deran/command/_10 | 停火 | order | cost=3 atk=null def=null op=null | kw=
+抉择：双方抽两张牌或使
+双方总部获得加6防御力
+
+### deran/command/_11 | 重锤战术 | order | cost=4 atk=null def=null op=null | kw=
+每有一个友方太空单位，
+对一个单位造成2点伤害
+开发一张轻型巡洋舰
+
+### deran/command/_12 | 突袭 | order | cost=3 atk=null def=null op=null | kw=
+对一个单位造成3点伤害
+
+### deran/command/_13 | 增援 | order | cost=4 atk=null def=null op=null | kw=
+抉择：使友方总部获得+7防御力或抽两张牌
+
+### deran/command/_14 | 总攻 | order | cost=4 atk=null def=null op=null | kw=
+场上所有友方单位获得减1行动花费
+和+1攻击力。直至本回合结束
+
+### deran/command/_15 | 掌控 | order | cost=4 atk=null def=null op=null | kw=
+抉择：压制所有敌方空军，或压制所有坦克
+
+### deran/command/_16 | 开疆扩土 | order | cost=4 atk=null def=null op=null | kw=
+下一回合，获得两个指挥点
+
+### deran/command/_17 | 帝国统治 | order | cost=6 atk=null def=null op=null | kw=
+开发一张帝国坦克，
+随机将一张研发加入手牌
+
+### deran/command/_18 | 考斯特 帝安 | order | cost=5 atk=null def=null op=null | kw=
+使场上所有友方单位=获得+1+2
+
+### deran/command/_19 | 空投 | order | cost=5 atk=null def=null op=null | kw=空投
+若可能，选择手中一张花费不大于 7的单位，
+将其加入前线，并使其失去闪击
+
+### deran/command/_2 | 折跃 | order | cost=2 atk=null def=null op=null | kw=
+使一个太空单位进入前线，并被压制一回合
+使其也算作是战斗机
+
+### deran/command/_20 | 白鲸计划 | order | cost=12 atk=null def=null op=null | kw=
+造成 20点伤害，平均分配至敌方所有目标
+
+### deran/command/_21 | 闪击战法 | order | cost=2 atk=null def=null op=null | kw=
+开发一张轻型巡航舰。将一张空中霸权加入手牌
+
+### deran/command/_22 | 机动防御 | order | cost=7 atk=null def=null op=null | kw=守护
+使一个友方坦克单位获得+1+1,奋战和守护
+
+### deran/command/_23 | 审判降临 | order | cost=14 atk=null def=null op=null | kw=
+将一张"审判战巡舰"加入支援阵线
+敌方失去一个指挥点槽
+
+### deran/command/_24 | 陨星炮 | order | cost=12 atk=null def=null op=null | kw=
+对一个总部造成12点伤害
+
+### deran/command/_3 | 革新 | order | cost=2 atk=null def=null op=null | kw=
+使一个友方空军获得+1+1和硬铝弹
+
+### deran/command/_4 | 强力支援 | order | cost=7 atk=null def=null op=null | kw=
+将三张火药机加入手牌，其花费减为0
+
+### deran/command/_5 | 突袭 | counter | cost=3 atk=null def=null op=null | kw=
+一个单位的亡计触发前，将其抑制
+
+### deran/command/_6 | 探索型方针 | order | cost=4 atk=null def=null op=null | kw=
+若可能将所有友方单位移至前线，否则
+敌方弃三张牌。额外获得3个指挥点槽
+
+### deran/command/_7 | 帝国安保初级研发 | order | cost=3 atk=null def=null op=null | kw=
+抉择：将一张"探索型方针"加入手牌，
+或者一张"帝国安保扩展研发"
+
+### deran/command/_8 | 帝国安保扩展研发 | order | cost=6 atk=null def=null op=null | kw=
+抉择：将一张"陨星炮2070"加入手牌
+或者一张"帝国安保高级研发"
+
+### deran/command/_9 | 帝国安保高级研发 | order | cost=9 atk=null def=null op=null | kw=
+抉择：将一张"S-1 X 2072"加入手牌
+或者一张"白鲸计划"
+
+### deran/command/25 | 空中支援 | order | cost=3 atk=null def=null op=null | kw=
+抽两张牌，如果友方控制空军，
+获得三个指挥点
+
+### deran/command/26 | 精准打击 | order | cost=3 atk=null def=null op=null | kw=
+造成3点伤害，如果是单位，
+获得两个指挥点
+
+### deran/units/_1 | 第332低空步兵团 | unit/infantry | cost=1 atk=1 def=2 op=0 | kw=闪击,硬铝弹
+(无)
+
+### deran/units/_10 | 帝国三号坦克 | unit/tank | cost=4 atk=8 def=8 op=0 | kw=闪击,armor,重甲1
+对友方总部造成6点伤害，使友方支援线单位返回手中
+无法攻击总部
+
+### deran/units/_11 | 猫头鹰战斗机 | unit/fighter | cost=4 atk=2 def=3 op=3 | kw=闪击,部署
+部署：对一个空军造成3点伤害
+
+### deran/units/_12 | 第九步兵团 | unit/infantry | cost=5 atk=5 def=4 op=1 | kw=闪击
+亡计：抽一张牌
+
+### deran/units/_13 | 13(a)坦克 | unit/tank | cost=4 atk=2 def=3 op=1 | kw=冲击
+具有冲击时，获得+2攻击力
+
+### deran/units/_14 | 38(b)坦克 | unit/tank | cost=5 atk=4 def=4 op=1 | kw=闪击
+(无)
+
+### deran/units/_15 | 第989步兵团 | unit/infantry | cost=5 atk=3 def=6 op=null | kw=守护
+如果场上友方单位数量小于敌方数量，则获得闪击和奋战
+
+### deran/units/_16 | 44(a)坦克 | unit/tank | cost=6 atk=6 def=4 op=1 | kw=armor,闪击,重甲1
+部署：将一张44(b)坦克加入支援线
+
+### deran/units/_17 | 28(a)坦克 | unit/tank | cost=6 atk=4 def=4 op=2 | kw=闪击
+部署：开发一张花费不大于4的指令
+
+### deran/units/_18 | zbk1母舰 | unit | cost=3 atk=0 def=4 op=2 | kw=烟幕
+部署：将随机太空战机加入同一阵线
+并随机获得其中一个的攻击力
+
+### deran/units/_19 | 28(b)坦克 | unit/tank | cost=6 atk=4 def=4 op=null | kw=轻甲2,重甲1
+友方战斗机行动花费减1
+
+### deran/units/_2 | 太空舰载机 | unit | cost=2 atk=2 def=2 op=0 | kw=
+(无)
+
+### deran/units/_20 | 44(b)坦克 | unit/tank | cost=6 atk=4 def=6 op=2 | kw=守护,轻甲2
+(无)
+
+### deran/units/_21 | 帝国二号坦克 | unit/tank | cost=6 atk=9 def=9 op=null | kw=伏击
+部署：弃掉位于卡组顶的五张牌
+受到指令伤害翻倍
+无法攻击总部
+
+### deran/units/_22 | 锤头级巡地舰 | unit | cost=6 atk=4 def=7 op=4 | kw=闪击,强磁护盾,armor,重甲2
+部署：将一张重锤战术加入手牌
+
+### deran/units/_23 | 44(a)坦克 2066 | unit/tank | cost=9 atk=6 def=8 op=null | kw=闪击,冲击,armor,重甲2
+部署：将一张机动防御加入手牌
+
+### deran/units/_24 | 33(a)坦克 | unit/tank | cost=6 atk=5 def=5 op=3 | kw=闪击
+若在手牌中，友方每使用一张指令，获得-2花费
+
+### deran/units/_25 | MR-80 | unit | cost=8 atk=4 def=8 op=2 | kw=闪击
+若在手牌中，友方每使用一张指令，获得-2花费
+
+### deran/units/_26 | MR-40 | unit | cost=4 atk=3 def=4 op=1 | kw=闪击
+成为指令的目标时，撤退至手牌中。
+
+### deran/units/_27 | 审判级巡地舰 | unit | cost=8 atk=8 def=8 op=3 | kw=强磁护盾,海绵装甲
+部署：将敌方卡组顶的卡牌置于手牌中
+
+### deran/units/_28 | 鳄龟坦克 | unit/tank | cost=13 atk=4 def=20 op=8 | kw=armor,守护,重甲3
+被炮兵和坦克单位攻击受到伤害翻倍，对战坦克伤害减1
+不受单位效果影响
+
+### deran/units/_28_1 | 鳄龟坦克 | unit/tank | cost=9 atk=7 def=8 op=6 | kw=armor,守护,重甲3
+一回合一次，友方使用指令后，
+获得等同于其花费的防御力
+
+### deran/units/_29 | 帝国一号坦克 | unit/tank | cost=16 atk=20 def=20 op=8 | kw=armor,fury,重甲3,奋战
+部署，弃掉所有手牌，使指挥点槽等于8，
+从卡组顶移除15张牌。
+无法被抑制，无法被压制，无法攻击总部
+
+### deran/units/_3 | 第12步兵团 | unit/infantry | cost=2 atk=2 def=1 op=null | kw=
+移上前线后，获得冲击和伏击
+
+### deran/units/_30 | 帝国第322团 | unit/infantry | cost=5 atk=5 def=4 op=3 | kw=fury,奋战
+本单位移上前线后，将其移除并返回，使其获得+1+1
+
+### deran/units/_4 | 卡维拉尔第3装甲旅 | unit/tank | cost=2 atk=3 def=3 op=2 | kw=
+(无)
+
+### deran/units/_5 | 10(b)坦克 | unit/tank | cost=2 atk=2 def=2 op=null | kw=闪击
+部署：若无剩余指挥点，则行动花费减为0
+
+### deran/units/_6q | 卡维拉尔第二步兵团 | unit/infantry | cost=3 atk=3 def=6 op=1 | kw=
+(无)
+
+### deran/units/_7 | K型战斗机 | unit/fighter | cost=3 atk=3 def=2 op=3 | kw=闪击,伏击
+若场上存在友方轰炸机单位，则获得奋战
+
+### deran/units/_8 | 蜂鸟战斗机 | unit | cost=3 atk=1 def=2 op=1 | kw=奋战,硬铝弹
+攻击太空单位时将其压制
+
+### deran/units/_9a | 空投师 | unit/infantry | cost=3 atk=4 def=4 op=1 | kw=闪击
+该单位部署时将其移至下一阵线。
+消灭一个敌方单位后升为老兵。
+
+### deran/units/_9b | 空投师 | unit/infantry | cost=3 atk=6 def=6 op=1 | kw=老兵,fury,伏击,冲击,闪击,奋战
+本单位消灭一个敌方单位后，获得收缴
+并完全修复本单位
+
+### deran/units/31 | 第466步兵团 | unit/infantry | cost=1 atk=1 def=4 op=null | kw=闪击
+友方使用补给后，获得+1攻击力
+
+### deran/units/32 | 步兵138后勤团 | unit/infantry | cost=3 atk=4 def=2 op=1 | kw=烟幕
+友方回合开始时，如果你控制多于三个帝安单位
+，获得两个指挥点，抽一张牌
+
+### deran/units/33 | 古斯师 | unit/infantry | cost=7 atk=8 def=8 op=null | kw=伏击
+部署：若是本回合部署的第一个单位，具有冲击
+
+### gue | 游击 / Guerrilla | order | cost=null atk=null def=null op=null | kw=游击
+单位可以回到上一阵线、返回手牌
+
+### lcru | 巡地舰 / LAND CRUISER | unit | cost=null atk=undefined def=undefined op=null | kw=
+场上存在巡航舰时无法攻击
+其他太空单位
+
+### mra | 磁反应装甲x / Magnetic-RA | undefined | cost=null atk=null def=null op=null | kw=
+具有免疫，被攻击后x-1.
+当x为0时，失去此效果。x最多为2
+
+### sc | 太空战机 / SpaceCraft | unit | cost=null atk=undefined def=undefined op=null | kw=
+无视太空单位的对战词条
+不会受到太空单位的反击伤害
+
+### sms | 强磁护盾 / Str-Mag-Shield | order | cost=null atk=null def=null op=null | kw=
+受到的伤害-1.
+单位攻击后失去此效果
+
+### token/attack/mode1 | 进攻·2费打5 | order | cost=2 atk=null def=null op=null | kw=
+对一个敌方单位造成5点伤害。
+
+### token/attack/mode10 | 进攻·4费四张经济复苏 | order | cost=4 atk=null def=null op=null | kw=
+将四张「经济复苏」加入手牌。
+
+### token/attack/mode11 | 进攻·6费四张支援政策 | order | cost=6 atk=null def=null op=null | kw=
+将四张「支援政策」加入手牌。
+
+### token/attack/mode2 | 进攻·0费打2 | order | cost=0 atk=null def=null op=null | kw=
+对一个敌方单位造成2点伤害。
+
+### token/attack/mode3 | 进攻·6费灭1 | order | cost=6 atk=null def=null op=null | kw=
+消灭一个敌方单位。
+
+### token/attack/mode4 | 进攻·12费打5强化 | order | cost=12 atk=null def=null op=null | kw=
+对一个敌方单位造成5点伤害；使所有友方单位获得+2+2。
+
+### token/attack/mode5 | 进攻·0费全场打1 | order | cost=0 atk=null def=null op=null | kw=
+对所有敌方单位造成1点伤害。
+
+### token/attack/mode6 | 进攻·3费全场打2 | order | cost=3 atk=null def=null op=null | kw=
+对所有敌方单位造成2点伤害。
+
+### token/attack/mode7 | 进攻·10费全场打6 | order | cost=10 atk=null def=null op=null | kw=
+对所有敌方单位造成6点伤害。
+
+### token/attack/mode8 | 进攻·6费打7 | order | cost=6 atk=null def=null op=null | kw=
+对一个敌方单位造成7点伤害。
+
+### token/attack/mode9 | 进攻·5费三张工业化 | order | cost=5 atk=null def=null op=null | kw=
+将三张「工业化」加入手牌。
+
+### tsekep | 硬铝弹 / TSE-KEP | order | cost=null atk=null def=null op=null | kw=
+单位攻击时，
+无视被攻击单位的对战词条
+
+### UN/_1 | 谨慎错误 | order | cost=0 atk=null def=null op=null | kw=
+在第一回合抽取，抽取：使用。使友方总部获得:
+友方单位部署时，使其获得+2+2和无法攻击。
+友方单位数量不小于四时,移除所有友方单位，抑制友方总部
+
+### UN/-2 | 侦察连队 | order | cost=3 atk=null def=null op=null | kw=
+将两个联合侦察连加入支援阵线
+
+### UN/-3 | 多极政治需求 | order | cost=1 atk=null def=null op=null | kw=
+将随机数量的联合国国家的卡牌洗入卡组，
+最多为6
+
+### UN/-4 | 联合聚焦 | order | cost=1 atk=null def=null op=null | kw=
+额外获得一个指挥点槽，
+使友方总部获得+3防御力，抽一张牌
+
+### UN/-5 | 探测 | order | cost=1 atk=null def=null op=null | kw=
+使一张手牌获得-1花费，
+额外获得一个指挥点槽
+
+### UN/-6 | 聚合集结 | order | cost=4 atk=null def=null op=null | kw=
+使友方总部获得+4防御力，抽一张牌
+下个友方回合开始时，获得3个指挥点
+
+### UN/-7 | 太空井 | order | cost=1 atk=null def=null op=null | kw=
+本回合，友方单位部署时，将其移至前线
+
+### UN/-8 | 联合工业政策 | order | cost=2 atk=null def=null op=null | kw=
+本回合友方单位每行动一次，
+下一个友方回合开始时，
+额外抽一张牌并获得两个指挥点
+
+### UN/-9 | 红色盟国 | order | cost=3 atk=null def=null op=null | kw=
+将三张“联合红色第三战团”加入支援阵线
+使所有友方单位获得
+“亡计:使友方总部+2防御力”
+
+### UN/unit/_1 | 联合第一步兵师 | unit/infantry | cost=2 atk=2 def=2 op=1 | kw=闪击
+部署: 抽一张牌
+
+### UN/unit/-10 | 国民第33团 | unit/infantry | cost=1 atk=undefined def=undefined op=1 | kw=守护
+友方单位被消灭时，获得+2防御力
+
+### UN/unit/-11 | UNTED-FF-18 | unit | cost=4 atk=3 def=2 op=1 | kw=闪击
+(无)
+
+### UN/unit/-12 | UNTED-CA-16 | unit | cost=7 atk=6 def=6 op=3 | kw=伏击,烟幕
+本单位攻击后，获得磁反应装甲1
+
+### UN/unit/-13 | UNTED-LPD-7 | unit/landcruiser | cost=5 atk=3 def=7 op=3 | kw=冲击
+对地面单位造成的伤害+4
+
+### UN/unit/-2 | 联合第三步兵师 | unit/infantry | cost=2 atk=3 def=1 op=0 | kw=
+若有其他同名单位，则具有闪击
+部署: 抽一张联合第三步兵师
+
+### UN/unit/-3 | 联合侦察连 | unit/infantry | cost=1 atk=1 def=2 op=0 | kw=闪击
+友方回合结束时，对本单位造成一点伤害，抽一张牌
+
+### UN/unit/-4 | UNTED-236 | unit/tank | cost=1 atk=1 def=3 op=0 | kw=伏击,冲击
+本单位移至前线时，获得+1攻击力
+
+### UN/unit/-5 | UNTED-K904 | unit/tank | cost=3 atk=3 def=4 op=2 | kw=
+部署: 与一个敌方单位战斗
+
+### UN/unit/-6 | 国际后勤组织 | unit/infantry | cost=1 atk=0 def=4 op=4 | kw=烟幕
+一回合一次，友方单位移至前线时，
+获得两个指挥点，抽一张牌
+
+### UN/unit/-7 | UNTED-UJA-401 | unit/fighter | cost=3 atk=4 def=3 op=1 | kw=闪击
+部署: 本回合内，本单位无法攻击总部
+
+### UN/unit/-8 | UNTED-探索者 | unit/tank | cost=2 atk=0 def=2 op=0 | kw=闪击,烟幕
+友方回合结束时，
+若本单位在前线，抽一张牌
+
+### UN/unit/-9 | 联合红色第三战团 | unit/infantry | cost=2 atk=2 def=5 op=1 | kw=守护
+亡计: 将一张国民第33团加入总部相邻处
+
+### USG/commands/_1 | 游击战术 | order | cost=4 atk=null def=null op=null | kw=
+使所有太空单位获得游击和+2+2
+
+### USG/commands/_10 | 工业机器 | order | cost=5 atk=null def=null op=null | kw=
+使场上所有友方步兵行动花费+1，
+额外获得2个指挥点槽。
+随机复制一张花费不大于8的手牌
+
+### USG/commands/_11 | 轨道轰炸 | order | cost=3 atk=null def=null op=null | kw=
+对一个单位造成3点伤害
+
+### USG/commands/_12 | 黑盾计划 | order | cost=7 atk=null def=null op=null | kw=
+抉择: 将三张黑盾单位加入手牌
+或开发一张反物质工程
+
+### USG/commands/_13 | 解体 | counter | cost=7 atk=null def=null op=null | kw=
+一个友方单位被消灭时，
+对敌方总部造成8点伤害
+
+### USG/commands/_14 | 北极星计划 | order | cost=8 atk=null def=null op=null | kw=
+额外获得两个指挥点槽，是友方总部获得：“
+友方花费不小于4的单位被消灭时，
+额外获得一个指挥点槽”
+
+### USG/commands/_15 | 偏转护盾 | counter | cost=8 atk=null def=null op=null | kw=
+当一个友方目标受到伤害大于其防御力的攻击时，将其随机转移至一个其他目标
+
+### USG/commands/_16 | 反物质工程 | order | cost=8 atk=null def=null op=null | kw=
+使场上所有黑盾单位获得+2+2，行动花费+1
+开发一张联合宣言
+
+### USG/commands/_17 | 联合宣言 | order | cost=8 atk=null def=null op=null | kw=
+开发一张新星联盟单位
+
+### USG/commands/_18 | Winter防空塔 | order | cost=8 atk=null def=null op=null | kw=
+消灭场上所有空军，下一回合，随机弃两张牌
+使友方总部获得
+“敌方部署空军时，将其压制”
+
+### USG/commands/_19 | 远征一期工程 | order | cost=14 atk=null def=null op=null | kw=
+抉择：将随机太空单位加入支援阵线，直至阵线已满；或者将一张远征二期工程加入手牌。
+
+### USG/commands/_2 | 防弹涂料 | order | cost=2 atk=null def=null op=null | kw=
+使场上、手牌中和卡组中的所有单位
+获得轻甲1和重甲1
+
+### USG/commands/_20 | 远征二期工程 | order | cost=14 atk=null def=null op=null | kw=
+抉择：将一张远距离巡航加入手牌，
+或者远征三期工程
+
+### USG/commands/_21 | 远征三期工程 | order | cost=14 atk=null def=null op=null | kw=
+抉择：将一张弗拉基米尔加入手牌
+或者一张黑盾计划
+
+### USG/commands/_22 | 远距离巡航 | order | cost=8 atk=null def=null op=null | kw=
+使友方总部获得：“友方太空单位部署时，
+使其行动花费减为0”
+
+### USG/commands/_23 | 弗拉基米尔 | order | cost=8 atk=null def=null op=null | kw=
+使手牌和卡组中的所有太空单位获得
++3+3和随机对战词条，抽两张单位
+
+### USG/commands/_24 | 气球攻势 | order | cost=32 atk=null def=null op=null | kw=
+弃掉手牌和卡组中的所有单位
+将数张古洛亚飞艇洗入卡组，直至卡组数为39
+抽数张牌直至手牌数为9.下一回合无法抽牌
+
+### USG/commands/_3 | 战前动员 | order | cost=1 atk=null def=null op=null | kw=
+使一个友方单位获得+1+1.如果剩余指挥点不
+小于5，则使所有友方单位获得+1+1
+
+### USG/commands/_4 | 近地支援 | order | cost=2 atk=null def=null op=null | kw=
+从三张USG精英单位中抽取一张
+
+### USG/commands/_5 | 联合SWX政府研发 | order | cost=3 atk=null def=null op=null | kw=
+抉择：将一张防弹涂料加入手牌
+或者一张游击战术
+
+### USG/commands/_7 | 推进 | order | cost=4 atk=null def=null op=null | kw=
+抽两张牌
+
+### USG/commands/_8 | 戒严令 | order | cost=4 atk=null def=null op=null | kw=
+抑制一个友方单位，
+然后使其获得“友方总部具有免疫”
+
+### USG/commands/_9 | 状态机改造 | order | cost=4 atk=null def=null op=null | kw=
+使场上所有友方步兵单位+1+2，获得轻甲1
+
+### USG/commands/25 | 向着星空 | order | cost=4 atk=null def=null op=null | kw=
+场上每有一个友方单位，获得两个指挥点
+
+### USG/commands/26 | 护卫 | order | cost=6 atk=null def=null op=null | kw=
+额外获得三个指挥点槽，如果你控制巡航舰，
+随机消灭一个敌方单位
+
+### USG/commands/27 | 工业生产 | order | cost=2 atk=null def=null op=null | kw=
+额外获得一个指挥点槽
+
+### USG/commands/28 | 征兵 | order | cost=2 atk=null def=null op=null | kw=
+抽一张牌，如果你手中存在补给，
+额外抽一张牌
+
+### USG/units/_1 | USG第九师 | unit/infantry | cost=1 atk=2 def=2 op=null | kw=
+(无)
+
+### USG/units/_10 | 113师第3特遣队 | unit/infantry | cost=3 atk=2 def=2 op=1 | kw=
+本单位受到伤害后获得加2攻击力
+
+### USG/units/_11 | 头进气道试验机 | unit/fighter | cost=3 atk=3 def=3 op=1 | kw=闪击
+本单位受到伤害后行动花费加3
+
+### USG/units/_12 | S-8导弹车 | unit/artillery | cost=3 atk=2 def=2 op=1 | kw=闪击
+也算作是坦克
+
+### USG/units/_13 | 第939特种步兵团 | unit/infantry | cost=1 atk=1 def=4 op=4 | kw=烟幕
+友方单位被消灭时，对敌方总部造成1点伤害
+
+### USG/units/_14 | Baster-A1坦克 | unit/tank | cost=4 atk=3 def=4 op=3 | kw=
+对战后存活则使一个随机友方单位
+获得+1+2
+
+### USG/units/_15 | USG104团 | unit/infantry | cost=4 atk=2 def=2 op=0 | kw=隐蔽,shock,冲击
+此前有方案为每受到一次攻击，获得+2+2
+
+### USG/units/_16 | 6分护卫舰 | unit | cost=4 atk=1 def=10 op=0 | kw=守护
+在第一回合抽取。
+抽取：使本单位花费减为0。
+友方使用的指令效果翻倍
+
+### USG/units/_17 | “深空二号” | unit | cost=4 atk=1 def=4 op=3 | kw=烟幕
+友方回合开始时，将一张火药机加入手牌
+
+### USG/units/_18 | 锤头级护卫舰 | unit/landcruiser | cost=4 atk=2 def=4 op=3 | kw=armor,守护,重甲2
+友方太空单位具有+2防御力
+
+### USG/units/_19 | 斯坦顿坦克 | unit/tank | cost=6 atk=1 def=8 op=null | kw=armor,守护,重甲2
+本单位攻击时，对敌方总部造成1点伤害
+
+### USG/units/_2 | Winter师 | unit/infantry | cost=1 atk=2 def=1 op=null | kw=闪击
+(无)
+
+### USG/units/_20 | 4-8-3攻城炮 | unit/artillery | cost=4 atk=3 def=2 op=3 | kw=
+场上存在敌方单位时，无法攻击敌方总部
+
+### USG/units/_21 | USG第六师 | unit/infantry | cost=5 atk=3 def=4 op=3 | kw=伏击,闪击
+对战坦克时获得+2攻击力
+
+### USG/units/_22 | x60运输舰 | unit/landcruiser | cost=5 atk=1 def=12 op=null | kw=armor,部署,重甲2
+部署：使一个地表单位上升到太空
+其行动花费+3
+
+### USG/units/_23 | FC-33战斗机 | unit/fighter | cost=5 atk=5 def=4 op=null | kw=shock,冲击
+对战空军具有伏击
+
+### USG/units/_24 | USG第5师 | unit/infantry | cost=5 atk=5 def=5 op=3 | kw=守护
+如果存在空投师，获得+2+2。
+
+### USG/units/_25 | 黑盾第二团 | unit/infantry | cost=5 atk=3 def=3 op=null | kw=闪击
+场上每有一个黑盾第二团，
+获得+1+1
+
+### USG/units/_26 | 第二集团军 | unit/infantry | cost=5 atk=5 def=4 op=3 | kw=闪击,奋战,流亡
+部署：使一个友方单位无视敌方单位效果
+对战后存活获得烟幕
+
+### USG/units/_27 | 双翼战斗机 | unit | cost=6 atk=3 def=4 op=null | kw=奋战,armor,重甲1
+(无)
+
+### USG/units/_28 | Baster-A2 | unit/tank | cost=6 atk=3 def=5 op=null | kw=奋战
+对战后存活随机使一个友方单位获得+1+2
+
+### USG/units/_29 | 马卡奇诺歼轰机 | unit | cost=6 atk=4 def=4 op=3 | kw=
+对战陆军时不会受到反击伤害
+
+### USG/units/_3 | CC防空车 | unit/tank | cost=2 atk=2 def=3 op=2 | kw=
+部署：压制一个敌方单位
+
+### USG/units/_30 | 钳级巡地舰 | unit | cost=5 atk=1 def=4 op=null | kw=armor,守护,强磁护盾,重甲2
+如果场上存在其它钳级巡地舰，则具有守护
+
+### USG/units/_31 | P-2隐身战斗机 | unit/fighter | cost=6 atk=5 def=6 op=null | kw=
+本单位无视指令、反制和单位效果
+
+### USG/units/_32 | 第58步兵团 | unit/infantry | cost=4 atk=3 def=4 op=1 | kw=守护
+亡计：对一个随机敌方单位造成4点伤害
+
+### USG/units/_33 | 毁灭 II 型巡洋舰 | unit/landcruiser | cost=8 atk=5 def=8 op=4 | kw=armor,闪击,强磁护盾,重甲2
+场上每有一个毁灭 II 型巡洋舰，则每个毁灭 II 型巡洋舰获得减1行动花费
+
+### USG/units/_34 | 锤级巡地舰 | unit | cost=7 atk=3 def=5 op=3 | kw=armor,部署,重甲2
+部署：随机消灭一个敌方陆军
+对陆军和总部造成的伤害+2
+
+### USG/units/_35 | 矛级巡地舰 | unit | cost=15 atk=8 def=5 op=4 | kw=闪击,armor,部署,重甲2
+若前线有友方单位则减2行动花费
+部署：随机消灭一个敌方陆军，随机消灭一个敌方陆军。
+
+### USG/units/_36 | 黑盾x2运输舰 | unit | cost=18 atk=10 def=12 op=4 | kw=armor,部署,重甲2
+部署：使手中一张指令获得-2花费
+
+### USG/units/_37 | BS-20A1 坦克 | unit/tank | cost=10 atk=8 def=7 op=2 | kw=部署,轻甲1
+充能完毕后，具有重甲3，本单位攻击时，具有+3攻击力。
+
+### USG/units/_38 | 联盟号巡洋舰 | unit | cost=24 atk=10 def=24 op=8 | kw=armor,部署,压制,重甲2,强磁护盾,磁反应装甲2
+部署：压制所有单位，抽两张牌
+本单位无视单位效果，无法被抑制
+亡计：将一张所有数值减半的复制加入卡组顶，并失去所有对战词条
+
+### USG/units/_39 | S-1 | unit | cost=24 atk=18 def=10 op=8 | kw=伏击,部署,强磁护盾
+部署：消灭所有花费不大于4的单位，压制所有单位
+亡计：如果行动花费不小于8，将一张复制加入手牌并使其的行动花费为4
+
+### USG/units/_4 | USG第二军 | unit/tank | cost=2 atk=3 def=2 op=2 | kw=
+(无)
+
+### USG/units/_5 | 水箱坦克 | unit/tank | cost=2 atk=2 def=1 op=1 | kw=重甲1
+被攻击时先获得重甲1，
+直至本回合结束
+
+### USG/units/_6 | BNA师 | unit/infantry | cost=2 atk=1 def=2 op=1 | kw=轻甲1
+消灭收到本单位对战伤害的步兵单位
+
+### USG/units/_7 | 古洛亚飞艇 | unit/bomber | cost=2 atk=1 def=2 op=1 | kw=闪击,流亡
+(无)
+
+### USG/units/_8 | USG第775团 | unit/infantry | cost=3 atk=1 def=3 op=2 | kw=闪击
+对战坦克时伤害加1
+亡计：消灭被本单位造成过伤害的单位
+
+### USG/units/_9 | 747-SPK | unit/fighter | cost=3 atk=2 def=2 op=1 | kw=闪击,流亡
+友方部署其他流亡单位时，
+对敌方总部造成1点伤害
+
+### USG/units/40 | S-11坦克 | unit/tank | cost=3 atk=2 def=2 op=1 | kw=闪击
+本单位攻击后，获得一个指挥点，抽一张牌
+
+### USG/units/41 | S-42坦克 | unit/tank | cost=4 atk=6 def=3 op=6 | kw=奋战
+友方单位行动时，每花费一个指挥点，本单位获得减1行动花费
+
+### USG/units/42 | 第38补给步兵团 | unit/infantry | cost=4 atk=6 def=6 op=2 | kw=烟幕,部署
+部署：如果友方手牌中存在补给，获得两个指挥点
+
+### zpaiq/天气/薄雾 | 薄雾 | order | cost=0 atk=null def=null op=null | kw=
+开发一张薄雾附加牌。
+
+### zpaiq/天气/薄雾附加牌·毒雾 | 薄雾附加牌·毒雾 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为薄雾。对所有敌方单位造成 1 点伤害。
+
+### zpaiq/天气/薄雾附加牌·迷雾 | 薄雾附加牌·迷雾 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为薄雾。抽一张牌。
+
+### zpaiq/天气/薄雾附加牌·迷障 | 薄雾附加牌·迷障 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为薄雾。随机使一个友方单位获得 +2+2。
+
+### zpaiq/天气/薄雾附加牌·浓雾 | 薄雾附加牌·浓雾 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为薄雾。对所有敌方单位造成 2 点伤害。
+
+### zpaiq/天气/薄雾附加牌·吞噬 | 薄雾附加牌·吞噬 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为薄雾。消灭一个随机敌方单位。
+
+### zpaiq/天气/薄雾附加牌·掩护 | 薄雾附加牌·掩护 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为薄雾。获得 2 个指挥点。
+
+### zpaiq/天气/狂风 | 狂风 | order | cost=0 atk=null def=null op=null | kw=
+开发一张狂风附加牌。
+
+### zpaiq/天气/狂风附加牌·风暴 | 狂风附加牌·风暴 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为狂风。对所有敌方空军单位造成 2 点伤害。
+
+### zpaiq/天气/狂风附加牌·疾风 | 狂风附加牌·疾风 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为狂风。抽一张牌。
+
+### zpaiq/天气/狂风附加牌·飓风 | 狂风附加牌·飓风 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为狂风。消灭一个随机敌方空军单位。
+
+### zpaiq/天气/狂风附加牌·龙卷 | 狂风附加牌·龙卷 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为狂风。对所有敌方单位造成 2 点伤害。
+
+### zpaiq/天气/狂风附加牌·顺风 | 狂风附加牌·顺风 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为狂风。获得 2 个指挥点。
+
+### zpaiq/天气/狂风附加牌·突袭 | 狂风附加牌·突袭 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为狂风。使所有友方单位获得闪击。
+
+### zpaiq/天气/蓝天 | 蓝天 | order | cost=0 atk=null def=null op=null | kw=
+开发一张蓝天附加牌。
+
+### zpaiq/天气/蓝天附加牌·复苏 | 蓝天附加牌·复苏 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为蓝天。完全修复所有友方单位。
+
+### zpaiq/天气/蓝天附加牌·暖阳 | 蓝天附加牌·暖阳 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为蓝天。使友方总部获得 +5 防御力。
+
+### zpaiq/天气/蓝天附加牌·清风 | 蓝天附加牌·清风 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为蓝天。获得 2 个指挥点。
+
+### zpaiq/天气/蓝天附加牌·晴空 | 蓝天附加牌·晴空 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为蓝天。抽一张牌。
+
+### zpaiq/天气/蓝天附加牌·晴日 | 蓝天附加牌·晴日 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为蓝天。所有友方单位获得 +2+2。
+
+### zpaiq/天气/蓝天附加牌·扫荡 | 蓝天附加牌·扫荡 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为蓝天。消灭所有受伤的敌方单位。
+
+### zpaiq/天气/落雪 | 落雪 | order | cost=0 atk=null def=null op=null | kw=
+开发一张落雪附加牌。
+
+### zpaiq/天气/落雪附加牌·暴雪 | 落雪附加牌·暴雪 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为落雪。抽两张牌并获得 4 个指挥点。
+
+### zpaiq/天气/落雪附加牌·冰封 | 落雪附加牌·冰封 | order | cost=6 atk=null def=null op=null | kw=
+使战场变为落雪。对敌方总部造成 4 点伤害。
+
+### zpaiq/天气/落雪附加牌·初雪 | 落雪附加牌·初雪 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为落雪。抽一张牌。
+
+### zpaiq/天气/落雪附加牌·积雪 | 落雪附加牌·积雪 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为落雪。所有友方单位获得 +1+1。
+
+### zpaiq/天气/落雪附加牌·暖炉 | 落雪附加牌·暖炉 | order | cost=2 atk=null def=null op=null | kw=
+使战场变为落雪。使友方总部获得 +3 防御力。
+
+### zpaiq/天气/落雪附加牌·雪崩 | 落雪附加牌·雪崩 | order | cost=4 atk=null def=null op=null | kw=
+使战场变为落雪。对敌方总部造成 3 点伤害。

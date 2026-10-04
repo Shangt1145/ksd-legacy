@@ -1,0 +1,4491 @@
+{
+ "nation": "USG",
+ "_说明": "已招安卡（adopted:true）——自动流水线只读不写；更新唯一通道 = tools/reparse-card.js 手动重析，或人工编辑本文件后跑 merge.js + build-effects.js 重建产物。",
+ "cards": {
+  "USG/commands/_1": {
+   "id": "USG/commands/_1",
+   "src": "USG/commands/_1.png",
+   "art": "../USG/commands/_1.png",
+   "name": "游击战术",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 4,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "使所有太空单位获得游击和+2+2",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面「使所有太空单位获得游击和+2+2」未限定阵营，按 side:'both' 处理。「游击」只出现在效果句内、卡面 keywords 为空，故用 grant 授予 guerrilla 词条。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "grant",
+       "keyword": "guerrilla",
+       "target": {
+        "sel": "all",
+        "side": "friendly",
+        "filter": {
+         "unitType": "space"
+        }
+       }
+      },
+      {
+       "op": "buff",
+       "attack": 2,
+       "defense": 2,
+       "target": {
+        "sel": "all",
+        "side": "friendly",
+        "filter": {
+         "unitType": "space"
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "游击战术"
+   ]
+  },
+  "USG/commands/_10": {
+   "id": "USG/commands/_10",
+   "src": "USG/commands/_10.png",
+   "art": "../USG/commands/_10.png",
+   "name": "工业机器",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 5,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "bronze",
+   "token": false,
+   "text": "使场上所有友方步兵行动花费+1，\n额外获得2个指挥点槽。\n随机复制一张花费不大于8的手牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：使场上所有友方步兵单位行动花费+1，额外获得2个指挥点槽。随机复制一张花费不大于8的手牌。①opCostMod(+1) 与 gainKreditSlot(2) 精确实现前两段；opCostMod 会把 opCostAdd 记进 u.dynMods 并在 recomputeAuras 重放，因此该行动花费修正是持久的（旧 notes 里的「会被重算清掉」已过时）。②「随机复制一张花费不大于8的手牌」：引擎没有「复制手牌」原语（chooseFromHand 的 mode:'duplicate' 需要玩家选牌，但它是选择而非随机，可作备选写法），最接近的仍是 transformHandCard（随机把一张手牌替换为卡池随机牌），差距是原手牌被替换而非复制、新牌来自全卡池而非原牌复制；transformHandCard 支持 maxCost 过滤，这里用 filter:{maxCost:8} 表达卡面约束。需新原语：随机复制手牌（不替换原牌）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "opCostModAll",
+       "target": {
+        "sel": "all",
+        "side": "friendly"
+       },
+       "amount": 1,
+       "filter": {
+        "unitType": "infantry"
+       }
+      },
+      {
+       "op": "gainKreditSlot",
+       "amount": 2,
+       "side": "self"
+      },
+      {
+       "op": "copyHandCard",
+       "side": "self",
+       "sel": "random",
+       "count": 1,
+       "filter": {
+        "maxCost": 8
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_11": {
+   "id": "USG/commands/_11",
+   "src": "USG/commands/_11.png",
+   "art": "../USG/commands/_11.png",
+   "name": "轨道轰炸",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 3,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "bronze",
+   "token": false,
+   "text": "对一个单位造成3点伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：对一个单位造成3点伤害。「一个单位」未限定阵营，按 side:'any'（可选择双方单位）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "damage",
+       "amount": 3,
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "any",
+       "kind": "unit",
+       "prompt": "选择一个单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "any",
+     "kind": "unit",
+     "prompt": "选择一个单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/commands/_12": {
+   "id": "USG/commands/_12",
+   "src": "USG/commands/_12.png",
+   "art": "../USG/commands/_12.png",
+   "name": "黑盾计划",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 7,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "抉择: 将三张黑盾单位加入手牌\n或开发一张反物质工程",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：抉择: 将三张黑盾单位加入手牌 或开发一张反物质工程。卡面冒号为半角「:」且带空格，按原样转写。第一选项：「黑盾单位」不是卡名，池中黑盾单位只有 USG/units/_25 黑盾第二团 与 USG/units/_36 黑盾x2运输舰 两种，没有「按名称模式随机取牌」的原语（addCardToHand 只能取固定 name/cardId），这里固定取费用5的黑盾第二团×3（推测，标 unimplemented）。第二选项：卡面写「开发」（引擎 discover 为三选一），但「反物质工程」是唯一确定的单张卡，按精确语义用 addCardToHand 直接入手；若严格照「开发」应改用 discover（filter:{cardType:'order',name:'反物质工程'}），差别写在此处。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "chooseOne",
+       "prompt": "抉择",
+       "options": [
+        {
+         "label": "将三张黑盾单位加入手牌",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "count": 3,
+           "filter": {
+            "nameIncludes": "黑盾"
+           }
+          }
+         ]
+        },
+        {
+         "label": "开发一张反物质工程",
+         "actions": [
+          {
+           "op": "develop",
+           "filter": {
+            "name": "反物质工程"
+           }
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "黑盾计划"
+   ]
+  },
+  "USG/commands/_13": {
+   "id": "USG/commands/_13",
+   "src": "USG/commands/_13.png",
+   "art": "../USG/commands/_13.png",
+   "name": "解体",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "counter",
+   "unitType": null,
+   "cost": 7,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "gold",
+   "token": false,
+   "text": "一个友方单位被消灭时，\n对敌方总部造成8点伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：一个友方单位被消灭时，对敌方总部造成8点伤害。这是一条持续效果，按 hqEnchant 挂到友方总部（持有者侧的 death 事件即「友方单位被消灭」）。已核实的引擎行为：killUnit 现在会派发 runTrigger({trigger:'friendlyDeath', matchAlso:['death'], owner:u.owner, source:u, deadUnit:u})，阵亡单位自身的 death 亡计能正确执行；但派发给总部附魔时，FX.exec 仍以 ev.trigger（即 'friendlyDeath'）去过滤附魔条目，而本条目写的是 trigger:'death'，两者不相等且 matchAlso 不参与附魔过滤，所以本卡的 hqEnchant 分支实际不会执行（已实测：挂上「解体」后消灭一个友方单位，敌方总部不掉血）。需新原语/修复：hqEnchant 里的 death 条目也应被 friendlyDeath 匹配（或附魔过滤同样使用 matchAlso）。",
+   "effects": [
+    {
+     "trigger": "counter",
+     "actions": [
+      {
+       "op": "damageHQ",
+       "amount": 8,
+       "side": "enemy"
+      }
+     ],
+     "on": "friendlyDeath",
+     "owner": "self"
+    }
+   ],
+   "compiled": false,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_14": {
+   "id": "USG/commands/_14",
+   "src": "USG/commands/_14.png",
+   "art": "../USG/commands/_14.png",
+   "name": "北极星计划",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "gold",
+   "token": false,
+   "text": "额外获得两个指挥点槽，是友方总部获得：“\n友方花费不小于4的单位被消灭时，\n额外获得一个指挥点槽”",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面「额外获得两个指挥点槽；总部获得：友方花费≥4的单位被消灭时，额外获得一个指挥点槽」：槽位永久累积。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "gainKreditSlot",
+       "amount": 2,
+       "side": "self"
+      }
+     ]
+    },
+    {
+     "trigger": "counter",
+     "actions": [
+      {
+       "op": "gainKreditSlot",
+       "amount": 1,
+       "side": "self"
+      }
+     ],
+     "filter": {
+      "minCost": 4
+     },
+     "on": "friendlyDeath",
+     "owner": "self"
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_15": {
+   "id": "USG/commands/_15",
+   "src": "USG/commands/_15.png",
+   "art": "../USG/commands/_15.png",
+   "name": "偏转护盾",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "counter",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "silver",
+   "token": false,
+   "text": "当一个友方目标受到伤害大于其防御力的攻击时，将其随机转移至一个其他目标",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "【反制卡】卡面「当一个友方目标受到伤害大于其防御力的攻击时，将其随机转移至一个其他目标」（类型图标「?」= counter）。这是**打断型反制**：interrupt:'fatalDamage' 由 engine.damageUnit 在扣血**之前**同步消费（consumeInterrupt）：当某友方单位即将受到 ≥ 其当前防御力的伤害时，反制被消耗，这份伤害随机转给场上另一个单位（不分敌我，与卡面「一个其他目标」一致；没有其它单位时偏转失败，反制不被消耗）。on/owner 仅作说明，打断路径不看它们。旧写法（order + 选一个友方单位 grantMod deflect）已废弃——那个 mod 在 damageUnit 里从来没有被消费过（tryDeflect 是死代码），实测完全没有效果。",
+   "effects": [
+    {
+     "trigger": "counter",
+     "actions": [],
+     "on": "friendlyDamaged",
+     "owner": "self",
+     "interrupt": "fatalDamage"
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_16": {
+   "id": "USG/commands/_16",
+   "src": "USG/commands/_16.png",
+   "art": "../USG/commands/_16.png",
+   "name": "反物质工程",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "使场上所有黑盾单位获得+2+2，行动花费+1\n开发一张联合宣言",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：使场上所有黑盾单位获得+2+2，行动花费+1。开发一张联合宣言。①第一段用 filter:{name:'黑盾'} 名称包含匹配，覆盖黑盾第二团与黑盾x2运输舰；卡面未限定阵营，故敌我各写一条 buffAll。opCostMod:+1 实现「行动花费+1」，引擎会把 opCostAdd 记进 u.dynMods 并在 recomputeAuras 重放，因此修正是持久的（旧 notes 里的「会被重算清掉」已过时）。②第二段「开发一张联合宣言」：联合宣言是唯一确定的卡（USG/commands/_17），按精确语义用 addCardToHand 直接入手；若严格照「开发」的字面应改用 discover（三选一，会出现无关候选），此处选择语义精确的写法，差异记于此。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 2,
+       "defense": 2,
+       "target": {
+        "sel": "all",
+        "side": "friendly",
+        "filter": {
+         "name": "黑盾"
+        }
+       }
+      },
+      {
+       "op": "opCostModAll",
+       "amount": 1,
+       "target": {
+        "sel": "all",
+        "side": "friendly",
+        "filter": {
+         "name": "黑盾"
+        }
+       }
+      },
+      {
+       "op": "develop",
+       "filter": {
+        "name": "联合宣言"
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_17": {
+   "id": "USG/commands/_17",
+   "src": "USG/commands/_17.png",
+   "art": "../USG/commands/_17.png",
+   "name": "联合宣言",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "开发一张新星联盟单位",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「开发一张新星联盟单位」：目前 = S-1 与 联盟号巡洋舰（指名卡池 cardIds）。[\"USG/units/_39\",\"USG/units/_38\"]",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "develop",
+       "filter": {
+        "cardType": "unit",
+        "cardIds": [
+         "USG/units/_39",
+         "USG/units/_38"
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_18": {
+   "id": "USG/commands/_18",
+   "src": "USG/commands/_18.png",
+   "art": "../USG/commands/_18.png",
+   "name": "Winter防空塔",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "gold",
+   "token": false,
+   "text": "消灭场上所有空军，下一回合，随机弃两张牌\n使友方总部获得\n“敌方部署空军时，将其压制”",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「消灭场上所有空军；下一回合随机弃两张；总部获得：敌方部署空军时将其压制」：destroyAll + delayNextTurn + hqEnchant。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "destroy",
+       "target": {
+        "sel": "random",
+        "side": "any",
+        "filter": {
+         "unitType": [
+          "fighter",
+          "spacefighter",
+          "bomber"
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "hqEnchant",
+       "name": "Winter防空塔",
+       "effects": [
+        {
+         "trigger": "unitDeployed",
+         "actions": [
+          {
+           "op": "pin",
+           "target": "t1"
+          }
+         ],
+         "targets": [
+          {
+           "id": "t1",
+           "side": "any",
+           "kind": "unit",
+           "prompt": "选择一个单位"
+          }
+         ],
+         "unitType": [
+          "fighter",
+          "spacefighter",
+          "bomber"
+         ],
+         "watchOpponent": true
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_19": {
+   "id": "USG/commands/_19",
+   "src": "USG/commands/_19.png",
+   "art": "../USG/commands/_19.png",
+   "name": "远征一期工程",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 14,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "gold",
+   "token": false,
+   "text": "抉择：将随机太空单位加入支援阵线，直至阵线已满；或者将一张远征二期工程加入手牌。",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面：抉择：将总花费等同于指挥点槽数的随机新星联盟太空单位加入支援阵线，直到阵线已满 或者远征二期工程。链式抉择的第一环：第二选项只把「远征二期工程」加入手牌（打出后由玩家继续打出并抉择），未在本卡内自动结算整条链。已实现的部分：「加入支援阵线，直到阵线已满」用 repeat times:5 反复调用 deckToField(to:'support')，靠引擎「支援阵线上限 5、满了就不再入场」自然近似；deckToField 会把该单位从卡组移出并直接进场，符合「加入支援阵线」。差距1：「新星联盟」在卡池中不存在（全池无此 set/名称），用最接近的 filter:{set:'星盟'}（星联）近似。差距2：「总花费等同于指挥点槽数」这一预算约束引擎无法表达（deckToField 没有 cost 预算参数，也没有「按花费选牌」的卡组选择器）。差距3：「随机」语义丢失——deckToField 从卡组顶开始找第一张符合条件的单位（找不到时最多轮转30张后放弃），不是随机抽取。需新原语：按总花费预算从卡组随机取牌进场。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "deckToField",
+       "to": "support",
+       "filter": {
+        "cardType": "unit"
+       }
+      },
+      {
+       "op": "summon",
+       "count": 1,
+       "filter": {
+        "unitType": "space",
+        "nameIncludes": "新星联盟"
+       },
+       "random": true
+      },
+      {
+       "op": "addCardToHand",
+       "name": "远征二期工程",
+       "count": 1,
+       "cardId": "USG/commands/_20"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "远征一期工程"
+   ]
+  },
+  "USG/commands/_2": {
+   "id": "USG/commands/_2",
+   "src": "USG/commands/_2.png",
+   "art": "../USG/commands/_2.png",
+   "name": "防弹涂料",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 2,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "使场上、手牌中和卡组中的所有单位\n获得轻甲1和重甲1",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：使场上、手牌中和卡组中的所有单位获得轻甲1和重甲1。卡面未限定阵营（写「所有单位」），故四条动作都覆盖双方：buffCardsInPiles 分别对 self/enemy 的手牌与卡组附魔（附魔记为手牌实例的 inst.mods.keywords 与玩家 cardMods[cardId].keywords，打出/上场时由 playCard / makeUnit 授予词条，已实测），grantAll 给场上双方单位直接授予 lightArmor 与 armor。轻甲=lightArmor、重甲=armor，两者都进 KG.armorOf 的减伤（各 1 点）。引擎侧限制（近似点）：卡组附魔按 cardId 记在 players[].cardMods 上，会影响此后从卡组打出的同名牌（含本卡结算后才被洗入/加入卡组的同名牌），且不会区分具体张数；手牌附魔则精确到实例。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "buffCardsInPiles",
+       "side": "self",
+       "filter": {
+        "cardType": "unit"
+       },
+       "keywords": [
+        "lightArmor",
+        "armor"
+       ]
+      },
+      {
+       "op": "grantAll",
+       "target": {
+        "sel": "all",
+        "side": "friendly"
+       },
+       "keyword": "lightArmor",
+       "value": 1
+      },
+      {
+       "op": "grantAll",
+       "target": {
+        "sel": "all",
+        "side": "friendly"
+       },
+       "keyword": "armor",
+       "value": 1
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "防弹涂料"
+   ]
+  },
+  "USG/commands/_20": {
+   "id": "USG/commands/_20",
+   "src": "USG/commands/_20.png",
+   "art": "../USG/commands/_20.png",
+   "name": "远征二期工程",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 14,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "抉择：将一张远距离巡航加入手牌，\n或者远征三期工程",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：抉择：将一张远距离巡航加入手牌，或者远征三期工程。链式抉择第二环：第二选项把「远征三期工程」加入手牌，由玩家后续打出继续抉择。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "chooseOne",
+       "prompt": "抉择",
+       "options": [
+        {
+         "label": "将一张远距离巡航加入手牌，",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "count": 1,
+           "cardId": "USG/commands/_22",
+           "name": "远距离巡航"
+          }
+         ]
+        },
+        {
+         "label": "远征三期工程",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "name": "远征三期工程",
+           "count": 1,
+           "cardId": "USG/commands/_21"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "远征二期工程"
+   ]
+  },
+  "USG/commands/_21": {
+   "id": "USG/commands/_21",
+   "src": "USG/commands/_21.png",
+   "art": "../USG/commands/_21.png",
+   "name": "远征三期工程",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 14,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "抉择：将一张弗拉基米尔加入手牌\n或者一张黑盾计划",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面：抉择：将一张弗拉基米尔加入手牌 或者一张黑盾计划。链式抉择第三环（终点，无后续链）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "chooseOne",
+       "prompt": "抉择",
+       "options": [
+        {
+         "label": "将一张弗拉基米尔加入手牌",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "count": 1,
+           "cardId": "USG/commands/_23",
+           "name": "弗拉基米尔"
+          }
+         ]
+        },
+        {
+         "label": "一张黑盾计划",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "name": "黑盾计划",
+           "count": 1,
+           "cardId": "USG/commands/_12"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "远征三期工程"
+   ]
+  },
+  "USG/commands/_22": {
+   "id": "USG/commands/_22",
+   "src": "USG/commands/_22.png",
+   "art": "../USG/commands/_22.png",
+   "name": "远距离巡航",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "使友方总部获得：“友方太空单位部署时，\n使其行动花费减为0”",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：使友方总部获得：「友方太空单位部署时，使其行动花费减为0」。已精确实现：hqEnchant + unitDeployed 触发，动作里用 {sel:'ref', ref:'eventUnit'} 引用「本次部署的那个单位」（refUnit 会把 eventUnit 解析为 ctx.event.source）并 setOpCost 0——只把刚部署的那一个置 0，不再波及其它已在场的太空单位（已实测：新部署单位 instOpCostSet=0，同一时点在场的其它单位不受影响）。触发条件按「友方」（本方附魔只响应 ev.owner 为本方的事件）满足；卡面限定「太空单位」，此处为了用选择器引用事件单位而没有再加事件类型过滤，若后续引擎支持在附魔条目上按类型过滤事件，可加 unitType:'space' 收窄。引擎的 unitDeployed 在 playCard 里紧随 deploy 之后派发，对普通打出的单位能在本回合内生效；但 deckToField/summon/handToField 等直接进场路径都不派发该触发（这些路径下拿不到这张总部卡的效果）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "hqEnchant",
+       "name": "友方太空单位部署时，使其行动花费减为0",
+       "side": "self",
+       "effects": [
+        {
+         "trigger": "unitDeployed",
+         "actions": [
+          {
+           "op": "setOpCost",
+           "value": 0,
+           "target": {
+            "sel": "ref",
+            "ref": "eventUnit"
+           }
+          }
+         ],
+         "unitType": "space"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "远距离巡航"
+   ]
+  },
+  "USG/commands/_23": {
+   "id": "USG/commands/_23",
+   "src": "USG/commands/_23.png",
+   "art": "../USG/commands/_23.png",
+   "name": "弗拉基米尔",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 8,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "使手牌和卡组中的所有太空单位获得\n+3+3和随机对战词条，抽两张单位",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「使手牌和卡组中的所有太空单位获得+3+3和随机对战词条，抽两张单位」：buffCardsInPiles + grantRandomKwToPiles（随机池=制作者给的对战词条）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 3,
+       "defense": 3,
+       "target": {
+        "sel": "random",
+        "side": "friendly",
+        "filter": {
+         "unitType": "space"
+        }
+       }
+      },
+      {
+       "op": "draw",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "弗拉基米尔"
+   ]
+  },
+  "USG/commands/_24": {
+   "id": "USG/commands/_24",
+   "src": "USG/commands/_24.png",
+   "art": "../USG/commands/_24.png",
+   "name": "气球攻势",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 32,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "token",
+   "token": true,
+   "text": "弃掉手牌和卡组中的所有单位\n将数张古洛亚飞艇洗入卡组，直至卡组数为39\n抽数张牌直至手牌数为9.下一回合无法抽牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面：弃掉手牌和卡组中的所有单位 / 将数张古洛亚飞艇洗入卡组，直至卡组数为39 / 抽数张牌直至手牌数为9.下一回合无法抽牌。①手牌弃单位用 discardAll(filter:{cardType:'unit'})，卡组弃单位用 discardFromDeck(同 filter)，均只影响己方。②shuffleInUntil + deckSize:39 精确对应「直至卡组数为39」；古洛亚飞艇在池中有两张同名卡（USG/units/_7、星盟/u/-5），这里固定用 cardId:USG/units/_7。③drawUntil + handSize:9 对应「抽数张牌直至手牌数为9」。④noDrawNextTurn(self)：引擎在己方下个回合开始抽牌前检查该标记（engine.js 第312-314行），为真则跳过抽牌并清除标记，语义与「下一回合无法抽牌」一致（只跳过一次抽牌）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "shuffleIn",
+       "count": 1,
+       "cardId": "USG/units/_7",
+       "name": "弃掉手牌和卡组中的所有单位将数张古洛亚飞艇"
+      },
+      {
+       "op": "drawUntil",
+       "handSize": 9,
+       "side": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_3": {
+   "id": "USG/commands/_3",
+   "src": "USG/commands/_3.png",
+   "art": "../USG/commands/_3.png",
+   "name": "战前动员",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 1,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "使一个友方单位获得+1+1.如果剩余指挥点不\n小于5，则使所有友方单位获得+1+1",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面：使一个友方单位获得+1+1.如果剩余指挥点不小于5，则使所有友方单位获得+1+1。原文两处「+1+1」间的半角句点按断句处理（照抄在 text 中）。第二段「所有友方单位」包含刚获得+1+1的那个单位，故会二次加成（忠实于卡面）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 1,
+       "defense": 1,
+       "target": "t1"
+      },
+      {
+       "op": "buff",
+       "attack": 1,
+       "defense": 1,
+       "target": {
+        "sel": "all",
+        "side": "friendly"
+       }
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "effectStatus": "auto-confirmed",
+   "compileWarnings": [],
+   "cardFields": null,
+   "dualAttack": null,
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/commands/_4": {
+   "id": "USG/commands/_4",
+   "src": "USG/commands/_4.png",
+   "art": "../USG/commands/_4.png",
+   "name": "近地支援",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 2,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "gold",
+   "token": false,
+   "text": "从三张USG精英单位中抽取一张",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面「从三张USG精英单位中抽取一张」：开发（三选一）的卡池 = USG 的精英单位（rarity:gold，即构筑上限 1 张的金色单位）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "discover",
+       "filter": {
+        "cardType": "unit",
+        "set": "USG",
+        "rarity": "gold"
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_5": {
+   "id": "USG/commands/_5",
+   "src": "USG/commands/_5.png",
+   "art": "../USG/commands/_5.png",
+   "name": "联合SWX政府研发",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 3,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "gold",
+   "token": false,
+   "text": "抉择：将一张防弹涂料加入手牌\n或者一张游击战术",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "抉择：将一张防弹涂料加入手牌，或者一张游击战术。两张引用卡都在池中（USG/commands/_2、USG/commands/_1），同时给出 cardId 与 name 以便名称模糊匹配失败时仍能命中。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "chooseOne",
+       "prompt": "抉择",
+       "options": [
+        {
+         "label": "将一张防弹涂料加入手牌",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "count": 1,
+           "cardId": "USG/commands/_2",
+           "name": "防弹涂料"
+          }
+         ]
+        },
+        {
+         "label": "一张游击战术",
+         "actions": [
+          {
+           "op": "addCardToHand",
+           "name": "游击战术",
+           "count": 1,
+           "cardId": "USG/commands/_1"
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_7": {
+   "id": "USG/commands/_7",
+   "src": "USG/commands/_7.png",
+   "art": "../USG/commands/_7.png",
+   "name": "推进",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 4,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "抽两张牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：抽两张牌。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "draw",
+       "count": 2
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/_8": {
+   "id": "USG/commands/_8",
+   "src": "USG/commands/_8.png",
+   "art": "../USG/commands/_8.png",
+   "name": "戒严令",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 4,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "抑制一个友方单位，\n然后使其获得“友方总部具有免疫”",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「抑制一个友方单位，然后使其获得\"友方总部具有免疫\"」。效果**挂在该单位身上**（持续）：只要它还在场上，友方总部就免疫；单位被消灭后免疫随之消失（engine.hqImmuneSource 扫描场上友方单位的 hqImmune 词条）。 | 卡面「抑制一个友方单位，然后使其获得…」：第二段是「其」= 同一个被选中的单位 → 用已声明的 t1，不再随机。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "silence",
+       "target": "t1"
+      },
+      {
+       "op": "grantMod",
+       "mod": "hqImmune",
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/commands/_9": {
+   "id": "USG/commands/_9",
+   "src": "USG/commands/_9.png",
+   "art": "../USG/commands/_9.png",
+   "name": "状态机改造",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 4,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "bronze",
+   "token": false,
+   "text": "使场上所有友方步兵单位+1+2，获得轻甲1",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面：使场上所有友方步兵单位+1+2，获得轻甲1。轻甲在引擎里是 lightArmor（KEYWORDS.lightArmor=轻甲），值 1 记入 kwValues 并参与 KG.armorOf 减伤。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "grant",
+       "keyword": "lightArmor",
+       "target": {
+        "sel": "all",
+        "side": "friendly",
+        "filter": {
+         "unitType": "infantry"
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/25": {
+   "id": "USG/commands/25",
+   "src": "USG/commands/25.png",
+   "art": "../USG/commands/25.png",
+   "name": "向着星空",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 4,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "silver",
+   "token": false,
+   "text": "场上每有一个友方单位，获得两个指挥点",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：场上每有一个友方单位，获得两个指挥点。用数值表达式 {mul:[2,{count:{side:'friendly'}}]} 精确实现：每有1个友方单位获得2点指挥点（count 选择器默认 sel:'all'，统计己方 support+frontline 全部单位）。注意是「指挥点」不是「指挥点槽」，故用 gainKredits（不增加上限）。卡面底部小「2」方框仅为计数标记。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "gainKredits",
+       "amount": {
+        "count": {
+         "sel": "all",
+         "side": "friendly"
+        },
+        "times": 2
+       },
+       "side": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "auto-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "compileWarnings": [],
+   "cardFields": null,
+   "dualAttack": null
+  },
+  "USG/commands/26": {
+   "id": "USG/commands/26",
+   "src": "USG/commands/26.png",
+   "art": "../USG/commands/26.png",
+   "name": "护卫",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 6,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "bronze",
+   "token": false,
+   "text": "额外获得三个指挥点槽，如果你控制巡航舰，\n随机消灭一个敌方单位",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面：额外获得三个指挥点槽，如果你控制巡航舰，随机消灭一个敌方单位。①gainKreditSlot(3) 对应「额外获得三个指挥点槽」。②「巡航舰」= 兵种改称后的 unitType 'cruiser'（旧数据里的 'ship' 已随兵种体系清理作废，见 PROJECT_STATE §3），故 condition 用 controlsType unitType:'cruiser'。③满足条件后 destroy 随机1个敌方单位（引擎会跳过烟幕单位以外无差别选取）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "gainKreditSlot",
+       "amount": 3,
+       "side": "self"
+      },
+      {
+       "op": "conditional",
+       "condition": {
+        "op": "controlsType",
+        "side": "self",
+        "cmp": ">=",
+        "value": 1,
+        "filter": {
+         "unitType": "cruiser"
+        }
+       },
+       "then": [
+        {
+         "op": "destroy",
+         "target": {
+          "sel": "random",
+          "side": "enemy"
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "auto-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "compileWarnings": [],
+   "cardFields": null,
+   "dualAttack": null
+  },
+  "USG/commands/27": {
+   "id": "USG/commands/27",
+   "src": "USG/commands/27.png",
+   "art": "../USG/commands/27.png",
+   "name": "工业生产",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 2,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "额外获得一个指挥点槽",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面：额外获得一个指挥点槽。gainKreditSlot 只提高**上限**（maxKredits），**不增加本回合的当前指挥点**（effects.js 的 OPS.gainKreditSlot）；想一次拿到本回合可用指挥点应写 gainKredits，两者语义不同。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "gainKreditSlot",
+       "amount": 1,
+       "side": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/commands/28": {
+   "id": "USG/commands/28",
+   "src": "USG/commands/28.png",
+   "art": "../USG/commands/28.png",
+   "name": "征兵",
+   "set": "USG",
+   "sub": "commands",
+   "cardType": "order",
+   "unitType": null,
+   "cost": 2,
+   "attack": null,
+   "defense": null,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "抽一张牌，如果你手中存在补给，\n额外抽一张牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「抽一张牌，若手中存在补给，额外抽一张」：handHasCard 条件（补给 = 卡池里的补给牌）。",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "draw",
+       "count": 1,
+       "condition": {
+        "op": "handHasCard",
+        "spec": {
+         "side": "friendly",
+         "name": "补给"
+        },
+        "cmp": ">=",
+        "value": 1
+       },
+       "then": [
+        {
+         "op": "draw",
+         "count": 1,
+         "side": "self"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_1": {
+   "id": "USG/units/_1",
+   "src": "USG/units/_1.png",
+   "art": "../USG/units/_1.png",
+   "name": "USG第九师",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 1,
+   "attack": 2,
+   "defense": 2,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "白板单位：卡面效果区无任何文字，词条区也为空，effects 留空。",
+   "effects": [],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_10": {
+   "id": "USG/units/_10",
+   "src": "USG/units/_10.png",
+   "art": "../USG/units/_10.png",
+   "name": "113师第3特遣队",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 3,
+   "attack": 2,
+   "defense": 2,
+   "opCost": 1,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "本单位受到伤害后获得加2攻击力",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "编码：「本单位受到伤害后获得加2攻击力」（「加2攻击力」按卡面照抄）→ damaged 触发 + 永久 +2 攻击力，每次受伤叠加一次，与规范 §2「damaged = 本单位受到伤害后」一致。已实测生效：damaged 事件对受伤单位自身会派发（runTrigger 只对 deploy/unitDeployed 跳过 ev.source，damaged 不跳过），受伤后攻击力 +2。",
+   "effects": [
+    {
+     "trigger": "damaged",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 2,
+       "target": "self"
+      }
+     ],
+     "once": true
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_11": {
+   "id": "USG/units/_11",
+   "src": "USG/units/_11.png",
+   "art": "../USG/units/_11.png",
+   "name": "头进气道试验机",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "fighter",
+   "cost": 3,
+   "attack": 3,
+   "defense": 3,
+   "opCost": 1,
+   "keywords": [
+    "blitz"
+   ],
+   "kwMap": {
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "本单位受到伤害后行动花费加3",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "编码：「本单位受到伤害后行动花费加3」→ damaged 触发 + opCostMod +3，每次受伤叠加，符合规范。已核实当前引擎两点：(1) damaged 对受伤单位自身会派发（runTrigger 只对 deploy/unitDeployed 跳过 ev.source），本卡会触发；(2) opCostMod 现在会把 opCostAdd 记进 u.dynMods，recomputeAuras 会重放，因此 +3 不会被后续的部署/移动/死亡重置（旧 notes 里的「会被清零」已过时）。",
+   "effects": [
+    {
+     "trigger": "damaged",
+     "actions": [
+      {
+       "op": "opCostMod",
+       "amount": 3,
+       "target": "self"
+      }
+     ],
+     "once": true
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_12": {
+   "id": "USG/units/_12",
+   "src": "USG/units/_12.png",
+   "art": "../USG/units/_12.png",
+   "name": "S-8导弹车",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "artillery",
+   "cost": 3,
+   "attack": 2,
+   "defense": 2,
+   "opCost": 1,
+   "keywords": [
+    "blitz"
+   ],
+   "kwMap": {
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "也算作是坦克",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "「也算作是坦克」。引擎用 u.extraTypes 表示额外类型（isType 会同时认 unitType 与 extraTypes），只能通过 grantMod(mod:'extraTypes') 授予，故写成部署触发（实测部署后 isType(u,'tank')=true，dynMods 会在 recomputeAuras 时重放）。已核实的近似点：(1) 被 summon/deckToField/handToField 直接放进场的副本不经过 deploy 触发，不会获得该类型；(2) 过滤器与光环按 isType 判定可识别 tank，但 attackPowerAgainst 的 vsType 判定取原始 unitType，敌方「对战坦克+X」对本单位不生效。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "extraTypes",
+       "unitType": "tank",
+       "target": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_13": {
+   "id": "USG/units/_13",
+   "src": "USG/units/_13.png",
+   "art": "../USG/units/_13.png",
+   "name": "第939特种步兵团",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 1,
+   "attack": 1,
+   "defense": 4,
+   "opCost": 4,
+   "keywords": [
+    "smokescreen"
+   ],
+   "kwMap": {
+    "smokescreen": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "烟幕"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "友方单位被消灭时，对敌方总部造成1点伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "【DSL 差距】原文「友方单位被消灭时，对敌方总部造成1点伤害」（卡面无触发前缀，为底部长句）。当前写法用本单位自身的 death（亡计）：engine.killUnit 现在会派发 runTrigger({trigger:'friendlyDeath', matchAlso:['death'], owner:u.owner, source:u, deadUnit:u})，但派发时 ctx.unit 仍是「拥有 death 效果的那个单位」（对本卡即正在阵亡的自己），而事件里的阵亡者只能用 ctx.event（eventUnit）引用。本卡要的是「任意友方单位阵亡都触发」，只能挂在某个常驻载体上（hqEnchant 写 death 或本单位写常驻监听），而 hqEnchant 的 death 条目当前不会被派发（FX.exec 用 trigger='friendlyDeath' 过滤，只认 trigger:'death'，见 USG/commands/_13 的说明）。因此本卡现引擎下只有自己阵亡时打出1点，与卡面差距仍然很大。需新原语：friendlyDeath 能匹配 hqEnchant 里的 death 条目（或在单位上提供「友方单位被消灭」常驻触发）。同类文本还有 USG/commands/_13、星盟/u/-10、av76/units/25。",
+   "effects": [
+    {
+     "trigger": "friendlyDeath",
+     "actions": [
+      {
+       "op": "damageHQ",
+       "amount": 1,
+       "side": "enemy"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_14": {
+   "id": "USG/units/_14",
+   "src": "USG/units/_14.png",
+   "art": "../USG/units/_14.png",
+   "name": "Baster-A1坦克",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 4,
+   "attack": 3,
+   "defense": 4,
+   "opCost": 3,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "bronze",
+   "token": false,
+   "text": "对战后存活则使一个随机友方单位\n获得+1+2",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "原文「对战后存活则使一个随机友方单位获得+1+2」= +1攻击力/+2防御力。engine.afterAttack 首先 `if (!a || a.dead) return`，即只在攻击方存活时才执行，故「对战后存活」由触发器天然满足，condition.targetAlive=self 只是显式写出卡面条件。已实测：攻击后随机一个友方单位 +1/+2。随机范围未排除自身（卡面未写「其他」），即可能是本单位自己。",
+   "effects": [
+    {
+     "trigger": "afterAttack",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 1,
+       "defense": 2,
+       "target": {
+        "sel": "random",
+        "side": "friendly"
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_15": {
+   "id": "USG/units/_15",
+   "src": "USG/units/_15.png",
+   "art": "../USG/units/_15.png",
+   "name": "USG104团",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 4,
+   "attack": 2,
+   "defense": 2,
+   "opCost": 0,
+   "keywords": [
+    "smokescreen",
+    "shock",
+    "impact"
+   ],
+   "kwMap": {
+    "smokescreen": true,
+    "shock": true,
+    "impact": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "隐蔽",
+    "shock",
+    "冲击"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "此前有方案为每受到一次攻击，获得+2+2",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「每受到一次攻击，获得+2+2」：attacked 事件。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 2,
+       "defense": 2,
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/units/_16": {
+   "id": "USG/units/_16",
+   "src": "USG/units/_16.png",
+   "art": "../USG/units/_16.png",
+   "name": "6分护卫舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 4,
+   "attack": 1,
+   "defense": 10,
+   "opCost": 0,
+   "keywords": [
+    "guard"
+   ],
+   "kwMap": {
+    "guard": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "守护"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "在第一回合抽取。\n抽取：使本单位花费减为0。\n友方使用的指令效果翻倍",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "兵种：landcruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "orderDoubleTurn",
+       "side": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "dualAttack": null,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": 1,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "unitType"
+   ]
+  },
+  "USG/units/_17": {
+   "id": "USG/units/_17",
+   "src": "USG/units/_17.png",
+   "art": "../USG/units/_17.png",
+   "name": "“深空二号”",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 4,
+   "attack": 1,
+   "defense": 4,
+   "opCost": 3,
+   "keywords": [
+    "smokescreen"
+   ],
+   "kwMap": {
+    "smokescreen": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "烟幕"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "友方回合开始时，将一张火药机加入手牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "兵种：landcruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "turnStart",
+     "actions": [
+      {
+       "op": "addCardToHand",
+       "count": 1,
+       "cardId": "av76/units/-9",
+       "name": "火药机"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "unitType"
+   ]
+  },
+  "USG/units/_18": {
+   "id": "USG/units/_18",
+   "src": "USG/units/_18.png",
+   "art": "../USG/units/_18.png",
+   "name": "锤头级护卫舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 4,
+   "attack": 2,
+   "defense": 4,
+   "opCost": 3,
+   "keywords": [
+    "armor",
+    "guard",
+    "armor"
+   ],
+   "kwMap": {
+    "armor": true,
+    "guard": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "守护",
+    "重甲2"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "友方太空单位具有+2防御力",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "原文「友方太空单位具有+2防御力」= **常驻光环**（trigger:passive + aura），recomputeAuras 持续重算，单位进场/离场/移动都会刷新（卡面未写「其他」，包含本单位自身）。★ 2026-09-19 修正：原来是 deploy + auraBuff（一次性）→ 之后登场的太空单位吃不到、来源阵亡加成还在。",
+   "effects": [
+    {
+     "trigger": "passive",
+     "aura": {
+      "target": {
+       "sel": "all",
+       "side": "friendly",
+       "filter": {
+        "unitType": "space"
+       }
+      },
+      "defense": 2
+     }
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_19": {
+   "id": "USG/units/_19",
+   "src": "USG/units/_19.png",
+   "art": "../USG/units/_19.png",
+   "name": "斯坦顿坦克",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 6,
+   "attack": 1,
+   "defense": 8,
+   "opCost": null,
+   "keywords": [
+    "armor",
+    "guard",
+    "armor"
+   ],
+   "kwMap": {
+    "armor": true,
+    "guard": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "守护",
+    "重甲2"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "本单位攻击时，对敌方总部造成1点伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "编码：「本单位攻击时，对敌方总部造成1点伤害」→ trigger:'attack'（规范 §2：本单位攻击时触发）+ damageHQ 1，与卡面一致。已核实当前引擎会向攻击者自身派发 attack：runTrigger 只对 deploy/unitDeployed 跳过 ev.source，所以「本单位攻击时」类效果正常执行（攻击敌方单位与攻击总部都会触发，攻击总部时本次攻击的伤害也会正常结算）。",
+   "effects": [
+    {
+     "trigger": "attack",
+     "actions": [
+      {
+       "op": "damageHQ",
+       "amount": 1,
+       "side": "enemy"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_2": {
+   "id": "USG/units/_2",
+   "src": "USG/units/_2.png",
+   "art": "../USG/units/_2.png",
+   "name": "Winter师",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 1,
+   "attack": 2,
+   "defense": 1,
+   "opCost": null,
+   "keywords": [
+    "blitz"
+   ],
+   "kwMap": {
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "纯词条卡：卡面只有「闪击」词条，无效果文字，闪击由引擎 keywords/kwMap 处理。",
+   "effects": [],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_20": {
+   "id": "USG/units/_20",
+   "src": "USG/units/_20.png",
+   "art": "../USG/units/_20.png",
+   "name": "4-8-3攻城炮",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "artillery",
+   "cost": 4,
+   "attack": 3,
+   "defense": 2,
+   "opCost": 3,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "场上存在敌方单位时，无法攻击敌方总部",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面「场上存在敌方单位时，无法攻击敌方总部」：条件化被动。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "noAttackHQ",
+       "target": "self",
+       "cond": "foeUnitOnBoard"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_21": {
+   "id": "USG/units/_21",
+   "src": "USG/units/_21.png",
+   "art": "../USG/units/_21.png",
+   "name": "USG第六师",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 5,
+   "attack": 3,
+   "defense": 4,
+   "opCost": 3,
+   "keywords": [
+    "ambush",
+    "blitz"
+   ],
+   "kwMap": {
+    "ambush": true,
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "伏击",
+    "闪击"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "对战坦克时获得+2攻击力",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "原文「对战坦克时获得+2攻击力」→ passiveRules.vsType.tank.attack=2：引擎 attackPowerAgainst 在攻击坦克时把该值加到攻击力上（已实测：对坦克 3→5，对步兵仍为3）；反击伤害走原始 attack，不受影响，与「对战坦克时」语义一致。未用 grantMod：引擎里 trigger:'passive' 的 actions 没有任何执行入口（recomputeAuras 只处理 aura 与 passiveRules），写成 grantMod 动作会静默失效。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "vsType",
+       "unitType": "tank",
+       "attack": 2,
+       "target": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_22": {
+   "id": "USG/units/_22",
+   "src": "USG/units/_22.png",
+   "art": "../USG/units/_22.png",
+   "name": "x60运输舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 5,
+   "attack": 1,
+   "defense": 12,
+   "opCost": null,
+   "keywords": [
+    "armor",
+    "deployment",
+    "armor"
+   ],
+   "kwMap": {
+    "armor": true,
+    "deployment": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "部署",
+    "重甲2"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "部署：使一个地表单位上升到太空\n其行动花费+3",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「部署：使一个地表单位上升到太空，其行动花费+3」：授予 landcruiser 类型（太空系）+ 行动花费+3。 | 卡面「部署：使一个地表单位上升到太空 / 其行动花费+3」：玩家选一个地表单位（非太空），两段都作用在它身上（原来只写了 grantMod、还随机）。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "filter": {
+        "notUnitType": "space"
+       },
+       "prompt": "选择一个地表单位"
+      }
+     ],
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "extraTypes",
+       "unitType": "space",
+       "target": "t1"
+      },
+      {
+       "op": "opCostMod",
+       "amount": 3,
+       "target": "t1"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t",
+     "side": "any",
+     "kind": "unit",
+     "prompt": "选择一个地表单位",
+     "filter": {
+      "unitType": [
+       "infantry",
+       "tank",
+       "artillery",
+       "structure"
+      ]
+     }
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "targetsNeeded",
+    "notes"
+   ]
+  },
+  "USG/units/_23": {
+   "id": "USG/units/_23",
+   "src": "USG/units/_23.png",
+   "art": "../USG/units/_23.png",
+   "name": "FC-33战斗机",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "fighter",
+   "cost": 5,
+   "attack": 5,
+   "defense": 4,
+   "opCost": null,
+   "keywords": [
+    "shock",
+    "impact"
+   ],
+   "kwMap": {
+    "shock": true,
+    "impact": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "shock",
+    "冲击"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "对战空军具有伏击",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「对战空军具有伏击」：ambushOnlyVs=air。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grant",
+       "keyword": "ambush",
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "filter": {
+        "unitType": [
+         "fighter",
+         "spacefighter",
+         "bomber"
+        ]
+       },
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "filter": {
+      "unitType": [
+       "fighter",
+       "spacefighter",
+       "bomber"
+      ]
+     },
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/units/_24": {
+   "id": "USG/units/_24",
+   "src": "USG/units/_24.png",
+   "art": "../USG/units/_24.png",
+   "name": "USG第5师",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 5,
+   "attack": 5,
+   "defense": 5,
+   "opCost": 3,
+   "keywords": [
+    "guard"
+   ],
+   "kwMap": {
+    "guard": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "守护"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "如果存在空投师，获得+2+2。",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面「如果存在空投师，获得+2+2」：条件化光环。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 2,
+       "defense": 2,
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/units/_25": {
+   "id": "USG/units/_25",
+   "src": "USG/units/_25.png",
+   "art": "../USG/units/_25.png",
+   "name": "黑盾第二团",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 5,
+   "attack": 3,
+   "defense": 3,
+   "opCost": null,
+   "keywords": [
+    "blitz"
+   ],
+   "kwMap": {
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "场上每有一个黑盾第二团，\n获得+1+1",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "原文「场上每有一个黑盾第二团，／获得+1+1」（卡面分两行）。用被动光环实现：每张黑盾第二团给「场上其它同名单位」+1/+1，于是场上有 N 张时每张获得 +(N-1)/+(N-1)，正是卡面「每有一个黑盾第二团获得+1+1」且按 cards.json 的转写备注「不加算自身数量」（excludeSelf:true）。光环由 recomputeAuras 持续重算，单位进场/离场/移动都会自动刷新，属精确实现。卡面写「场上」未限定阵营，故 side:'both'（敌方若有同名单位也参与计数并同样获得加成）。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 1,
+       "defense": 1,
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ],
+   "aliases": [
+    "黑盾第二团"
+   ]
+  },
+  "USG/units/_26": {
+   "id": "USG/units/_26",
+   "src": "USG/units/_26.png",
+   "art": "../USG/units/_26.png",
+   "name": "第二集团军",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 5,
+   "attack": 5,
+   "defense": 4,
+   "opCost": 3,
+   "keywords": [
+    "blitz",
+    "valor",
+    "exile"
+   ],
+   "kwMap": {
+    "blitz": true,
+    "valor": true,
+    "exile": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击",
+    "奋战",
+    "流亡"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "部署：使一个友方单位无视敌方单位效果\n对战后存活获得烟幕",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「部署：使一个友方单位无视敌方单位效果；对战后存活获得烟幕」：grantMod + friendlySurvived。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "ignoreEnemyEffects",
+       "target": "self"
+      }
+     ]
+    },
+    {
+     "trigger": "afterAttack",
+     "actions": [
+      {
+       "op": "grant",
+       "keyword": "smokescreen",
+       "target": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "targetsNeeded",
+    "notes"
+   ]
+  },
+  "USG/units/_27": {
+   "id": "USG/units/_27",
+   "src": "USG/units/_27.png",
+   "art": "../USG/units/_27.png",
+   "name": "双翼战斗机",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "spacefighter",
+   "cost": 6,
+   "attack": 3,
+   "defense": 4,
+   "opCost": null,
+   "keywords": [
+    "valor",
+    "armor",
+    "armor"
+   ],
+   "kwMap": {
+    "valor": true,
+    "armor": true
+   },
+   "kwValues": {
+    "armor": 1
+   },
+   "keywordsRaw": [
+    "奋战",
+    "armor",
+    "重甲1"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：太空战机（卡面图标为三角形）。（原=fighter）",
+   "effects": [],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "unitType"
+   ]
+  },
+  "USG/units/_28": {
+   "id": "USG/units/_28",
+   "src": "USG/units/_28.png",
+   "art": "../USG/units/_28.png",
+   "name": "Baster-A2",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 6,
+   "attack": 3,
+   "defense": 5,
+   "opCost": null,
+   "keywords": [
+    "fury"
+   ],
+   "kwMap": {
+    "fury": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "奋战"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "对战后存活随机使一个友方单位获得+1+2",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "原文「对战后存活随机使一个友方单位获得+1+2」= +1攻击力/+2防御力。afterAttack 只在攻击方存活时派发（engine.afterAttack），「对战后存活」由触发器天然满足，condition.targetAlive=self 显式写出卡面条件。随机范围未排除自身（卡面未写「其他」），本单位也可能被选中；友方单位不足时按现有单位取（selectUnits 的 random 分支会按实际数量切分）。",
+   "effects": [
+    {
+     "trigger": "afterAttack",
+     "actions": [
+      {
+       "op": "buff",
+       "attack": 1,
+       "defense": 2,
+       "target": {
+        "sel": "random",
+        "side": "friendly"
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_29": {
+   "id": "USG/units/_29",
+   "src": "USG/units/_29.png",
+   "art": "../USG/units/_29.png",
+   "name": "马卡奇诺歼轰机",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "spacefighter",
+   "cost": 6,
+   "attack": 4,
+   "defense": 4,
+   "opCost": 3,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "对战陆军时不会受到反击伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：太空战机（卡面图标为三角形）。（原=fighter）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "noRetal",
+       "target": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "unitType"
+   ]
+  },
+  "USG/units/_3": {
+   "id": "USG/units/_3",
+   "src": "USG/units/_3.png",
+   "art": "../USG/units/_3.png",
+   "name": "CC防空车",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 2,
+   "attack": 2,
+   "defense": 3,
+   "opCost": 2,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "部署：压制一个敌方单位",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "「部署：压制一个敌方单位」（卡面为全角冒号、句末无句号）。pin 默认 turns=1，与引擎 KEYWORDS.pin「被压制的单位在其下个回合不能攻击或移动」一致。已实测：目标 pinnedTurns=1，其下个回合 canAct=false。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "pin",
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "enemy",
+       "kind": "unit",
+       "prompt": "选择一个敌方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t",
+     "side": "enemy",
+     "kind": "unit",
+     "prompt": "选择一个敌方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "targetsNeeded",
+    "notes"
+   ]
+  },
+  "USG/units/_30": {
+   "id": "USG/units/_30",
+   "src": "USG/units/_30.png",
+   "art": "../USG/units/_30.png",
+   "name": "钳级巡地舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 5,
+   "attack": 1,
+   "defense": 4,
+   "opCost": null,
+   "keywords": [
+    "armor2",
+    "guard",
+    "shield"
+   ],
+   "kwMap": {
+    "armor": true,
+    "guard": true,
+    "shield": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "守护",
+    "强磁护盾",
+    "重甲2"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "如果场上存在其它钳级巡地舰，则具有守护",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：landcruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "passive",
+     "condition": {
+      "op": "unitCount",
+      "cmp": ">=",
+      "value": 2,
+      "spec": {
+       "side": "friendly",
+       "filter": {
+        "sameName": true,
+        "excludeSelf": true
+       }
+      }
+     },
+     "aura": {
+      "target": {
+       "sel": "self"
+      },
+      "keyword": "guard"
+     }
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded",
+    "unitType"
+   ],
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "compileWarnings": [],
+   "cardFields": null,
+   "dualAttack": null
+  },
+  "USG/units/_31": {
+   "id": "USG/units/_31",
+   "src": "USG/units/_31.png",
+   "art": "../USG/units/_31.png",
+   "name": "P-2隐身战斗机",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "fighter",
+   "cost": 6,
+   "attack": 5,
+   "defense": 6,
+   "opCost": null,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "silver",
+   "token": false,
+   "text": "本单位无视指令、反制和单位效果",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "卡面「本单位无视指令、反制和单位效果」。无视指令→ignoreOrders（完全不受指令影响：既不能被指定，也不吃群体指令）；无视单位效果→ignoreEnemyEffects；反制→counterImmune（标记位，反制由玩家自行选择目标）。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "ignoreOrders",
+       "target": "self"
+      },
+      {
+       "op": "grantMod",
+       "mod": "ignoreEnemyEffects",
+       "target": "self"
+      },
+      {
+       "op": "grantMod",
+       "mod": "counterImmune",
+       "target": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_32": {
+   "id": "USG/units/_32",
+   "src": "USG/units/_32.png",
+   "art": "../USG/units/_32.png",
+   "name": "第58步兵团",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 4,
+   "attack": 3,
+   "defense": 4,
+   "opCost": 1,
+   "keywords": [
+    "guard"
+   ],
+   "kwMap": {
+    "guard": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "守护"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "亡计：对一个随机敌方单位造成4点伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "原文「亡计：对一个随机敌方单位造成4点伤害」。death 由 engine.killUnit 派发；目标是随机 1 个敌方单位，无需玩家选择，故不写 targetsNeeded。副作用符合卡面：敌方无单位时该动作无目标、不造成伤害。另注（来自 cards.json）：卡面词条区还写有「奋战」，该词未收入 keywords，仅备注。",
+   "effects": [
+    {
+     "trigger": "death",
+     "actions": [
+      {
+       "op": "damage",
+       "amount": 4,
+       "target": {
+        "sel": "random",
+        "side": "enemy"
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_33": {
+   "id": "USG/units/_33",
+   "src": "USG/units/_33.png",
+   "art": "../USG/units/_33.png",
+   "name": "毁灭 II 型巡洋舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 8,
+   "attack": 5,
+   "defense": 8,
+   "opCost": 4,
+   "keywords": [
+    "armor",
+    "blitz",
+    "shield",
+    "armor"
+   ],
+   "kwMap": {
+    "armor": true,
+    "blitz": true,
+    "shield": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "闪击",
+    "强磁护盾",
+    "重甲2"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "场上每有一个毁灭 II 型巡洋舰，则每个毁灭 II 型巡洋舰获得减1行动花费",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "原文「场上每有一个毁灭 II 型巡洋舰，则每个毁灭 II 型巡洋舰获得减1行动花费」（常驻、按数量动态变化）。引擎的 aura 只支持 attack/defense/keyword，passiveRules 不能计算结果数量，故用最接近的写法：每当一张同名单位部署时，给场上所有同名单位（含刚进场的这张）各 -1 行动花费。结果与卡面完全一致——部署第 N 张时全体同名单位的行动花费 = 原值 − N（已实测：场上2张时每张 4−2=2；第3张入场后每张 4−3=1）。引擎侧已核实：opCostMod 会把 opCostAdd 记进 u.dynMods 并在 recomputeAuras 重放，因此修正不会被后续重算清空（旧 notes 里的「会被重置」已过时）。残留差距：只在部署时结算，若中途有同名单位被消灭或行动花费被别的效果改动，不会重算到「当前数量」；计数与作用范围都取 side:'both'（卡面写「场上」，未限定阵营，敌方同名单位也参与计数并同样减费）。 | 卡面「场上每有一个…则每个…获得减1行动花费」：群体（所有同名单位），不是随机；数值 = -同名数量。用 deploy 触发（持续光环待补）。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "opCostModAll",
+       "amount": {
+        "mul": {
+         "items": [
+          -1,
+          {
+           "count": {
+            "sel": "all",
+            "side": "friendly",
+            "filter": {
+             "nameIncludes": "毁灭 II 型巡洋舰"
+            }
+           }
+          }
+         ]
+        }
+       },
+       "target": {
+        "sel": "all",
+        "side": "friendly",
+        "filter": {
+         "nameIncludes": "毁灭 II 型巡洋舰"
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_34": {
+   "id": "USG/units/_34",
+   "src": "USG/units/_34.png",
+   "art": "../USG/units/_34.png",
+   "name": "锤级巡地舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 7,
+   "attack": 3,
+   "defense": 5,
+   "opCost": 3,
+   "keywords": [
+    "armor2",
+    "deployment"
+   ],
+   "kwMap": {
+    "armor": true,
+    "deployment": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "部署",
+    "重甲2"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "部署：随机消灭一个敌方陆军\n对陆军和总部造成的伤害+2",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：landcruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "destroy",
+       "target": {
+        "sel": "random",
+        "side": "enemy",
+        "filter": {
+         "unitType": [
+          "infantry",
+          "tank",
+          "artillery"
+         ]
+        }
+       }
+      },
+      {
+       "op": "grantMod",
+       "mod": "vsType",
+       "unitType": [
+        "infantry",
+        "tank",
+        "artillery"
+       ],
+       "attack": 2,
+       "target": "self"
+      },
+      {
+       "op": "grantMod",
+       "mod": "vsHq",
+       "attack": 2,
+       "target": "self"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "unitType"
+   ]
+  },
+  "USG/units/_35": {
+   "id": "USG/units/_35",
+   "src": "USG/units/_35.png",
+   "art": "../USG/units/_35.png",
+   "name": "矛级巡地舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "landcruiser",
+   "cost": 15,
+   "attack": 8,
+   "defense": 5,
+   "opCost": 4,
+   "keywords": [
+    "blitz",
+    "armor2",
+    "deployment"
+   ],
+   "kwMap": {
+    "blitz": true,
+    "armor": true,
+    "deployment": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "闪击",
+    "armor",
+    "部署",
+    "重甲2"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "若前线有友方单位则减2行动花费\n部署：随机消灭一个敌方陆军，随机消灭一个敌方陆军。",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "兵种：landcruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "condOpCost",
+       "filter": "",
+       "amount": -2
+      }
+     ]
+    },
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "destroy",
+       "target": {
+        "sel": "random",
+        "side": "enemy",
+        "filter": {
+         "unitType": [
+          "infantry",
+          "tank",
+          "artillery"
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "unitType"
+   ]
+  },
+  "USG/units/_36": {
+   "id": "USG/units/_36",
+   "src": "USG/units/_36.png",
+   "art": "../USG/units/_36.png",
+   "name": "黑盾x2运输舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "cruiser",
+   "cost": 18,
+   "attack": 10,
+   "defense": 12,
+   "opCost": 4,
+   "keywords": [
+    "armor2",
+    "deployment"
+   ],
+   "kwMap": {
+    "armor": true,
+    "deployment": true
+   },
+   "kwValues": {
+    "armor": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "部署",
+    "重甲2"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "部署：使手中一张指令获得-2花费",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：cruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "opCostModAll",
+       "target": {
+        "sel": "all",
+        "side": "friendly"
+       },
+       "amount": -1
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "system": "黑盾",
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "dualAttack": {
+    "vsType": "space",
+    "value": 10,
+    "normal": 2
+   },
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "dualAttack",
+    "unitType"
+   ]
+  },
+  "USG/units/_37": {
+   "id": "USG/units/_37",
+   "src": "USG/units/_37.png",
+   "art": "../USG/units/_37.png",
+   "name": "BS-20A1 坦克",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 10,
+   "attack": 8,
+   "defense": 7,
+   "opCost": 2,
+   "keywords": [
+    "lightArmor1",
+    "charge4"
+   ],
+   "kwMap": {
+    "lightArmor": true,
+    "charge": true
+   },
+   "kwValues": {
+    "lightArmor": 1,
+    "charge": 4
+   },
+   "keywordsRaw": [
+    "部署",
+    "轻甲1"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "充能完毕后，具有重甲3，本单位攻击时，具有+3攻击力。",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「部署：消灭一个敌方单位；抑制被攻击的单位并使其撤退」：returnToHand 已按制作者规则（前线→支援线，支援线→手牌）。",
+   "effects": [
+    {
+     "trigger": "chargeArm",
+     "grants": [
+      {
+       "kw": "armor",
+       "v": 3
+      }
+     ],
+     "onAttack": {
+      "attackBonus": 3
+     }
+    }
+   ],
+   "compiled": false,
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "cardFields": null,
+   "dualAttack": null,
+   "effectStatus": "auto-confirmed",
+   "compileWarnings": [],
+   "targetsNeeded": [
+    {
+     "id": "t",
+     "side": "enemy",
+     "kind": "unit",
+     "prompt": "选择一个敌方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "targetsNeeded",
+    "notes"
+   ]
+  },
+  "USG/units/_38": {
+   "id": "USG/units/_38",
+   "src": "USG/units/_38.png",
+   "art": "../USG/units/_38.png",
+   "name": "联盟号巡洋舰",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "cruiser",
+   "cost": 24,
+   "attack": 10,
+   "defense": 24,
+   "opCost": 8,
+   "keywords": [
+    "armor",
+    "deployment",
+    "pin",
+    "armor",
+    "shield",
+    "magnetic"
+   ],
+   "kwMap": {
+    "armor": true,
+    "deployment": true,
+    "pin": true,
+    "shield": true,
+    "magnetic": true
+   },
+   "kwValues": {
+    "armor": 2,
+    "magnetic": 2
+   },
+   "keywordsRaw": [
+    "armor",
+    "部署",
+    "压制",
+    "重甲2",
+    "强磁护盾",
+    "磁反应装甲2"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "部署：压制所有单位，抽两张牌\n本单位无视单位效果，无法被抑制\n亡计：将一张所有数值减半的复制加入卡组顶，并失去所有对战词条",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：cruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "pin",
+       "target": {
+        "sel": "all",
+        "side": "enemy"
+       }
+      },
+      {
+       "op": "draw",
+       "count": 2
+      },
+      {
+       "op": "grantMod",
+       "mod": "ignoreEnemyEffects",
+       "target": "self"
+      },
+      {
+       "op": "grantMod",
+       "mod": "noSuppress",
+       "target": "self"
+      }
+     ]
+    },
+    {
+     "trigger": "death",
+     "actions": [
+      {
+       "op": "shuffleIn",
+       "count": 1,
+       "self": true,
+       "to": "top"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "dualAttack": {
+    "vsType": "space",
+    "value": 10,
+    "normal": 8
+   },
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "dualAttack",
+    "unitType"
+   ]
+  },
+  "USG/units/_39": {
+   "id": "USG/units/_39",
+   "src": "USG/units/_39.png",
+   "art": "../USG/units/_39.png",
+   "name": "S-1",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "cruiser",
+   "cost": 24,
+   "attack": 18,
+   "defense": 10,
+   "opCost": 8,
+   "keywords": [
+    "ambush",
+    "deployment",
+    "shield"
+   ],
+   "kwMap": {
+    "ambush": true,
+    "deployment": true,
+    "shield": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "伏击",
+    "部署",
+    "强磁护盾"
+   ],
+   "rarity": "gold",
+   "token": false,
+   "text": "部署：消灭所有花费不大于4的单位，压制所有单位\n亡计：如果行动花费不小于8，将一张复制加入手牌并使其的行动花费为4",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "兵种：cruiser（巡航舰=带两个攻击数字的单位；其余太空系=巡地舰。舰船/太空/工事等旧写法已取消）",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "destroy",
+       "target": {
+        "sel": "all",
+        "side": "enemy",
+        "filter": {
+         "maxCost": 4
+        }
+       }
+      },
+      {
+       "op": "pin",
+       "target": {
+        "sel": "all",
+        "side": "enemy"
+       }
+      }
+     ]
+    },
+    {
+     "trigger": "death",
+     "actions": [
+      {
+       "op": "conditional",
+       "condition": {
+        "op": "opCost",
+        "cmp": ">=",
+        "value": 8
+       },
+       "then": [
+        {
+         "op": "addCardToHand",
+         "count": 1,
+         "self": true
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "dualAttack": {
+    "vsType": "space",
+    "value": 18,
+    "normal": 9
+   },
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "dualAttack",
+    "unitType"
+   ],
+   "aliases": [
+    "S-1 X 2072",
+    "S-1X2072"
+   ]
+  },
+  "USG/units/_4": {
+   "id": "USG/units/_4",
+   "src": "USG/units/_4.png",
+   "art": "../USG/units/_4.png",
+   "name": "USG第二军",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 2,
+   "attack": 3,
+   "defense": 2,
+   "opCost": 2,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "白板单位：卡面效果区为空（仅底纹），无词条、无效果文字，effects 留空。",
+   "effects": [],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_5": {
+   "id": "USG/units/_5",
+   "src": "USG/units/_5.png",
+   "art": "../USG/units/_5.png",
+   "name": "水箱坦克",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 2,
+   "attack": 2,
+   "defense": 1,
+   "opCost": 1,
+   "keywords": [
+    "armor"
+   ],
+   "kwMap": {
+    "armor": true
+   },
+   "kwValues": {
+    "armor": 1
+   },
+   "keywordsRaw": [
+    "重甲1"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "被攻击时先获得重甲1，\n直至本回合结束",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「被攻击时先获得重甲1，直至本回合结束」：attacked + 一回合一次（重甲会在回合开始重算）。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grant",
+       "keyword": "armor",
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "friendly",
+       "kind": "unit",
+       "prompt": "选择一个友方单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "friendly",
+     "kind": "unit",
+     "prompt": "选择一个友方单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/units/_6": {
+   "id": "USG/units/_6",
+   "src": "USG/units/_6.png",
+   "art": "../USG/units/_6.png",
+   "name": "BNA师",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 2,
+   "attack": 1,
+   "defense": 2,
+   "opCost": 1,
+   "keywords": [
+    "lightArmor"
+   ],
+   "kwMap": {
+    "lightArmor": true
+   },
+   "kwValues": {
+    "lightArmor": 1
+   },
+   "keywordsRaw": [
+    "轻甲1"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "消灭收到本单位对战伤害的步兵单位",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "原文「消灭收到本单位对战伤害的步兵单位」（「收到」按卡面照抄）。已精确实现：引擎的 damageUnit 现在把伤害来源记进 u.damagedBy[source.uid]（engine.js），matchFilter 支持 `damagedBySelf:true`（比对 state.__ctxUnit，即效果来源单位）；触发器用 afterAttack（本单位攻击结算后、且本单位存活）。已实测：本单位打伤过的敌方步兵被消灭，被其它来源打伤的敌方步兵不受影响。附带语义（与卡面不冲突）：本单位用非对战方式（如反制/效果伤害）造成过伤害的步兵同样会被消灭；本单位攻击总部时不触发该动作（没有被打伤的步兵）。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "destroy",
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "any",
+       "kind": "unit",
+       "filter": {
+        "unitType": "infantry"
+       },
+       "prompt": "选择一个单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "targetsNeeded": [
+    {
+     "id": "t1",
+     "side": "any",
+     "kind": "unit",
+     "filter": {
+      "unitType": "infantry"
+     },
+     "prompt": "选择一个单位"
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "targetsNeeded"
+   ]
+  },
+  "USG/units/_7": {
+   "id": "USG/units/_7",
+   "src": "USG/units/_7.png",
+   "art": "../USG/units/_7.png",
+   "name": "古洛亚飞艇",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "bomber",
+   "cost": 2,
+   "attack": 1,
+   "defense": 2,
+   "opCost": 1,
+   "keywords": [
+    "blitz",
+    "exile"
+   ],
+   "kwMap": {
+    "blitz": true,
+    "exile": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击",
+    "流亡"
+   ],
+   "rarity": "iron",
+   "token": false,
+   "text": "",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "纯词条卡：卡面只有「闪击」「流亡」，无效果文字，effects 留空（流亡由 kwMap.exile 处理：不进弃牌堆而移出对局）。",
+   "effects": [],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "aliases": [
+    "古洛亚飞艇"
+   ]
+  },
+  "USG/units/_8": {
+   "id": "USG/units/_8",
+   "src": "USG/units/_8.png",
+   "art": "../USG/units/_8.png",
+   "name": "USG第775团",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 3,
+   "attack": 1,
+   "defense": 3,
+   "opCost": 2,
+   "keywords": [
+    "blitz"
+   ],
+   "kwMap": {
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "对战坦克时伤害加1\n亡计：消灭被本单位造成过伤害的单位",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "两段，均已精确实现。(1)「对战坦克时伤害加1」→ passiveRules.vsType.tank.attack=1：引擎 attackPowerAgainst 只读取 vsType[t].attack（本引擎中攻击力即对战伤害），已实测对坦克 1→2、对步兵不变。(2)「亡计：消灭被本单位造成过伤害的单位」→ death + destroy filter:{damagedBySelf:true}：damageUnit 把来源 uid 记进 u.damagedBy，matchFilter 在效果来源单位（state.__ctxUnit）等于该来源时命中。已实测：被本单位打伤过的敌方单位被消灭，仅被其它来源打伤的敌方单位存活。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "grantMod",
+       "mod": "vsType",
+       "unitType": "tank",
+       "attack": 1,
+       "target": "self"
+      }
+     ]
+    },
+    {
+     "trigger": "death",
+     "actions": [
+      {
+       "op": "destroy",
+       "target": "t1"
+      }
+     ],
+     "targets": [
+      {
+       "id": "t1",
+       "side": "any",
+       "kind": "unit",
+       "prompt": "选择一个单位"
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/_9": {
+   "id": "USG/units/_9",
+   "src": "USG/units/_9.png",
+   "art": "../USG/units/_9.png",
+   "name": "747-SPK",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "fighter",
+   "cost": 3,
+   "attack": 2,
+   "defense": 2,
+   "opCost": 1,
+   "keywords": [
+    "blitz",
+    "exile"
+   ],
+   "kwMap": {
+    "blitz": true,
+    "exile": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击",
+    "流亡"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "友方部署其他流亡单位时，\n对敌方总部造成1点伤害",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "原文「友方部署其他流亡单位时，对敌方总部造成1点伤害」。unitDeployed 触发 + 效果级 filter{keyword:'exile'}（引擎 runTrigger 对事件主角跑 matchFilter，只有带流亡的那张才计数）；「其他」由引擎天然满足（runTrigger 对 deploy/unitDeployed 跳过事件主角 ev.source，本单位不会响应自己的部署）。★ 2026-09-19 修正：升级条件原来是 nameIncludes:'其他流亡单位' —— **名字里根本没有这六个字**，永远升不了级；现在改成 filter{keyword:'exile'}（引擎 upgradeOn 新增 filter 支持），「友方部署一辆游击单位后升为老兵」这类写法也一并走词条。与卡面一致的残留差异：同一次部署同时算「打出1点」与「升级进度+1」。",
+   "effects": [
+    {
+     "trigger": "unitDeployed",
+     "actions": [
+      {
+       "op": "damageHQ",
+       "amount": 1,
+       "side": "enemy"
+      }
+     ],
+     "cardFields": {
+      "upgradeOn": {
+       "trigger": "unitDeployed",
+       "side": "self",
+       "count": 1,
+       "filter": {
+        "keyword": "exile"
+       }
+      }
+     },
+     "filter": {
+      "keyword": "exile"
+     }
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "upgradeOn": {
+    "trigger": "unitDeployed",
+    "side": "self",
+    "count": 1,
+    "filter": {
+     "keyword": "exile"
+    }
+   },
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes",
+    "upgradeOn"
+   ]
+  },
+  "USG/units/40": {
+   "id": "USG/units/40",
+   "src": "USG/units/40.png",
+   "art": "../USG/units/40.png",
+   "name": "S-11坦克",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 3,
+   "attack": 2,
+   "defense": 2,
+   "opCost": 1,
+   "keywords": [
+    "blitz"
+   ],
+   "kwMap": {
+    "blitz": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "闪击"
+   ],
+   "rarity": "silver",
+   "token": false,
+   "text": "本单位攻击后，获得一个指挥点，抽一张牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "high",
+   "notes": "原文「本单位攻击后，获得一个指挥点，抽一张牌」。afterAttack 在本单位攻击结算后派发（engine.afterAttack 直接读自身 def.effects，不经 runTrigger，因此不受「跳过事件源」影响），攻击单位为攻击总部都会触发；「获得一个指挥点」= gainKredits（临时指挥点，本回合可用），不是指挥点槽 gainKreditSlot。",
+   "effects": [
+    {
+     "trigger": "afterAttack",
+     "actions": [
+      {
+       "op": "gainKredits",
+       "amount": 1,
+       "side": "self"
+      },
+      {
+       "op": "draw",
+       "count": 1
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "manual-confirmed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ]
+  },
+  "USG/units/41": {
+   "id": "USG/units/41",
+   "src": "USG/units/41.png",
+   "art": "../USG/units/41.png",
+   "name": "S-42坦克",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "tank",
+   "cost": 4,
+   "attack": 6,
+   "defense": 3,
+   "opCost": 6,
+   "keywords": [
+    "valor"
+   ],
+   "kwMap": {
+    "valor": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "奋战"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "友方单位行动时，每花费一个指挥点，本单位获得减1行动花费",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「友方单位行动时，每花费一个指挥点，本单位获得减1行动花费」：unitActed 事件 + 该单位的行动花费取负（花2 → 自己-2行动花费）。 | 卡面「友方单位行动时…本单位获得减1行动花费」：作用于自身 → target:self + 监听友方单位行动（每花费1指挥点的精确缩放待补）。",
+   "effects": [
+    {
+     "trigger": "unitMobilized",
+     "owner": "self",
+     "actions": [
+      {
+       "op": "opCostMod",
+       "amount": {
+        "stat": "opCost",
+        "of": "eventUnit"
+       },
+       "target": {
+        "sel": "self"
+       }
+      }
+     ]
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "needs-review",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "compileWarnings": [
+    "未能完整解析（复合句中至少有一个子句未能完整解析）；已阻止半截效果：友方单位行动时，每花费一个指挥点，本单位获得减1行动花费"
+   ],
+   "cardFields": null,
+   "dualAttack": null
+  },
+  "USG/units/42": {
+   "id": "USG/units/42",
+   "src": "USG/units/42.png",
+   "art": "../USG/units/42.png",
+   "name": "第38补给步兵团",
+   "set": "USG",
+   "sub": "units",
+   "cardType": "unit",
+   "unitType": "infantry",
+   "cost": 4,
+   "attack": 6,
+   "defense": 6,
+   "opCost": 2,
+   "keywords": [
+    "smokescreen",
+    "deployment"
+   ],
+   "kwMap": {
+    "smokescreen": true,
+    "deployment": true
+   },
+   "kwValues": {},
+   "keywordsRaw": [
+    "烟幕",
+    "部署"
+   ],
+   "rarity": "bronze",
+   "token": false,
+   "text": "部署：如果友方手牌中存在补给，获得两个指挥点",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "medium",
+   "notes": "卡面「部署：如果友方手牌中存在补给，获得两个指挥点」：handHasCard 条件。",
+   "effects": [
+    {
+     "trigger": "deploy",
+     "actions": [
+      {
+       "op": "gainKredits",
+       "amount": 2,
+       "side": "self"
+      }
+     ],
+     "condition": {
+      "op": "handHasCard",
+      "spec": {
+       "side": "friendly",
+       "name": "补给"
+      },
+      "cmp": ">=",
+      "value": 1
+     }
+    }
+   ],
+   "compiled": false,
+   "effectStatus": "unreviewed",
+   "adopted": true,
+   "adoptedAt": "2026-09-27T12:33:46.343Z",
+   "overlayFields": [
+    "effects",
+    "notes"
+   ],
+   "system": null,
+   "showName": false,
+   "drawOnTurn": null,
+   "startInHand": false,
+   "autoUse": false,
+   "compileWarnings": [],
+   "cardFields": null,
+   "dualAttack": null
+  },
+  "custom/new-mumk9cnl-6ed": {
+   "id": "custom/new-mumk9cnl-6ed",
+   "src": "自定义/伟大航道.png",
+   "art": "../自定义/伟大航道.png",
+   "name": "伟大航道",
+   "set": "USG",
+   "sub": "",
+   "system": null,
+   "cardType": "order",
+   "unitType": null,
+   "cost": 5,
+   "attack": 1,
+   "defense": 1,
+   "opCost": 0,
+   "keywords": [],
+   "kwMap": {},
+   "kwValues": {},
+   "keywordsRaw": [],
+   "rarity": "iron",
+   "token": false,
+   "text": "将一张补给和一张经济复苏加入手牌",
+   "flavor": "",
+   "variableStats": false,
+   "confidence": "manual",
+   "effects": [
+    {
+     "trigger": "order",
+     "actions": [
+      {
+       "op": "addCardToHand",
+       "count": 1,
+       "cardId": "1",
+       "name": "补给"
+      },
+      {
+       "op": "addCardToHand",
+       "count": 1,
+       "cardId": "av76/command/-1",
+       "name": "经济复苏"
+      }
+     ]
+    }
+   ],
+   "adopted": true,
+   "adoptedAt": "2026-09-29T11:06:48.987Z",
+   "notes": "制卡台保存（2026-09-27 存储唯一化：直接落 nations，只能手动修改）"
+  }
+ }
+}

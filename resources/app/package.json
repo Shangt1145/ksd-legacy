@@ -1,0 +1,7 @@
+{
+  "name": "kards-diy",
+  "version": "1.0.1",
+  "private": true,
+  "description": "KARDS DIY 对战 —— 桌面版（内嵌本地服务器 + 联机）",
+  "main": "main.js"
+}
