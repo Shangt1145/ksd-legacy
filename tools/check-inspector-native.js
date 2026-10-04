@@ -12,10 +12,11 @@ class HiddenWindow extends electron.BrowserWindow {
     this.webContents.on('did-finish-load',async()=>{
       if(done)return;
       try {
-        const ready=phase===1?'!!window.KG_INSPECTOR':'!!(window.KG && KG.ui && KG.ui.pool && KG.ui.pool.length)';
+        const ready=phase===1?'!!window.KG_INSPECTOR':'!!(window.KG && KG.ui && window.__S===KG.ui)';
         let ok=false;for(let n=0;n<100;n++){ok=await this.webContents.executeJavaScript(ready);if(ok)break;await pause(100);}
         assert.ok(ok,'page failed to initialize in phase '+phase);
         if(phase===0){
+          assert.equal(await this.webContents.executeJavaScript('KG.ui.pool.length'),0,'fresh install starts with an empty pool');
           await this.webContents.executeJavaScript("localStorage.setItem('kg.inspector-test','native-marker');KG_AUTO_SAVE.flush()");
           phase=1;await this.loadURL(this.webContents.getURL().replace('index.html','inspector.html'));return;
         }

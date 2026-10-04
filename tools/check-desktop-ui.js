@@ -44,6 +44,7 @@ app.whenReady().then(async () => {
       document.body.classList.remove('mulligan-phase');
       document.querySelector('#myHand').removeAttribute('style');
       document.querySelector('#mulliganBar').classList.add('hidden');
+      document.querySelector('[data-screen="battle"]').click();
       ui.renderBattle({animate:false});
     })()`);
     await pause(600);

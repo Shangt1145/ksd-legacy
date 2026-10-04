@@ -11,6 +11,7 @@ let server, win;
 const pause = ms => new Promise(r => setTimeout(r, ms));
 const beginnerChecks = async function () {
  const assert=(v,m)=>{if(!v)throw Error(m);},I=KG_INSPECTOR;
+ assert(KG_CARDS.length===0&&I.api.list().length===0,'fresh Inspector opens with no bundled cards');
  const card=I.api.newCard({name:'练习：补给',effects:[{trigger:'deploy',actions:[]}]});await I.select(card);
  document.querySelector('[data-example="draw"]').click();
  assert(I.getEffects().length===1&&I.getEffects()[0].actions[0].times===2,'example replaces only empty starter');
@@ -69,7 +70,7 @@ const checks = async function () {
  input(JSON.stringify([{trigger:'deploy',actions:[{op:'developCard',pool:{source:'cards',cardIds:[c.id]},side:'self'}]}]));check(await I.save(),'custom development pool saves');
  input(JSON.stringify([{trigger:'deploy',actions:[{op:'loop',times:2,actions:[{op:'drawOne',side:'self'}]}]}]));
  const original=Storage.prototype.setItem;Storage.prototype.setItem=function(){throw Error('quota fixture');};check(!(await I.save()),'quota failure');Storage.prototype.setItem=original;check(I.hasUnsavedChanges(),'failed save retains draft');await I.save();
- const inline=KG_CARDS.find(c=>c.effects?.length&&!KG_EFFECT_OVERLAY[c.id]);check(inline,'inline fixture');same(I.api.getFx(inline.id),inline.effects,'inline effects preserved');
+ const inline={id:'test/inline',name:'临时内联效果测试',cardType:'unit',cost:1,attack:1,defense:1,effects:[{trigger:'deploy',actions:[{op:'drawOne',side:'self'}]}]};KG_CARDS.push(inline);same(I.api.getFx(inline.id),inline.effects,'synthetic inline effects preserved');
  const name2=document.querySelector('[data-focus-key="card.name"]');name2.closest('details').open=true;name2.focus();name2.value='重载草稿';name2.dispatchEvent(new InputEvent('input'));I.flushHistory();await new Promise(r=>setTimeout(r,400));check(JSON.parse(localStorage.getItem('kg.inspectorDraft')).patch.name==='重载草稿','draft backup');
  return {cards:I.api.list().length,atomicActions:Object.keys(catalog).length,focusKey:'card.name',cardId:c.id};
 };

@@ -7664,7 +7664,7 @@
     if (orcDrafts.length) showOrCReport({summary:{ready:0,pending:orcDrafts.length,rejected:0,skipped:0},ready:[],pending:orcDrafts,rejected:[],skipped:[],entries:[]}, ['上次导入的待核对资料已恢复。']);
     bindPager();
     // ★ 手机首屏 = 卡牌库（2026-10-02 Alan 定）：不自动开局，进对战时 show('battle') 会自启
-    if (typeof isMobileUI === 'function' && isMobileUI()) {
+    if (!S.pool.length || (typeof isMobileUI === 'function' && isMobileUI())) {
       show('collection');
     } else {
       show('battle');

@@ -16,10 +16,10 @@ class HiddenWindow extends electron.BrowserWindow {
       try {
         let result;
         for (let i = 0; i < 100; i++) {
-          result = await this.webContents.executeJavaScript('window.KG && KG.ui && KG.ui.pool && KG.ui.pool.length');
+          result = await this.webContents.executeJavaScript('!!(window.KG && KG.ui && window.__S===KG.ui)');
           if (result) break; await pause(100);
         }
-        assert.ok(result > 0, 'real UI failed to initialize');
+        assert.ok(result, 'real UI failed to initialize');
         await this.webContents.executeJavaScript("localStorage.setItem('kg_ui_zoom','90');KG_AUTO_SAVE.flush()");
         const file = path.join(profile, 'player-data/web-save.json');
         const saved = require('../player-storage.js').read(file);
