@@ -27,6 +27,8 @@ npm start
 
 完整教程见 [Inspector 新手教程](docs/INSPECTOR_BEGINNER_GUIDE.md)，也可在检查器顶部直接打开。
 
+![简洁界面：直接填写抽牌张数和归属](docs/images/inspector.png)
+
 ## 验证
 
 ```powershell
